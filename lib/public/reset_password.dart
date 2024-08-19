@@ -38,7 +38,6 @@ class _ResetPasswordState extends State<ResetPassword> {
       ),
       body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-
           child: Column(
             children: [
               Text(
@@ -107,7 +106,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
-                              isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                              isConfirmPasswordVisible =
+                                  !isConfirmPasswordVisible;
                             });
                           },
                           child: Icon(

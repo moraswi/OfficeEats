@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/app_buttons.dart';
+
 class SignUp extends StatefulWidget {
   var routeName = '/signUp';
 
@@ -30,7 +32,7 @@ class _SignUpState extends State<SignUp> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                '/landingScreen', (Route<dynamic> route) => true);
+                '/landingPage', (Route<dynamic> route) => true);
           },
         ),
       ),
@@ -191,7 +193,7 @@ class _SignUpState extends State<SignUp> {
                           onTap: () {
                             setState(() {
                               isConfirmPasswordVisible =
-                              !isConfirmPasswordVisible;
+                                  !isConfirmPasswordVisible;
                             });
                           },
                           child: Icon(
@@ -208,27 +210,35 @@ class _SignUpState extends State<SignUp> {
               ),
 
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  // Set the background color to orange
-                  minimumSize: Size(double.infinity, 0),
-                  // Set width to 100%
-                  padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11.0),
-                    // Set border radius
-                  ),
-                ),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.orange,
+              //     // Set the background color to orange
+              //     minimumSize: Size(double.infinity, 0),
+              //     // Set width to 100%
+              //     padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(11.0),
+              //       // Set border radius
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.of(context).pushNamedAndRemoveUntil(
+              //         '/logIn', (Route<dynamic> route) => true);
+              //   },
+              //   child: Text(
+              //     'Register',
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ),
 
-                onPressed: () {
+              CustomButton(
+                label: 'Register',
+                onTap: () {
+                  // Handle button press
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/logIn', (Route<dynamic> route) => true);
                 },
-                child: Text(
-                  'Register',
-                  style: TextStyle(color: Colors.white),
-                ),
               ),
 
               const SizedBox(height: 10),

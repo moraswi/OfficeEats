@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../core/utilils/app_colors.dart';
+import '../shared/app_buttons.dart';
+
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';
 
@@ -72,70 +75,62 @@ class _LogInState extends State<LogIn> {
 
               const SizedBox(height: 23),
 
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.all(8),
-                      ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(9.0),
+                    borderSide: const BorderSide(
+                      width: 0,
+                      style: BorderStyle.solid,
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: passwordController,
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: !isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.all(8),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isPasswordVisible = !isPasswordVisible;
-                            });
-                          },
-                          child: Icon(
-                            isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
+                  ),
+                  contentPadding: const EdgeInsets.all(8),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: passwordController,
+                keyboardType: TextInputType.emailAddress,
+                obscureText: !isPasswordVisible,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(9.0),
+                    borderSide: const BorderSide(
+                      width: 0,
+                      style: BorderStyle.solid,
                     ),
-
-
-              const SizedBox(height: 14),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  minimumSize: Size(double.infinity, 0),
-                  padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11.0),
+                  ),
+                  contentPadding: const EdgeInsets.all(8),
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                    child: Icon(
+                      isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
+              ),
 
-                onPressed: () {
+              const SizedBox(height: 20),
+
+              CustomButton(
+                label: 'Log In',
+                onTap: () {
+                  // Handle button press
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/home', (Route<dynamic> route) => true);
                 },
-                child: Text('Log in', style: TextStyle(color: Colors.white),),
               ),
 
               const SizedBox(height: 20),

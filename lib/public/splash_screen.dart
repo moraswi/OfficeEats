@@ -14,10 +14,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
         Duration(seconds: 3),
-            () => Navigator.of(context).pushNamedAndRemoveUntil(
-          '/landingPage',
+        () => Navigator.of(context).pushNamedAndRemoveUntil(
+              '/landingPage',
               (Route<dynamic> route) => false,
-        ));
+            ));
   }
 
   @override
@@ -29,7 +29,10 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Office Eats', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),)
+            Text(
+              'Office Eats',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            )
             // Image.asset(
             //   'assets/legacyLogo.png',
             //   width: 200,

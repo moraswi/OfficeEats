@@ -104,7 +104,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     // Set border radius
                   ),
                 ),
-
                 onPressed: () {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/resetPassword', (Route<dynamic> route) => true);
