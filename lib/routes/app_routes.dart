@@ -1,12 +1,14 @@
 // routes.dart
 
 import 'package:flutter/material.dart';
-import 'package:eats/public/forgot_password.dart';
-import 'package:eats/public/landing_page.dart';
-import 'package:eats/public/logIn.dart';
-import 'package:eats/public/reset_password.dart';
-import 'package:eats/public/sign_up.dart';
-import 'package:eats/public/splash_screen.dart';
+
+import 'package:eats/components/public/forgot_password.dart';
+import 'package:eats/components/public/landing_page.dart';
+import 'package:eats/components/public/logIn.dart';
+import 'package:eats/components/public/reset_password.dart';
+import 'package:eats/components/public/sign_up.dart';
+
+import 'package:eats/components/public/splash_screen.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {

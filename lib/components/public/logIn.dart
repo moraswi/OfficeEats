@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../core/utilils/app_colors.dart';
-import '../shared/app_buttons.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';
