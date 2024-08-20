@@ -128,7 +128,7 @@ class _LogInState extends State<LogIn> {
                 onTap: () {
                   // Handle button press
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/storemenu', (Route<dynamic> route) => true);
+                      '/home', (Route<dynamic> route) => true);
                 },
               ),
 

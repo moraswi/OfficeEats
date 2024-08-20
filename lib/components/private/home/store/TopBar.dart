@@ -16,7 +16,7 @@ class TopBar extends StatelessWidget {
               child: CircleAvatar(
                 radius: 50, // Adjust the size of the circle
                 backgroundColor: AppColors.backgroundColor,
-                //child: Image.asset('images/a_dot_ham.jpeg')
+                // child: Image.asset('assets/images/image1.webp')
                 backgroundImage: AssetImage('assets/images/image1.webp'),
               ),
             );

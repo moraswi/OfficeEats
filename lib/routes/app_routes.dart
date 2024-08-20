@@ -9,8 +9,8 @@ import 'package:eats/components/public/sign_up.dart';
 import 'package:eats/components/public/splash_screen.dart';
 
 // private
-import 'package:eats/components/private/home/home_screen.dart';
-import 'package:eats/components/private/home/menu_items_widget/store_menu.dart';
+import 'package:eats/components/private/home/store/store_screen.dart';
+import 'package:eats/components/private/home/menu/menu_screen.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
