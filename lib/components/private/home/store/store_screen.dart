@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:eats/shared/bottom_nav_bar.dart';
 
-import '../../../../shared/bottom_nav_bar.dart';
+import '../../../../core/utilils/app_colors.dart';
 
 class StoreCard extends StatelessWidget {
   final String imagePath;
@@ -20,7 +20,6 @@ class StoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        margin: EdgeInsets.all(16),
         height: 200, // Adjust the height according to your needs
         decoration: BoxDecoration(
           color: backgroundColor, // Set background color of the card
@@ -70,9 +69,8 @@ class StoreCard extends StatelessWidget {
                     Row(
                       children: List.generate(5, (index) {
                         return Icon(
-                          index < rating
-                              ? Icons.star
-                              : Icons.star_border, // Show filled or outlined star
+                          index < rating ? Icons.star : Icons.star_border,
+                          // Show filled or outlined star
                           color: Colors.yellow,
                           size: 20,
                         );
@@ -104,36 +102,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          SizedBox(height: 100,),
-          // Uncomment and use TopBar if needed
-          // TopBar(),
-          // Uncomment and use TextField if needed for search
-          TextField(
-            //controller: _searchController,
-            decoration: InputDecoration(
-              labelText: 'Search',
-              border: OutlineInputBorder(),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 100,
             ),
-          ),
-          SizedBox(height: 50,),
 
-          // Example StoreCard instances with dummy data
-          StoreCard(
-            imagePath: 'assets/images/image1.webp', // Replace with your image path
-            storeName: 'Store Name 1',
-            rating: 4.5,
-          ),
-          StoreCard(
-            imagePath: 'assets/images/food9.jpeg', // Replace with your image path
-            storeName: 'Store Name 2',
-            rating: 3.8,
-          ),
-          // Add more StoreCard instances as needed
-        ],
+            InkWell(
+
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: AppColors.secondaryColor,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                alignment: Alignment.center,
+                child: Text('Unit 54, Mogale Tech', style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15),),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/profile', (Route<dynamic> route) => true);
+              },
+            ),
+            // Uncomment and use TopBar if needed
+            // TopBar(),
+            // Uncomment and use TextField if needed for search
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
+              //controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+
+            // Example StoreCard instances with dummy data
+            StoreCard(
+              imagePath: 'assets/images/image1.webp',
+              // Replace with your image path
+              storeName: 'Store Name 1',
+              rating: 4.5,
+            ),
+            StoreCard(
+              imagePath: 'assets/images/food9.jpeg',
+              // Replace with your image path
+              storeName: 'Store Name 2',
+              rating: 3.8,
+            ),
+            // Add more StoreCard instances as needed
+          ],
+        ),
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,

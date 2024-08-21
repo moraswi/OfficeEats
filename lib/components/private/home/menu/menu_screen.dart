@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../shared/bottom_nav_bar.dart';
-import '../menu/TopBar.dart';
+import 'package:eats/shared/bottom_nav_bar.dart';
+import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
   final String imagePath;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/utilils/app_colors.dart';
+
 class RoundedBottomBar extends StatefulWidget {
   RoundedBottomBar({Key? key, required this.selectedIndex}) : super(key: key);
   final int selectedIndex;
@@ -11,8 +13,7 @@ class RoundedBottomBar extends StatefulWidget {
 class _RoundedBottomBarState extends State<RoundedBottomBar>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Color activeIconColor =
-      Colors.orange; // Set your desired active icon color here
+  Color activeIconColor = AppColors.primaryColor; // Set your desired active icon color here
   Color inactiveIconColor =
       Colors.grey; // Set your desired inactive icon color here
 
@@ -86,16 +87,13 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                     ),
                     text: 'Order',
                   ),
-                  // Tab(
-                  //   icon: Icon(
-                  //     Icons.help,
-                  //     size: 23.0,
-                  //     color: widget.selectedIndex == 2
-                  //         ? activeIconColor
-                  //         : inactiveIconColor,
-                  //   ),
-                  //   text: 'Help',
-                  // ),
+                  Tab(
+                    icon: Icon(
+                      Icons.help,
+                      size: 23.0,
+                    ),
+                    text: 'Help',
+                  ),
                   Tab(
                     icon: Icon(
                       Icons.account_circle,
@@ -106,13 +104,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                     ),
                     text: 'Profile',
                   ),
-                  Tab(
-                    icon: Icon(
-                      Icons.next_plan,
-                      size: 23.0,
-                    ),
-                    text: 'Help',
-                  ),
+
                 ],
                 onTap: (index) {
                   setState(() {

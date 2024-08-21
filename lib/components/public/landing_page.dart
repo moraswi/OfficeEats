@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../../core/utilils/app_colors.dart';
+
 class LandingPage extends StatefulWidget {
   var routeName = '/landingPage';
 
@@ -66,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
                 SizedBox(width: 16), // Space between the buttons
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    primary: AppColors.primaryColor,
                     padding: EdgeInsets.fromLTRB(50, 14, 50, 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(11.0),
