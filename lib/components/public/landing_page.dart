@@ -78,7 +78,7 @@ class _LandingPageState extends State<LandingPage> {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/logIn', (Route<dynamic> route) => true);
                   },
-                  child: Text(
+                  child: const Text(
                     'Log In',
                     style: TextStyle(
                         color: Colors.white,

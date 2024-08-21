@@ -12,6 +12,7 @@ import 'package:eats/components/public/splash_screen.dart';
 import 'package:eats/components/private/home/store_screen.dart';
 import 'package:eats/components/private/home/menu/menu_screen.dart';
 import 'package:eats/components/private/home/cart_screen.dart';
+import 'package:eats/components/private/history/history_screen.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
@@ -27,6 +28,7 @@ Map<String, WidgetBuilder> getRoutes() {
     HomeScreen().routeName: (context) => HomeScreen(),
     MenuPage().routeName: (context) => MenuPage(),
     CartPage().routeName: (context) => CartPage(),
+    HistoryPage().routeName: (context) => HistoryPage(),
   };
 }
 
