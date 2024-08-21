@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import '../../../../core/utilils/app_colors.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -7,12 +8,14 @@ class MenuItem extends StatefulWidget {
   final String name;
   final double rating;
   final double price;
+  final Function(int) onQuantityChanged; // Callback to notify parent
 
   MenuItem({
     required this.imagePath,
     required this.name,
     required this.rating,
     required this.price,
+    required this.onQuantityChanged,
   });
 
   @override
@@ -26,6 +29,7 @@ class _MenuItemState extends State<MenuItem> {
     setState(() {
       quantity++;
     });
+    widget.onQuantityChanged(quantity); // Notify parent
   }
 
   void _decrement() {
@@ -33,6 +37,7 @@ class _MenuItemState extends State<MenuItem> {
       setState(() {
         quantity--;
       });
+      widget.onQuantityChanged(quantity); // Notify parent
     }
   }
 
@@ -107,6 +112,7 @@ class _MenuItemState extends State<MenuItem> {
                   ),
                 ],
               ),
+              Text('Hot Deal', style: TextStyle(color: AppColors.primaryColor)),
             ],
           ),
         ],
@@ -123,14 +129,43 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  int _totalQuantity = 0;
+
+  void _updateTotalQuantity(int quantity) {
+    setState(() {
+      _totalQuantity += quantity;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Explore Our Stores'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Handle back action
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_sharp,
+                size: 28, color: AppColors.primaryColor),
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/cart', (Route<dynamic> route) => true);
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          SizedBox(height: 105,),
+          const SizedBox(
+            height: 10,
+          ),
           TopBar(),
-
           Expanded(
             child: ListView(
               children: [
@@ -139,50 +174,56 @@ class _MenuPageState extends State<MenuPage> {
                   name: 'Food Item 1',
                   rating: 4.5,
                   price: 12.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
-
                 MenuItem(
                   imagePath: 'assets/images/food2.jpeg',
                   name: 'Food Item 1',
                   rating: 4.5,
                   price: 12.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
                 MenuItem(
                   imagePath: 'assets/images/food3.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
                 MenuItem(
                   imagePath: 'assets/images/food4.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
                 MenuItem(
                   imagePath: 'assets/images/food5.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
                 MenuItem(
                   imagePath: 'assets/images/food6.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
                 MenuItem(
                   imagePath: 'assets/images/food7.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
-
                 MenuItem(
                   imagePath: 'assets/images/food9.jpeg',
                   name: 'Food Item 2',
                   rating: 4.0,
                   price: 10.99,
+                  onQuantityChanged: _updateTotalQuantity,
                 ),
               ],
             ),

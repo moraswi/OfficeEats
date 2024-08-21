@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-
-import '../../../../core/utilils/app_colors.dart';
+import 'package:eats/core/utilils/app_colors.dart';
 
 class StoreCard extends StatelessWidget {
   final String imagePath;
@@ -102,68 +101,101 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Explore Our Stores'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Handle back action
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart_sharp, size: 28,),
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/cart', (Route<dynamic> route) => true);
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 100,
-            ),
+        child:Column(
 
-            InkWell(
+        children: [
+          SizedBox(height: 15,),
 
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                alignment: Alignment.center,
-                child: Text('Unit 54, Mogale Tech', style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15),),
-              ),
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/profile', (Route<dynamic> route) => true);
-              },
-            ),
-            // Uncomment and use TopBar if needed
-            // TopBar(),
-            // Uncomment and use TextField if needed for search
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              //controller: _searchController,
-              decoration: InputDecoration(
-                labelText: 'Search',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(
+          InkWell(
+            child: Container(
+              width: double.infinity,
               height: 50,
+              decoration: BoxDecoration(
+                color: AppColors.secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                'Unit 54, Mogale Tech',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
             ),
+            onTap: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/profile',
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+          const SizedBox(height: 15),
+          const TextField(
+            //controller: _searchController,
+            decoration: InputDecoration(
+              labelText: 'Search',
+              border: OutlineInputBorder(),
+            ),
+          ),
 
-            // Example StoreCard instances with dummy data
-            StoreCard(
-              imagePath: 'assets/images/image1.webp',
-              // Replace with your image path
-              storeName: 'Store Name 1',
-              rating: 4.5,
+          const SizedBox(height: 5),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height:15),
+                  // Example StoreCard instances with dummy data
+                  StoreCard(
+                    imagePath: 'assets/images/image1.webp',
+                    // Replace with your image path
+                    storeName: 'Store Name 1',
+                    rating: 4.5,
+                  ),
+                  const SizedBox(height: 50),
+                  StoreCard(
+                    imagePath: 'assets/images/food9.jpeg',
+                    // Replace with your image path
+                    storeName: 'Store Name 2',
+                    rating: 3.8,
+                  ),
+                  const SizedBox(height: 50),
+                  StoreCard(
+                    imagePath: 'assets/images/food9.jpeg',
+                    // Replace with your image path
+                    storeName: 'Store Name 3',
+                    rating: 3.8,
+                  ),
+                ],
+              ),
             ),
-            StoreCard(
-              imagePath: 'assets/images/food9.jpeg',
-              // Replace with your image path
-              storeName: 'Store Name 2',
-              rating: 3.8,
-            ),
-            // Add more StoreCard instances as needed
-          ],
-        ),
+          ),
+        ],
+      ),
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,

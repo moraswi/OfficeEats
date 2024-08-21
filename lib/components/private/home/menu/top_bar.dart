@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utilils/app_colors.dart';
+import 'package:eats/core/utilils/app_colors.dart';
 
 class FoodCategory {
   final String name;
@@ -21,8 +21,7 @@ final List<FoodCategory> foodCategories = [
 class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-    //  height: 130, // Adjusted to accommodate the title below the circle
+    return Container( // Adjusted to accommodate the title below the circle
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -43,10 +42,11 @@ class TopBar extends StatelessWidget {
                       backgroundColor: AppColors.backgroundColor,
                       backgroundImage: AssetImage(category.imagePath),
                     ),
-                    SizedBox(height: 8.0), // Space between the circle and the title
+                    SizedBox(height: 8.0),
+                    // Space between the circle and the title
                     Text(
                       category.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14.0,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
