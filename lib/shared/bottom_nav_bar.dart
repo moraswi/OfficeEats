@@ -85,7 +85,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                           ? activeIconColor
                           : inactiveIconColor,
                     ),
-                    text: 'Order',
+                    text: 'History',
                   ),
                   Tab(
                     icon: Icon(
@@ -115,7 +115,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   if (index == 0) {
                     Navigator.pushNamed(context, '/home');
                   } else if (index == 1) {
-                    Navigator.pushNamed(context, '/cattlelist');
+                    Navigator.pushNamed(context, '/history');
                   }
                   // else if (index == 2) {
                   //   Navigator.pushNamed(context, '/help');

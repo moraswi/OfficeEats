@@ -108,8 +108,6 @@ class _CartPageState extends State<CartPage> {
             icon: const Icon(Icons.shopping_cart_sharp,
                 size: 28, color: AppColors.primaryColor),
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/history', (Route<dynamic> route) => true);
             },
           ),
         ],

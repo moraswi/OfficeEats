@@ -73,26 +73,27 @@ class _MenuItemState extends State<MenuItem> {
             ),
           ),
           SizedBox(width: 12),
-      ElevatedButton(
-        onPressed: () {
-          // Action when the button is pressed
-          print('Track Order pressed');
-        },
-        style: ElevatedButton.styleFrom(
-          primary: Colors.blue, // Background color
-          onPrimary: Colors.white, // Text color
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0), // Rounded corners
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/trackorder', (Route<dynamic> route) => true);
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue, // Background color
+              onPrimary: Colors.white, // Text color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0), // Rounded corners
+              ),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16.0, vertical: 0.0), // Padding inside the button
+            ),
+            child: Text(
+              'Track Order',
+              style: TextStyle(
+                fontSize: 16.0, // Text size
+              ),
+            ),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0), // Padding inside the button
-        ),
-        child: Text(
-          'Track Order',
-          style: TextStyle(
-            fontSize: 16.0, // Text size
-          ),
-        ),
-      ),
         ],
       ),
     );
@@ -155,7 +156,6 @@ class _HistoryPageState extends State<HistoryPage> {
                   const SizedBox(
                     height: 20,
                   ),
-
                 ],
               ),
             ),
@@ -163,7 +163,7 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
       bottomNavigationBar: RoundedBottomBar(
-        selectedIndex: 0,
+        selectedIndex: 1,
       ),
     );
   }
