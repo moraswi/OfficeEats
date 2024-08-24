@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/app_buttons.dart';
+
 class ForgotPassword extends StatefulWidget {
   var routeName = '/forgotPassword';
 
@@ -77,12 +79,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       decoration: InputDecoration(
                         hintText: 'Email',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
                       ),
                     ),
@@ -92,27 +93,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
               const SizedBox(height: 25),
 
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  // Set the background color to orange
-                  minimumSize: Size(double.infinity, 0),
-                  // Set width to 100%
-                  padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11.0),
-                    // Set border radius
-                  ),
-                ),
-                onPressed: () {
+              CustomButton(
+                label: 'Next',
+                onTap: () {
+                  // Handle button press
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/resetPassword', (Route<dynamic> route) => true);
                 },
-                child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
-                ),
               ),
+
               const SizedBox(height: 25),
 
               RichText(

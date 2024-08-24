@@ -13,8 +13,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
-  TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
@@ -89,55 +89,53 @@ class _SignUpState extends State<SignUp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     TextFormField(
                       controller: firstNameController,
-                      keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         hintText: 'First Name',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(8),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.all(8),
                       ),
                     ),
                     const SizedBox(height: 16),
 
                     // Email
                     TextFormField(
-                      controller: firstNameController,
-                      keyboardType: TextInputType.name,
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: 'Email',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(8),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.all(8),
                       ),
                     ),
                     const SizedBox(height: 16),
 
                     // Phone number
                     TextFormField(
-                      controller: firstNameController,
-                      keyboardType: TextInputType.name,
+                      controller: phoneNumberController,
+                      keyboardType: TextInputType.number,
+
                       decoration: InputDecoration(
                         hintText: 'Phone Number',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
-                        contentPadding: EdgeInsets.all(8),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.all(8),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -150,13 +148,13 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         hintText: 'Password',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
+
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -182,13 +180,13 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                         hintText: 'Confirm Password',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
+
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {

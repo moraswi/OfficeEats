@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../shared/app_buttons.dart';
+
 class ResetPassword extends StatefulWidget {
   var routeName = '/resetPassword';
 
@@ -27,7 +29,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 '/forgotPassword', (Route<dynamic> route) => true);
           },
         ),
-        title: Text(
+        title: const Text(
           'Reset Password',
           style: TextStyle(
             color: Colors.black,
@@ -40,11 +42,11 @@ class _ResetPasswordState extends State<ResetPassword> {
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
             children: [
-              Text(
+              const Text(
                 'Please enter and confirm',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
               ),
-              Text(
+              const Text(
                 'your new desired password.',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
               ),
@@ -57,18 +59,17 @@ class _ResetPasswordState extends State<ResetPassword> {
                     TextFormField(
                       controller: newPasswordController,
                       keyboardType: TextInputType.visiblePassword,
-                      textAlign: TextAlign.center,
                       obscureText: !isNewPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'New Password',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
+
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -91,17 +92,15 @@ class _ResetPasswordState extends State<ResetPassword> {
                     TextFormField(
                       controller: confirmPasswordController,
                       keyboardType: TextInputType.visiblePassword,
-                      textAlign: TextAlign.center,
                       obscureText: !isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Confirm New Password',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.solid,
-                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
                         ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
                         suffixIcon: GestureDetector(
                           onTap: () {
@@ -122,27 +121,15 @@ class _ResetPasswordState extends State<ResetPassword> {
 
                     const SizedBox(height: 25),
 
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
-                        // Set the background color to orange
-                        minimumSize: Size(double.infinity, 0),
-                        // Set width to 100%
-                        padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(11.0),
-                          // Set border radius
-                        ),
-                      ),
-                      onPressed: () {
+                    CustomButton(
+                      label: 'Submit',
+                      onTap: () {
+                        // Handle button press
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/logIn', (Route<dynamic> route) => true);
                       },
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
+
                   ],
                 ),
               ),

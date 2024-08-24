@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               height: 50,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
+                color: AppColors.primaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               alignment: Alignment.center,
@@ -152,12 +152,19 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+
           const SizedBox(height: 15),
-          const TextField(
-            //controller: _searchController,
+
+          TextFormField(
             decoration: InputDecoration(
-              labelText: 'Search',
-              border: OutlineInputBorder(),
+              hintText: 'Search Store',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+              contentPadding: const EdgeInsets.all(8),
             ),
           ),
 
