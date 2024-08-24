@@ -13,9 +13,9 @@ import 'package:eats/components/private/home/store_screen.dart';
 import 'package:eats/components/private/home/menu/menu_screen.dart';
 import 'package:eats/components/private/home/cart_screen.dart';
 import 'package:eats/components/private/history/history_screen.dart';
-
 import 'package:eats/components/private/history/track_order.dart';
 import 'package:eats/components/private/home/offices.dart';
+import 'package:eats/components/private/home/order_review.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
@@ -34,6 +34,8 @@ Map<String, WidgetBuilder> getRoutes() {
     HistoryPage().routeName: (context) => HistoryPage(),
     TrackOrderPage().routeName: (context) => TrackOrderPage(),
     OfficePage().routeName: (context) => OfficePage(),
+    OrderReviewPage().routeName: (context) => OrderReviewPage(),
+
   };
 }
 

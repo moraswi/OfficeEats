@@ -141,11 +141,11 @@ class _CartPageState extends State<CartPage> {
                     height: 20,
                   ),
                   CustomButton(
-                    label: 'Pay',
+                    label: 'Check out',
                     onTap: () {
                       // Handle button press
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/home', (Route<dynamic> route) => true);
+                          '/orderreview', (Route<dynamic> route) => true);
                     },
                   ),
                 ],

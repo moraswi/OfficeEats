@@ -124,85 +124,85 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child:Column(
 
-        children: [
-          SizedBox(height: 15,),
+          children: [
+            SizedBox(height: 15,),
 
-          InkWell(
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.circular(10),
+            InkWell(
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.center,
+                child: const Text(
+                  'Unit 54, Mogale Tech',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
               ),
-              alignment: Alignment.center,
-              child: const Text(
-                'Unit 54, Mogale Tech',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
+              onTap: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/profile',
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+
+            const SizedBox(height: 15),
+
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Search Store',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+                contentPadding: const EdgeInsets.all(8),
+              ),
+            ),
+
+            const SizedBox(height: 5),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height:15),
+                    // Example StoreCard instances with dummy data
+                    StoreCard(
+                      imagePath: 'assets/images/image1.webp',
+                      // Replace with your image path
+                      storeName: 'Store Name 1',
+                      rating: 4.5,
+                    ),
+                    const SizedBox(height: 50),
+                    StoreCard(
+                      imagePath: 'assets/images/food9.jpeg',
+                      // Replace with your image path
+                      storeName: 'Store Name 2',
+                      rating: 3.8,
+                    ),
+                    const SizedBox(height: 50),
+                    StoreCard(
+                      imagePath: 'assets/images/food9.jpeg',
+                      // Replace with your image path
+                      storeName: 'Store Name 3',
+                      rating: 3.8,
+                    ),
+                  ],
                 ),
               ),
             ),
-            onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/profile',
-                (Route<dynamic> route) => false,
-              );
-            },
-          ),
-
-          const SizedBox(height: 15),
-
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Search Store',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey[200],
-              contentPadding: const EdgeInsets.all(8),
-            ),
-          ),
-
-          const SizedBox(height: 5),
-
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height:15),
-                  // Example StoreCard instances with dummy data
-                  StoreCard(
-                    imagePath: 'assets/images/image1.webp',
-                    // Replace with your image path
-                    storeName: 'Store Name 1',
-                    rating: 4.5,
-                  ),
-                  const SizedBox(height: 50),
-                  StoreCard(
-                    imagePath: 'assets/images/food9.jpeg',
-                    // Replace with your image path
-                    storeName: 'Store Name 2',
-                    rating: 3.8,
-                  ),
-                  const SizedBox(height: 50),
-                  StoreCard(
-                    imagePath: 'assets/images/food9.jpeg',
-                    // Replace with your image path
-                    storeName: 'Store Name 3',
-                    rating: 3.8,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,

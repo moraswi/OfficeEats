@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import '../../../../core/utilils/app_colors.dart';
+import '../../../../shared/app_buttons.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -44,7 +45,7 @@ class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -141,7 +142,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Explore Our Stores'),
+        title: Text(''),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -160,75 +161,86 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          TopBar(),
-          Expanded(
-            child: ListView(
-              children: [
-                MenuItem(
-                  imagePath: 'assets/images/image1.webp',
-                  name: 'Food Item 1',
-                  rating: 4.5,
-                  price: 12.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food2.jpeg',
-                  name: 'Food Item 1',
-                  rating: 4.5,
-                  price: 12.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food3.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food4.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food5.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food6.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food7.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-                MenuItem(
-                  imagePath: 'assets/images/food9.jpeg',
-                  name: 'Food Item 2',
-                  rating: 4.0,
-                  price: 10.99,
-                  onQuantityChanged: _updateTotalQuantity,
-                ),
-              ],
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Column(
+          children: [
+            TopBar(),
+            Expanded(
+              child: ListView(
+                children: [
+                  MenuItem(
+                    imagePath: 'assets/images/image1.webp',
+                    name: 'Food Item 1',
+                    rating: 4.5,
+                    price: 12.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food2.jpeg',
+                    name: 'Food Item 1',
+                    rating: 4.5,
+                    price: 12.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food3.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food4.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food5.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food6.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food7.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                  MenuItem(
+                    imagePath: 'assets/images/food9.jpeg',
+                    name: 'Food Item 2',
+                    rating: 4.0,
+                    price: 10.99,
+                    onQuantityChanged: _updateTotalQuantity,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            CustomButton(
+              label: 'My Cart',
+              onTap: () {
+                // Handle button press
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/cart', (Route<dynamic> route) => true);
+              },
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,
