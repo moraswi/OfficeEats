@@ -28,7 +28,7 @@ class TopBar extends StatelessWidget {
           children: List.generate(foodCategories.length, (index) {
             final category = foodCategories[index];
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 18),
               child: GestureDetector(
                 onTap: () {
                   // Handle the tap event here
@@ -38,7 +38,7 @@ class TopBar extends StatelessWidget {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 45, // Adjust the size of the circle
+                      radius: 35, // Adjust the size of the circle
                       backgroundColor: AppColors.tertiaryColor,
                       backgroundImage: AssetImage(category.imagePath),
                     ),

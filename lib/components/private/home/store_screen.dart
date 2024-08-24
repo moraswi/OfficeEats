@@ -183,14 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       storeName: 'Store Name 1',
                       rating: 4.5,
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 25),
                     StoreCard(
                       imagePath: 'assets/images/food9.jpeg',
                       // Replace with your image path
                       storeName: 'Store Name 2',
                       rating: 3.8,
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 25),
                     StoreCard(
                       imagePath: 'assets/images/food9.jpeg',
                       // Replace with your image path

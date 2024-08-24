@@ -15,7 +15,7 @@ class _OfficePageState extends State<OfficePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 100),
+          const SizedBox(height: 70),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -32,14 +32,14 @@ class _OfficePageState extends State<OfficePage> {
                     contentPadding: const EdgeInsets.all(8),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                     children: [
                       const Expanded(
@@ -75,7 +75,6 @@ class _OfficePageState extends State<OfficePage> {
               ],
             ),
           ),
-
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -85,61 +84,60 @@ class _OfficePageState extends State<OfficePage> {
                     // Other scrollable content here
 
                     InkWell(
-                     child:Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4.0,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/officePackImage1.jpg',
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
-                          const SizedBox(width: 12),
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Office Pack: Moreleta park',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-
-                                Row(
-                                  children: [
-                                    Icon(Icons.location_on, color: AppColors.primaryColor, size: 20),
-                                    Text('Gauteng, Moreleta, worts street',
-                                        style: TextStyle(fontSize: 16)),
-                                  ],
-                                ),
-                              ],
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4.0,
+                              offset: Offset(0, 2),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/officePackImage1.jpg',
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Office Pack: Moreleta park',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.location_on,
+                                          color: AppColors.primaryColor,
+                                          size: 20),
+                                      Text('Gauteng, Moreleta, worts street',
+                                          style: TextStyle(fontSize: 16)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-
                       onTap: () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/home', (Route<dynamic> route) => true);
                       },
                     ),
                     const SizedBox(height: 20),
-
                   ],
                 ),
               ),
