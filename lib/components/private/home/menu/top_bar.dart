@@ -28,7 +28,7 @@ class TopBar extends StatelessWidget {
           children: List.generate(foodCategories.length, (index) {
             final category = foodCategories[index];
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 18),
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
               child: GestureDetector(
                 onTap: () {
                   // Handle the tap event here

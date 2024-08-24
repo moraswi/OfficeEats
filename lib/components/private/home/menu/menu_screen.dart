@@ -162,7 +162,7 @@ class _MenuPageState extends State<MenuPage> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: Column(
           children: [
             TopBar(),
