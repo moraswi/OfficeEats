@@ -113,7 +113,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   });
 
                   if (index == 0) {
-                    Navigator.pushNamed(context, '/home');
+                    Navigator.pushNamed(context, '/office');
                   } else if (index == 1) {
                     Navigator.pushNamed(context, '/history');
                   }

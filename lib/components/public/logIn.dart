@@ -81,29 +81,28 @@ class _LogInState extends State<LogIn> {
                 decoration: InputDecoration(
                   hintText: 'Email',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(9.0),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide.none,
                   ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
                   contentPadding: const EdgeInsets.all(8),
                 ),
               ),
+
               const SizedBox(height: 10),
+
               TextFormField(
                 controller: passwordController,
-                keyboardType: TextInputType.emailAddress,
                 obscureText: !isPasswordVisible,
                 decoration: InputDecoration(
                   hintText: 'Password',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(9.0),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.solid,
-                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide.none,
                   ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
                   contentPadding: const EdgeInsets.all(8),
                   suffixIcon: GestureDetector(
                     onTap: () {
