@@ -123,7 +123,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   else if (index == 2) {
                     Navigator.pushNamed(context, '/familylisttree');
                   } else if (index == 3) {
-                    Navigator.pushNamed(context, '/logIn');
+                    Navigator.pushNamed(context, '/profilelanding');
                   }
                 },
                 controller: _tabController,

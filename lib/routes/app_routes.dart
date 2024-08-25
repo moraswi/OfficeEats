@@ -16,6 +16,7 @@ import 'package:eats/components/private/history/history_screen.dart';
 import 'package:eats/components/private/history/track_order.dart';
 import 'package:eats/components/private/home/offices.dart';
 import 'package:eats/components/private/home/order_review.dart';
+import 'package:eats/components/private/profile/profile_screen.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
@@ -35,6 +36,8 @@ Map<String, WidgetBuilder> getRoutes() {
     TrackOrderPage().routeName: (context) => TrackOrderPage(),
     OfficePage().routeName: (context) => OfficePage(),
     OrderReviewPage().routeName: (context) => OrderReviewPage(),
+    ProfileLandingPage().routeName: (context) => ProfileLandingPage(),
+
 
   };
 }

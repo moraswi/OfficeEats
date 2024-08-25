@@ -16,23 +16,23 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 100),
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 30),
         decoration: BoxDecoration(),
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.center,
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 200,
             ),
-            Text(
+            const Text(
               'Office Eats',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
-            Text(
+            const Text(
               "Welcome to Office Eats! Enjoy delicious meals delivered or ready for pickup, Simplify order with our tailored service!",
               textAlign: TextAlign.center,
               style: TextStyle(
