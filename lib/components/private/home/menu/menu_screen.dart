@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-import '../../../../shared/app_colors.dart';
-import '../../../../shared/app_buttons.dart';
+import 'package:eats/shared/app_colors.dart';
+import 'package:eats/shared/app_buttons.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {

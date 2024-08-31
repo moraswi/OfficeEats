@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import 'package:eats/shared/app_buttons.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:eats/shared/bottom_nav_bar.dart';
 
 import '../../../shared/app_colors.dart';
 
@@ -14,11 +12,17 @@ class ProfileLandingPage extends StatefulWidget {
 }
 
 class _ProfileLandingPageState extends State<ProfileLandingPage> {
+  final List<String> itemNames = [
+    'My profile',
+    'Change my password',
+    'Payments method',
+    'Log out'
+  ]; // List of item names
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -36,81 +40,142 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
         //   ),
         // ],
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            SizedBox(
-                width: 120,
-                height: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.asset('assets/images/food3.jpeg'),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "Blessing Mothapo",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
-            ),
-            const Text(
-              "Bless@gmail.com",
-              style: TextStyle( fontSize: 15),
-            ),
-            SizedBox(height: 20,),
 
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    side: BorderSide.none,
-                    shape: StadiumBorder()),
-                child: Text('Edit Profile', style: TextStyle(color: Colors.white),),
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              children: [
+
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.asset('assets/images/food3.jpeg'),
+                    )),
+
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  "Blessing Mothapo",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                ),
+                const Text(
+                  "Bless@gmail.com",
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/feedback', (Route<dynamic> route) => true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        side: BorderSide.none,
+                        shape: StadiumBorder()),
+                    child: Text(
+                      'Rate App',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Divider(),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+
+          //options
+          Column(
+            children: [
+              const SizedBox(height: 315),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(15, 32, 15, 32),
+                  itemCount: itemNames.length, // Number of items in the list
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // Navigate to different sections/screens based on the item index
+                            if (index == 0) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/home', (Route<dynamic> route) => true);
+                            } else if (index == 1) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/home', (Route<dynamic> route) => true);
+                            } else if (index == 2) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/home', (Route<dynamic> route) => true);
+                            } else if (index == 3) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/login', (Route<dynamic> route) => true);
+                            }
+                          },
+                          child: Container(
+                            height: 65,
+                            decoration: const BoxDecoration(
+                                color: Color(0xFFEFEFF0),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15.0),
+                                ),
+                            ),
+                            child: Center(
+                              child: ListTile(
+                                title: Text(
+                                  itemNames[index],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 19,
+                                    color: index ==
+                                            itemNames.length -
+                                                1 //setting the 4th item to be red
+                                        ? Colors.red
+                                        : Colors.black,
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  Icons.arrow_forward,
+                                  color: index ==
+                                          itemNames.length -
+                                              1 //setting the 4th item to be red
+                                      ? Colors.red
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: 30,),
-            Divider(),
-            SizedBox(height: 30,),
-
-            // Text("Profile Details", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),),
-            // SizedBox(height: 20,),
-            //
-            // Text("Change Password", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),),
-            // SizedBox(height: 20,),
-            //
-            // // Text("Title here", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),),
-            // // SizedBox(height: 20,),
-            //
-            // Text("Office Address", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),),
-            // // ListTile(
-            //   leading: Container(
-            //     width: 40,
-            //     height: 40,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(100),
-            //       color: AppColors.tertiaryColor
-            //     ),
-            //     child: Icon(LineAwesomeIcons.copy, color: AppColors.secondaryColor,),
-            //   ),
-            //   title: Text("Title here", style: TextStyle(fontWeight: FontWeight.w600),),
-            //
-            //   trailing: Container(
-            //     width: 30,
-            //     height: 30,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(100),
-            //       color: AppColors.tertiaryColor,
-            //     ),
-            //     child: Icon(LineAwesomeIcons.address_book, size: 18,color: AppColors.secondaryColor,),
-            //   ),
-            // )
-          ],
-        ),
-      )),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: RoundedBottomBar(
+        selectedIndex: 3,
+      ),
     );
   }
 }
