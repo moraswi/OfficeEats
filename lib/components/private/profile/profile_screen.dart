@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-import '../../../core/utilils/app_colors.dart';
+import '../../../shared/app_colors.dart';
 
 class ProfileLandingPage extends StatefulWidget {
   var routeName = '/profilelanding';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-import '../../../../core/utilils/app_colors.dart';
+import '../../../../shared/app_colors.dart';
 import '../../../../shared/app_buttons.dart';
 import '../menu/top_bar.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eats/core/utilils/app_colors.dart';
+import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
 class OfficePage extends StatefulWidget {

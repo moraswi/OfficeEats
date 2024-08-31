@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/utilils/app_colors.dart';
+import 'app_colors.dart';
 
 class RoundedBottomBar extends StatefulWidget {
   RoundedBottomBar({Key? key, required this.selectedIndex}) : super(key: key);

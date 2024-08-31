@@ -9,16 +9,16 @@ import 'package:eats/components/public/sign_up.dart';
 import 'package:eats/components/public/splash_screen.dart';
 
 // private
-import 'package:eats/components/private/home/store_screen.dart';
+import 'package:eats/components/private/home/stores/store_screen.dart';
 import 'package:eats/components/private/home/menu/menu_screen.dart';
-import 'package:eats/components/private/home/cart_screen.dart';
+import 'package:eats/components/private/home/cart_and_review/cart_screen.dart';
 import 'package:eats/components/private/history/history_screen.dart';
 import 'package:eats/components/private/history/track_order.dart';
-import 'package:eats/components/private/home/offices.dart';
-import 'package:eats/components/private/home/order_review.dart';
+import 'package:eats/components/private/home/offices/offices.dart';
+import 'package:eats/components/private/home/cart_and_review/order_review.dart';
 import 'package:eats/components/private/profile/profile_screen.dart';
-import 'package:eats/components/private/feedback/feedBack.dart';
-import 'package:eats/components/private/feedback/feedBackConfirmed.dart';
+import 'package:eats/components/private/feedback/feedback.dart';
+import 'package:eats/components/private/feedback/feedback_confirmed.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
