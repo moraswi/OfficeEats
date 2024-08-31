@@ -92,7 +92,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                       Icons.help,
                       size: 23.0,
                     ),
-                    text: 'Help',
+                    text: 'Rate App',
                   ),
                   Tab(
                     icon: Icon(
@@ -121,7 +121,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   //   Navigator.pushNamed(context, '/help');
                   //}
                   else if (index == 2) {
-                    Navigator.pushNamed(context, '/familylisttree');
+                    Navigator.pushNamed(context, '/feedback');
                   } else if (index == 3) {
                     Navigator.pushNamed(context, '/profilelanding');
                   }
