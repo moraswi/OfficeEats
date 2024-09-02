@@ -1,8 +1,6 @@
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-
-import '../../../shared/app_colors.dart';
 
 class ProfileLandingPage extends StatefulWidget {
   var routeName = '/profilelanding';
@@ -30,15 +28,6 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
             Navigator.of(context).pop();
           },
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.shopping_cart_sharp, size: 28,),
-        //     onPressed: () {
-        //       Navigator.of(context).pushNamedAndRemoveUntil(
-        //           '/cart', (Route<dynamic> route) => true);
-        //     },
-        //   ),
-        // ],
       ),
 
       body: Stack(
@@ -91,11 +80,11 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Divider(),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
               ],
             ),
@@ -104,7 +93,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
           //options
           Column(
             children: [
-              const SizedBox(height: 315),
+              const SizedBox(height: 280),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.fromLTRB(15, 32, 15, 32),
@@ -117,10 +106,10 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                             // Navigate to different sections/screens based on the item index
                             if (index == 0) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => true);
+                                  '/myprofile', (Route<dynamic> route) => true);
                             } else if (index == 1) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => true);
+                                  '/changepassword', (Route<dynamic> route) => true);
                             } else if (index == 2) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/home', (Route<dynamic> route) => true);
