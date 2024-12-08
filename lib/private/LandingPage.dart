@@ -45,7 +45,7 @@ class _LandingPageState extends State<LandingPage> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.orange,
+                    backgroundColor: Colors.orange,
                     padding: EdgeInsets.fromLTRB(40, 14, 40, 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(11.0),
@@ -66,7 +66,7 @@ class _LandingPageState extends State<LandingPage> {
                 SizedBox(width: 16), // Space between the buttons
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                     padding: EdgeInsets.fromLTRB(50, 14, 50, 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(11.0),

@@ -124,7 +124,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
+                        backgroundColor: Colors.orange,
                         // Set the background color to orange
                         minimumSize: Size(double.infinity, 0),
                         // Set width to 100%

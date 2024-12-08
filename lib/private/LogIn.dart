@@ -123,7 +123,7 @@ class _LogInState extends State<LogIn> {
               const SizedBox(height: 14),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                  backgroundColor: Colors.orange,
                   minimumSize: Size(double.infinity, 0),
                   padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
                   shape: RoundedRectangleBorder(
