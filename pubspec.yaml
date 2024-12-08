@@ -62,24 +62,24 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-
-    - assets/images/image1.webp
-    - assets/images/food2.jpeg
-    - assets/images/food3.jpeg
-    - assets/images/food4.jpeg
-    - assets/images/food5.jpeg
-    - assets/images/food6.jpeg
-    - assets/images/food7.jpeg
-    - assets/images/food8.jpeg
-    - assets/images/food9.jpeg
-    - assets/images/food10.jpeg
-    - assets/images/officePackImage1.jpg
-    - assets/images/mastercard.png
+    - assets/images/
+#    - assets/images/image1.webp
+#    - assets/images/food2.jpeg
+#    - assets/images/food3.jpeg
+#    - assets/images/food4.jpeg
+#    - assets/images/food5.jpeg
+#    - assets/images/food6.jpeg
+#    - assets/images/food7.jpeg
+#    - assets/images/food8.jpeg
+#    - assets/images/food9.jpeg
+#    - assets/images/food10.jpeg
+#
+#    - assets/images/mastercard.png
 
 #    Feedback
-    - assets/images/feedback/starFill.png
-    - assets/images/feedback/starOutlined.png
-    - assets/images/feedback/solar_like-bold.png
+    - assets/images/feedback/
+#    - assets/images/feedback/starOutlined.png
+#    - assets/images/feedback/solar_like-bold.png
 
 #    - assets/images/mtn.png
 #    - images/a_dot_ham.jpeg

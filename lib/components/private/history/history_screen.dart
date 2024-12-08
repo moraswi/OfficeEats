@@ -79,8 +79,7 @@ class _MenuItemState extends State<MenuItem> {
                   '/trackorder', (Route<dynamic> route) => true);
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue, // Background color
-              onPrimary: Colors.white, // Text color
+              foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0), // Rounded corners
               ),
