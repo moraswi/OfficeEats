@@ -7,14 +7,14 @@ import '../menu/top_bar.dart';
 class MenuItem extends StatefulWidget {
   final String imagePath;
   final String name;
-  final double rating;
+  final String description;
   final double price;
   final Function(int) onQuantityChanged; // Callback to notify parent
 
   MenuItem({
     required this.imagePath,
     required this.name,
-    required this.rating,
+    required this.description,
     required this.price,
     required this.onQuantityChanged,
   });
@@ -50,7 +50,7 @@ class _MenuItemState extends State<MenuItem> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 4.0,
@@ -66,56 +66,86 @@ class _MenuItemState extends State<MenuItem> {
             height: 80,
             fit: BoxFit.cover,
           ),
+
           SizedBox(width: 12),
-          Expanded(
-            child: Column(
+
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                // Name Of Food
                 Text(
                   widget.name,
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
+
+                // description
+                Text('${widget.description}', style: TextStyle(fontSize: 13)),
+
+                // button and amount
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.star, color: Colors.amber, size: 16),
-                    Text('${widget.rating}', style: TextStyle(fontSize: 16)),
+                      Text(
+                        '\R${widget.price.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.secondaryColor
+                        ),
+                      ),
+
+                    SizedBox(width: 150 ,),
+
+                        Row(
+                          children: [
+
+                            InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              onTap: _decrement,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red[600],
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(0.0),
+                                child: Icon(Icons.remove, color: Colors.white),
+                              ),
+                            ),
+
+                            SizedBox(width: 3,),
+
+                            Text(
+                              '$quantity',
+                              style: TextStyle(fontSize: 16),
+                            ),
+
+                            SizedBox(width: 3,),
+
+                            InkWell(
+                              borderRadius: BorderRadius.circular(50),
+                              onTap: _decrement,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red[600],
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(0.0),
+                                child: Icon(Icons.add, color: Colors.white),
+                              ),
+                            ),
+
+                          ],
+                        ),
+
                   ],
-                ),
-                Text(
-                  '\R${widget.price.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                )
               ],
             ),
-          ),
-          SizedBox(width: 12),
-          Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove, color: Colors.red),
-                    onPressed: _decrement,
-                  ),
-                  Text(
-                    '$quantity',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add, color: Colors.green),
-                    onPressed: _increment,
-                  ),
-                ],
-              ),
-              Text('Hot Deal', style: TextStyle(color: AppColors.primaryColor)),
-            ],
-          ),
+
         ],
       ),
     );
@@ -148,6 +178,18 @@ class _MenuPageState extends State<MenuPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100), bottomRight: Radius.circular(0))
         ),
+
+        flexibleSpace: ClipRRect(
+           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100), bottomRight: Radius.circular(0)),
+          child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+             image: AssetImage("assets/images/food2.jpeg"),
+              fit: BoxFit.fill
+            )
+          ),
+          ),
+        ),
         title: Text(''),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -172,6 +214,54 @@ class _MenuPageState extends State<MenuPage> {
         padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: Column(
           children: [
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Mac D", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),),
+                    Text("Villaboas Office Pack"),
+                  ],
+                ),
+              ),
+            ),
+
+            const Row(
+              children: [
+                Icon(
+                  Icons.star,
+                  color: Color(0xFFF9A825),
+                  size: 20,
+                ),
+
+                Icon(
+                  Icons.star,
+                  color: Color(0xFFF9A825),
+                  size: 20,
+                ),
+
+                Icon(
+                  Icons.star,
+                  color: Color(0xFFF9A825),
+                  size: 20,
+                ),
+
+                Icon(
+                  Icons.star,
+                  color: Color(0xFFF9A825),
+                  size: 20,
+                ),
+
+                Icon(
+                  Icons.star,
+                  color: Color(0xFFF9A825),
+                  size: 20,
+                ),
+                  ]
+                ),
+
             TopBar(),
             Expanded(
               child: ListView(
@@ -179,59 +269,18 @@ class _MenuPageState extends State<MenuPage> {
                   MenuItem(
                     imagePath: 'assets/images/image1.webp',
                     name: 'Food Item 1',
-                    rating: 4.5,
+                    description: "description of item",
                     price: 12.99,
                     onQuantityChanged: _updateTotalQuantity,
                   ),
                   MenuItem(
                     imagePath: 'assets/images/food2.jpeg',
                     name: 'Food Item 1',
-                    rating: 4.5,
+                    description: "description of item",
                     price: 12.99,
                     onQuantityChanged: _updateTotalQuantity,
                   ),
-                  MenuItem(
-                    imagePath: 'assets/images/food3.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food4.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food5.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food6.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food7.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food9.jpeg',
-                    name: 'Food Item 2',
-                    rating: 4.0,
-                    price: 10.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
+
                 ],
               ),
             ),
