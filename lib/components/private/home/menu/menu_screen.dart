@@ -141,7 +141,13 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(180),
+      child: AppBar(
+        backgroundColor: Colors.pink,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100), bottomRight: Radius.circular(0))
+        ),
         title: Text(''),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -161,6 +167,7 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ],
       ),
+    ),
       body: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: Column(
