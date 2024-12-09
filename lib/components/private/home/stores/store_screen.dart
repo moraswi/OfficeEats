@@ -12,74 +12,76 @@ class StoreCard extends StatelessWidget {
     required this.imagePath,
     required this.storeName,
     required this.rating,
-    this.backgroundColor = Colors.white, // Default color
+    this.backgroundColor = Colors.grey, // Default color
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Container(
-        height: 200, // Adjust the height according to your needs
-        decoration: BoxDecoration(
-          color: backgroundColor, // Set background color of the card
-          borderRadius: BorderRadius.circular(10), // Rounded corners
-          boxShadow: const [
-            // Shadow for card elevation
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(imagePath),
-                    fit: BoxFit.cover,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0), // Apply the same border radius
+        child: Container(
+          height: 200, // Adjust the height according to your needs
+          decoration: BoxDecoration(
+            color: backgroundColor, // Set background color of the card
+            boxShadow: const [
+              // Shadow for card elevation
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(imagePath),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                color: Colors.black54,
-                // Background color of the store name area
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      storeName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: Colors.black54,
+                  // Background color of the store name area
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        storeName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < rating ? Icons.star : Icons.star_border,
-                          // Show filled or outlined star
-                          color: Colors.yellow,
-                          size: 20,
-                        );
-                      }),
-                    ),
-                  ],
+                      SizedBox(height: 8),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating ? Icons.star : Icons.star_border,
+                            // Show filled or outlined star
+                            color: Colors.yellow,
+                            size: 20,
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       onTap: () {
@@ -127,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(height: 15,),
 
+            // address
             InkWell(
               child: Container(
                 width: double.infinity,
@@ -155,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 15),
 
+            // search textfield
             TextFormField(
               decoration: InputDecoration(
                 hintText: 'Search Store',
@@ -183,20 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       storeName: 'Store Name 1',
                       rating: 4.5,
                     ),
-                    const SizedBox(height: 25),
-                    StoreCard(
-                      imagePath: 'assets/images/food9.jpeg',
-                      // Replace with your image path
-                      storeName: 'Store Name 2',
-                      rating: 3.8,
-                    ),
-                    const SizedBox(height: 25),
-                    StoreCard(
-                      imagePath: 'assets/images/food9.jpeg',
-                      // Replace with your image path
-                      storeName: 'Store Name 3',
-                      rating: 3.8,
-                    ),
+
                   ],
                 ),
               ),
