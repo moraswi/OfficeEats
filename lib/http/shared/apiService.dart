@@ -51,7 +51,7 @@ class apiService {
 
   //getStores
   Future<dynamic> getStores(int officeId) async {
-    final endpoint = 'shop/$officeId';
+    final endpoint = 'stores/$officeId';
     return await httpService.get(endpoint);
   }
 
@@ -80,11 +80,47 @@ class apiService {
     return await httpService.get(endpoint);
   }
 
+  //placeOrder/////
+  Future<dynamic> placeOrder(
+      int userId,
+      int foodId,
+      int quantity,
+
+      double itemPrice,
+      String deliveryAddress,
+      String paymentMethod,
+      int shopId) async {
+
+    final endpoint = 'place-order';
+    final data = {
+      'userId': userId,
+      'foodId': foodId,
+      'quantity': quantity,
+      'itemPrice': itemPrice,
+      'deliveryAddress': deliveryAddress,
+      'paymentMethod': paymentMethod,
+      'shopId': shopId,
+    };
+    return await httpService.post(endpoint, data);
+  }
+
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {
     final endpoint = 'addresses/$userid';
     return await httpService.get(endpoint);
   }
+
+  //deleteUserAddress/////
+  Future<dynamic> deleteUserAddress(int id) async {
+    final endpoint = 'address/$id';
+    return await httpService.delete(endpoint);
+  }
+
+  //deleteUserAddress/////
+  // Future<dynamic> rate(int id) async {
+  //   final endpoint = 'rate';
+  //   return await httpService.post(endpoint);
+  // }
 
   //getStoreMenuCategories
   Future<dynamic> getOrders(int userid) async {
