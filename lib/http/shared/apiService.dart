@@ -80,12 +80,11 @@ class apiService {
     return await httpService.get(endpoint);
   }
 
-  //placeOrder/////
+  //placeOrder
   Future<dynamic> placeOrder(
       int userId,
       int foodId,
       int quantity,
-
       double itemPrice,
       String deliveryAddress,
       String paymentMethod,

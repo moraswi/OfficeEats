@@ -80,4 +80,22 @@ class storeApiServcie {
       rethrow;
     }
   }
+
+  //placeOrderReq
+  Future<void> placeOrderReq(
+      int userId,
+      int foodId,
+      int quantity,
+      double itemPrice,
+      String deliveryAddress,
+      String paymentMethod,
+      int shopId) async {
+    try {
+
+    } catch (e) {
+
+      print('placeOrderReq Error: $e');
+      rethrow;
+    }
+  }
 }
