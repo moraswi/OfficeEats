@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eats/http/shared/apiService.dart';
 
-class AuthApiService {
+class authApiService {
 
   //login
   Future<void> loginReq( String email, String password) async {
@@ -48,5 +48,15 @@ class AuthApiService {
     }
   }
 
+  //deleteProfileReq
+  Future<void> getUserAddressReq(int id) async {
+    try {
+
+    } catch (e) {
+
+      print('deleteProfileReq Error: $e');
+      rethrow;
+    }
+  }
 
 }
