@@ -1,24 +1,43 @@
 
 import 'package:eats/http/shared/apiService.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../shared/loading_dialog.dart';
 
 class AuthApiService {
 
   ApiService apiService = ApiService();
 
   //login
-  Future<bool> loginReq( String email, String password) async {
+  Future<bool> loginReq(BuildContext context, String email, String password) async {
     try {
-      print(email);
-      print(password);
+      if (email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Email and Password are required!')),
+        );
+        return false;
+      }
+
+      // Show the loading dialog
+      LoadingDialog.show(context);
         var results = await apiService.login(email,password);
 
-          print(results);
-
         if (results.statusCode == 200) {
-          print('Login successful');
+
+          // hide loading dialog
+          LoadingDialog.hide(context);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/office',
+                (Route<dynamic> route) => false,
+          );
           return true;
+
         } else {
-          print('Login failed with status: ${results.statusCode}');
+          // Show a failure message if login is not successful
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invalid email or password')),
+          );
           return false;
         }
     } catch (e) {

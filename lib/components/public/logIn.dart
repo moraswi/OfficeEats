@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 
 import '../../http/authApiService.dart';
+import '../../shared/loading_dialog.dart';
 
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';
@@ -30,46 +31,19 @@ class _LogInState extends State<LogIn> {
     super.initState();
   }
 
+  // handleLogin
   Future<void> handleLogin() async {
     String email = emailController.text.trim();
     String password = passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email and Password are required!')),
-      );
-      return;
-    }
-
     try {
-      print(email);
-      print(password);
-      bool isLoginSuccessful = await authService.loginReq(email, password);
-      print(isLoginSuccessful);
-
-      if (isLoginSuccessful) {
-        // Navigate to '/office' on successful login
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/office',
-              (Route<dynamic> route) => false,
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login Successful')),
-        );
-      } else {
-        // Show a failure message if login is not successful
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Invalid email or password')),
-        );
-      }
+       await authService.loginReq(context, email, password);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Failed: $e')),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
