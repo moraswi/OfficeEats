@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'httpService.dart';
 import 'dart:io';
 
-class apiService {
+class Apiservice {
   HttpService httpService = HttpService();
 
   //login
