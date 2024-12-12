@@ -1,18 +1,25 @@
-import 'dart:convert';
 
 import 'package:eats/http/shared/apiService.dart';
 
-class authApiService {
+class AuthApiService {
 
-  Apiservice apiService = Apiservice();
+  ApiService apiService = ApiService();
 
   //login
-  Future<void> loginReq( String email, String password) async {
+  Future<bool> loginReq( String email, String password) async {
     try {
+      print(email);
+      print(password);
         var results = await apiService.login(email,password);
 
-        if(results.statusCode == 200){
-          print('successful');
+          print(results);
+
+        if (results.statusCode == 200) {
+          print('Login successful');
+          return true;
+        } else {
+          print('Login failed with status: ${results.statusCode}');
+          return false;
         }
     } catch (e) {
 
@@ -26,6 +33,7 @@ class authApiService {
     try {
       var results = await apiService.register(fullName, phoneNumber, email, password, role);
 
+      print(results);
       if(results.statusCode == 200){
         print('successful');
       }

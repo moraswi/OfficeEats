@@ -1,9 +1,8 @@
-import 'dart:convert';
 
 import 'package:eats/http/shared/apiService.dart';
 
-class storeApiServcie {
-  Apiservice apiService = Apiservice();
+class StoreApiServcie {
+  ApiService apiService = ApiService();
 
   //getOfficesReq
   Future<void> getOfficesReq() async {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:eats/shared/app_buttons.dart';
 
+import '../../http/authApiService.dart';
+
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';
 
@@ -13,6 +15,8 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  final AuthApiService authService = AuthApiService();
 
   bool isChecked = false;
   bool isPasswordVisible = false;
@@ -25,6 +29,47 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
   }
+
+  Future<void> handleLogin() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email and Password are required!')),
+      );
+      return;
+    }
+
+    try {
+      print(email);
+      print(password);
+      bool isLoginSuccessful = await authService.loginReq(email, password);
+      print(isLoginSuccessful);
+
+      if (isLoginSuccessful) {
+        // Navigate to '/office' on successful login
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/office',
+              (Route<dynamic> route) => false,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login Successful')),
+        );
+      } else {
+        // Show a failure message if login is not successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid email or password')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Failed: $e')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,11 +169,7 @@ class _LogInState extends State<LogIn> {
 
               CustomButton(
                 label: 'Log In',
-                onTap: () {
-                  // Handle button press
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/office', (Route<dynamic> route) => true);
-                },
+                onTap: handleLogin
               ),
 
               const SizedBox(height: 20),
