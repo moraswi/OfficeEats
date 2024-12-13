@@ -11,10 +11,11 @@ class ApiService {
   }
 
   //register
-  Future<dynamic> register(String fullName, String phoneNumber, String email, String password, String role) async {
+  Future<dynamic> register(String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
     final endpoint = 'register';
     final data = {
-      'fullName': fullName,
+      'firstName': firstName,
+      'lastName': lastName,
       'phoneNumber': phoneNumber,
       'email': email,
       'password': password,

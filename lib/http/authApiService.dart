@@ -19,14 +19,12 @@ class AuthApiService {
         return false;
       }
 
-      // Show the loading dialog
-      LoadingDialog.show(context);
+        // Show the loading dialog
+        LoadingDialog.show(context);
+
         var results = await apiService.login(email,password);
 
         if (results.statusCode == 200) {
-
-          // hide loading dialog
-          LoadingDialog.hide(context);
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
                 (Route<dynamic> route) => false,
@@ -44,22 +42,50 @@ class AuthApiService {
 
       print('loginReq Error: $e');
       rethrow;
+    }finally{
+      LoadingDialog.hide(context);
     }
   }
 
   //registerReq
-  Future<void> registerReq(String fullName, String phoneNumber, String email, String password, String role) async {
+  Future<void> registerReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
     try {
-      var results = await apiService.register(fullName, phoneNumber, email, password, role);
+      if (firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty || email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('All the fields are required!')),
+        );
+        return;
+      }
 
-      print(results);
-      if(results.statusCode == 200){
-        print('successful');
+      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter a valid email address')),
+        );
+        return;
+      }
+
+      // Show the loading dialog
+      LoadingDialog.show(context);
+
+      var results = await apiService.register(firstName, lastName, phoneNumber, email, password, role);
+          print(results.statusCode);
+      if (results.statusCode == 200) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/logIn',
+              (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: ${results.body}')),
+        );
       }
     } catch (e) {
-
       print('registerReq Error: $e');
-      rethrow;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    } finally {
+      LoadingDialog.hide(context);
     }
   }
 

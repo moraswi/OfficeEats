@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:eats/shared/app_buttons.dart';
 
+import '../../http/authApiService.dart';
+
 class SignUp extends StatefulWidget {
   var routeName = '/signUp';
 
@@ -18,9 +20,29 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  final AuthApiService authService = AuthApiService();
+
   bool isChecked = false;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
+
+  // register
+  Future<void> register() async {
+    String firstName = firstNameController.text;
+    String lastName = surnameController.text;
+    String email = emailController.text;
+    String phoneNumber = phoneNumberController.text;
+    String password = passwordController.text;
+    String role = "customer";
+
+    try{
+      await authService.registerReq(context, firstName, lastName, phoneNumber, email, password, role);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Register Failed')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +116,21 @@ class _SignUpState extends State<SignUp> {
                       controller: firstNameController,
                       decoration: InputDecoration(
                         hintText: 'First Name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: const EdgeInsets.all(8),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    TextFormField(
+                      controller: surnameController,
+                      decoration: InputDecoration(
+                        hintText: 'Last Name',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -208,35 +245,11 @@ class _SignUpState extends State<SignUp> {
               ),
 
               const SizedBox(height: 20),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     primary: Colors.orange,
-              //     // Set the background color to orange
-              //     minimumSize: Size(double.infinity, 0),
-              //     // Set width to 100%
-              //     padding: EdgeInsets.fromLTRB(0, 14, 0, 14),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(11.0),
-              //       // Set border radius
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     Navigator.of(context).pushNamedAndRemoveUntil(
-              //         '/logIn', (Route<dynamic> route) => true);
-              //   },
-              //   child: Text(
-              //     'Register',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
+
 
               CustomButton(
                 label: 'Register',
-                onTap: () {
-                  // Handle button press
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/logIn', (Route<dynamic> route) => true);
-                },
+                onTap: register
               ),
 
               const SizedBox(height: 10),
