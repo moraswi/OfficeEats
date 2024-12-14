@@ -27,6 +27,10 @@ class AuthApiService {
         if (results.statusCode == 200) {
           LoadingDialog.hide(context);
 
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Succesfully registered')),
+          );
+
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
                 (Route<dynamic> route) => false,
@@ -49,8 +53,9 @@ class AuthApiService {
     }
   }
 
+
   //registerReq
-  Future<void> registerReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
+  Future<void> regcccisterReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
     try {
       if (firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty || email.isEmpty || password.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -87,6 +92,56 @@ class AuthApiService {
         SnackBar(content: Text('An error occurred: $e')),
       );
     } finally {
+      LoadingDialog.hide(context);
+    }
+  }
+
+  Future<bool> registerReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
+    try {
+      // Validation: Ensure all fields are filled
+      if (firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty || email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('All fields are required!')),
+        );
+        return false; // Stay on the same page
+      }
+
+      // Validation: Check if passwords match
+      // if (password != confirmPassword) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Passwords do not match!')),
+      //   );
+      //   return false; // Stay on the same page
+      // }
+
+      // Show the loading dialog
+      LoadingDialog.show(context);
+
+      // Call API for registration
+      var results = await apiService.register(firstName, lastName, phoneNumber, email, password, role);
+
+      if (results.statusCode == 201) { // Success
+        LoadingDialog.hide(context); // Hide the dialog
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Successfully registered!')),
+        );
+
+        // Navigate to the login page
+        Navigator.of(context).pushNamed('/login');
+        return true;
+      } else { // Failure
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed! Try again.')),
+        );
+        return false; // Stay on the same page
+      }
+    } catch (e) {
+      print('registerReq Error: $e');
+      rethrow;
+    } finally {
+      // Ensure the loading dialog is hidden in all cases
       LoadingDialog.hide(context);
     }
   }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-
-import 'package:eats/http/authApiService.dart';
-
-import '../../../../http/storeApiServcie.dart';
+import 'package:eats/http/storeApiService.dart';
 
 class OfficePage extends StatefulWidget {
   var routeName = '/office';
@@ -15,19 +12,25 @@ class OfficePage extends StatefulWidget {
 
 class _OfficePageState extends State<OfficePage> {
 
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> offices = [];
+
   @override
   void initState() {
-    getOffices();
     super.initState();
+    getOffices();
   }
 
-  final StoreApiServcie storeServcie = StoreApiServcie();
 
-
-  // getOffices
+  // Fetch offices data
   Future<void> getOffices() async {
     try {
-      await storeServcie.getOfficesReq();
+
+      List<dynamic> response = await storeService.getOfficesReq();
+
+      setState(() {
+        offices = response;
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('get offices failed: $e')),
@@ -42,7 +45,8 @@ class _OfficePageState extends State<OfficePage> {
         children: [
           const SizedBox(height: 70),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 16.0,right: 16.0, top: 16.0),
+
             child: Column(
               children: [
                 TextFormField(
@@ -57,7 +61,9 @@ class _OfficePageState extends State<OfficePage> {
                     contentPadding: const EdgeInsets.all(8),
                   ),
                 ),
+
                 const SizedBox(height: 15),
+
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -100,74 +106,85 @@ class _OfficePageState extends State<OfficePage> {
               ],
             ),
           ),
+
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16.0,right: 16.0),
                 child: Column(
                   children: [
-                    // Other scrollable content here
+                    // Using ListView.builder to dynamically display the office data
+                    ListView.builder(
+                      shrinkWrap: true, // Ensures the list takes up only as much space as needed
+                      physics: NeverScrollableScrollPhysics(), // Disable scrolling in ListView to let SingleChildScrollView handle it
+                      itemCount: offices.length, // The number of items to display
+                      itemBuilder: (context, index) {
+                        var office = offices[index]; // Get the office data for the current index
 
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4.0,
-                              offset: Offset(0, 2),
+                        return InkWell(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4.0,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/officePackImage1.jpg',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
-                            const SizedBox(width: 12),
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Office Pack: Moreleta park',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Row(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/officePackImage1.jpg',
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Icon(Icons.location_on,
-                                          color: AppColors.primaryColor,
-                                          size: 20),
-                                      Text('Gauteng, Moreleta, worts street',
-                                          style: TextStyle(fontSize: 16)),
+                                      Text(
+                                        'Office Pack: ${office['officeName']}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.location_on,
+                                              color: AppColors.primaryColor, size: 20),
+                                          Text('${office['officeLocation']}',
+                                              style: TextStyle(fontSize: 16)),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/home', (Route<dynamic> route) => true);
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home', (Route<dynamic> route) => true);
+                          },
+                        );
                       },
                     ),
-                    const SizedBox(height: 20),
+
+                    // const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
           ),
+
         ],
       ),
       bottomNavigationBar: RoundedBottomBar(

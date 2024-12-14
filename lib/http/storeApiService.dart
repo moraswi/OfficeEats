@@ -1,23 +1,32 @@
 
+import 'dart:convert';
+
 import 'package:eats/http/shared/apiService.dart';
 
-class StoreApiServcie {
+class StoreApiService {
   ApiService apiService = ApiService();
 
   //getOfficesReq
-  Future<void> getOfficesReq() async {
+  Future<List<dynamic>> getOfficesReq() async {
     try {
-      var results = await apiService.getOffices();
+      var results = await apiService.getOffices(); // Perform the API call
+      print('Raw Response: $results');
+      print('Status Code: ${results.statusCode}');
 
-      if(results.statusCode == 200){
-        print('successful');
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body); // Decode the JSON response
+        print('Decoded Data: $data');
+        return data; // Return the decoded data to the caller
+      } else {
+        throw Exception('Failed to fetch offices: ${results.statusCode}');
       }
     } catch (e) {
-
       print('getOfficesReq Error: $e');
-      rethrow;
+      rethrow; // Rethrow the error to be handled by the caller
     }
   }
+
+
 
   //getOfficesReq
   Future<void> getStoresReq(int officeId) async {
