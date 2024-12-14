@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:eats/shared/app_buttons.dart';
 
-import '../../http/authApiService.dart';
-import '../../shared/loading_dialog.dart';
+import 'package:eats/http/authApiService.dart';
 
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';

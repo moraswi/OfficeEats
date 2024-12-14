@@ -25,6 +25,8 @@ class AuthApiService {
         var results = await apiService.login(email,password);
 
         if (results.statusCode == 200) {
+          LoadingDialog.hide(context);
+
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
                 (Route<dynamic> route) => false,

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
+import 'package:eats/http/authApiService.dart';
+
+import '../../../../http/storeApiServcie.dart';
+
 class OfficePage extends StatefulWidget {
   var routeName = '/office';
 
@@ -10,6 +14,27 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
+
+  @override
+  void initState() {
+    getOffices();
+    super.initState();
+  }
+
+  final StoreApiServcie storeServcie = StoreApiServcie();
+
+
+  // getOffices
+  Future<void> getOffices() async {
+    try {
+      await storeServcie.getOfficesReq();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('get offices failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
