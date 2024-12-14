@@ -26,11 +26,6 @@ class AuthApiService {
 
         if (results.statusCode == 200) {
           LoadingDialog.hide(context);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Succesfully registered')),
-          );
-
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
                 (Route<dynamic> route) => false,

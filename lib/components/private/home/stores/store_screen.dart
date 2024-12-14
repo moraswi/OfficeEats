@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 
+import '../../../../http/storeApiService.dart';
+
 class StoreCard extends StatelessWidget {
   final String imagePath;
   final String storeName;
@@ -100,6 +102,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> stores = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getStoresReq();
+  }
+
+  // getStoresReq
+  Future<void> getStoresReq() async {
+    try {
+      var officeId = 4;
+      List<dynamic> response = await storeService.getStoresReq(officeId);
+      setState(() {
+        stores = response;
+        print(stores);
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get offices failed: $e')),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,12 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+
         child:Column(
 
           children: [
             SizedBox(height: 15,),
 
-            // address
             InkWell(
               child: Container(
                 width: double.infinity,
@@ -181,12 +215,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const SizedBox(height:15),
                     // Example StoreCard instances with dummy data
-                    StoreCard(
-                      imagePath: 'assets/images/image1.webp',
-                      // Replace with your image path
-                      storeName: 'Store Name 1',
-                      rating: 4.5,
-                    ),
+
+                    ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: stores.length,
+                    itemBuilder: (context, index) {
+                      var store = stores[index];
+
+                      // address
+                      return StoreCard(
+                        imagePath: 'assets/images/image1.webp',
+                        // Replace with your image path
+                        storeName:  store['shopName'],
+                        rating: 4.5,
+                      );
+                    }
+                    )
 
                   ],
                 ),

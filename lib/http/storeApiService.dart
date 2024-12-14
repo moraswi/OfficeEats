@@ -9,13 +9,11 @@ class StoreApiService {
   //getOfficesReq
   Future<List<dynamic>> getOfficesReq() async {
     try {
-      var results = await apiService.getOffices(); // Perform the API call
-      print('Raw Response: $results');
-      print('Status Code: ${results.statusCode}');
+      var results = await apiService.getOffices();
 
       if (results.statusCode == 200) {
-        final data = jsonDecode(results.body); // Decode the JSON response
-        print('Decoded Data: $data');
+        final data = jsonDecode(results.body);
+
         return data; // Return the decoded data to the caller
       } else {
         throw Exception('Failed to fetch offices: ${results.statusCode}');
@@ -26,24 +24,26 @@ class StoreApiService {
     }
   }
 
+    Future<List<dynamic>> getStoresReq(int officeId) async {
+      try {
+        var results = await apiService.getStores(officeId);
 
-
-  //getOfficesReq
-  Future<void> getStoresReq(int officeId) async {
-    try {
-      var results = await apiService.getStores(officeId);
-
-      if(results.statusCode == 200){
-        print('successful');
+        if (results.statusCode == 200) {
+          final data = jsonDecode(results.body);
+          return data;
+        } else {
+          // Handle non-200 status codes
+          print('Error: ${results.statusCode} - ${results.reasonPhrase}');
+          throw Exception('Failed to fetch stores. Status code: ${results.statusCode}');
+        }
+      } catch (e) {
+        print('getStoresReq Error: $e');
+        rethrow;
       }
-    } catch (e) {
-
-      print('getStoresReq Error: $e');
-      rethrow;
     }
-  }
 
-  //getOfficesReq
+
+    //getOfficesReq
   Future<void> getStoreMenuByCategoryIdReq(int officeId) async {
     try {
       var results = await apiService.getStoreMenuByCategoryId(officeId);
