@@ -315,17 +315,9 @@ class _MenuPageState extends State<MenuPage> {
                           description: menu['description'],
                           price: menu['price'],
                           onQuantityChanged: _updateTotalQuantity,
-                  );
-                }
-              ),
-
-                 // MenuItem(
-                 //    imagePath: 'assets/images/food2.jpeg',
-                 //    name: 'Food Item 1',
-                 //    description: "description of item",
-                 //    price: 12.99,
-                 //    onQuantityChanged: _updateTotalQuantity,
-                 //  ),
+                        );
+                      }
+                    ),
 
                 ],
                 ),

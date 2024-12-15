@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
+import '../../../../http/storeApiService.dart';
 
 class FoodCategory {
   final String name;
@@ -8,56 +9,80 @@ class FoodCategory {
   FoodCategory({required this.name, required this.imagePath});
 }
 
-// Define a list of food categories
-final List<FoodCategory> foodCategories = [
-  FoodCategory(name: 'Meal', imagePath: 'assets/images/food10.jpeg'),
-  FoodCategory(name: 'Drinks', imagePath: 'assets/images/food9.jpeg'),
-  FoodCategory(name: 'Fast Food', imagePath: 'assets/images/food9.jpeg'),
-  FoodCategory(name: 'Hot Deals', imagePath: 'assets/images/food8.jpeg'),
-  FoodCategory(name: 'All', imagePath: 'assets/images/food7.jpeg'),
-  // Add more categories as needed
-];
+class TopBar extends StatefulWidget {
+  @override
+  _TopBarState createState() => _TopBarState();
+}
 
-class TopBar extends StatelessWidget {
+class _TopBarState extends State<TopBar> {
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> menus = [];
+  bool isCategoriesLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getStoreMenuCategoriesReq();
+  }
+
+  Future<void> getStoreMenuCategoriesReq() async {
+    try {
+      var storeId = 0;
+      List<dynamic> response = await storeService.getStoreMenuCategoriesReq(storeId);
+      setState(() {
+        menus = response;
+        isCategoriesLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isCategoriesLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Store categories failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container( // Adjusted to accommodate the title below the circle
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(foodCategories.length, (index) {
-            final category = foodCategories[index];
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
-              child: GestureDetector(
-                onTap: () {
-                  // Handle the tap event here
-                  print('${category.name} tapped');
-                  // You can navigate to another page or show a dialog here
-                },
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35, // Adjust the size of the circle
-                      backgroundColor: AppColors.tertiaryColor,
-                      backgroundImage: AssetImage(category.imagePath),
+    return isCategoriesLoading
+        ? const Center(child: CircularProgressIndicator())
+        : SizedBox(
+      height: 120, // Adjust height to fit the circle avatar and text
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal, // Set horizontal scrolling
+        itemCount: menus.length,
+        itemBuilder: (context, index) {
+          var menu = menus[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
+            child: GestureDetector(
+              onTap: () {
+                // Handle the tap event here
+                print('${menu['name']} tapped');
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 35, // Adjust size of the circle
+                    backgroundColor: AppColors.tertiaryColor,
+                    backgroundImage: AssetImage(menu['imagePath'] ?? 'assets/images/default.jpeg'),
+                  ),
+                  const SizedBox(height: 8.0), // Space between the circle and text
+                  Text(
+                    menu['name'] ?? 'Unknown',
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 8.0),
-                    // Space between the circle and the title
-                    Text(
-                      category.name,
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
