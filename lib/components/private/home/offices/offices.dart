@@ -118,8 +118,7 @@ class _OfficePageState extends State<OfficePage> {
                   itemBuilder: (context, index) {
                     return SkeletonLoader();
                   },
-                )
-                    : ListView.builder(
+                ) : ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: offices.length,

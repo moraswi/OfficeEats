@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/app_buttons.dart';
+import 'package:eats/http/storeApiService.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -162,6 +163,38 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   int _totalQuantity = 0;
 
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> menus = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getStoreMenuByCategoryIdReq();
+  }
+
+  // getStoresReq
+  Future<void> getStoreMenuByCategoryIdReq() async {
+    try {
+      var categoryId = 0;
+      List<dynamic> response = await storeService.getStoreMenuByCategoryIdReq(categoryId);
+      setState(() {
+        menus = response;
+        print(menus);
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('store menu failed: $e')),
+      );
+    }
+  }
+
+
+
   void _updateTotalQuantity(int quantity) {
     setState(() {
       _totalQuantity += quantity;
@@ -264,24 +297,38 @@ class _MenuPageState extends State<MenuPage> {
 
             TopBar(),
             Expanded(
-              child: ListView(
-                children: [
-                  MenuItem(
-                    imagePath: 'assets/images/image1.webp',
-                    name: 'Food Item 1',
-                    description: "description of item",
-                    price: 12.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food2.jpeg',
-                    name: 'Food Item 1',
-                    description: "description of item",
-                    price: 12.99,
-                    onQuantityChanged: _updateTotalQuantity,
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: menus.length,
+                      itemBuilder: (context, index) {
+                        var menu = menus[index];
+
+                        // address
+                        return MenuItem(
+                          imagePath: 'assets/images/image1.webp',
+                          name: menu['name'],
+                          description: menu['description'],
+                          price: menu['price'],
+                          onQuantityChanged: _updateTotalQuantity,
+                  );
+                }
+              ),
+
+                 // MenuItem(
+                 //    imagePath: 'assets/images/food2.jpeg',
+                 //    name: 'Food Item 1',
+                 //    description: "description of item",
+                 //    price: 12.99,
+                 //    onQuantityChanged: _updateTotalQuantity,
+                 //  ),
 
                 ],
+                ),
               ),
             ),
             const SizedBox(

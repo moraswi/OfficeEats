@@ -44,12 +44,17 @@ class StoreApiService {
 
 
     //getOfficesReq
-  Future<void> getStoreMenuByCategoryIdReq(int officeId) async {
+  Future<List<dynamic>> getStoreMenuByCategoryIdReq(int categoryId) async {
     try {
-      var results = await apiService.getStoreMenuByCategoryId(officeId);
+      var results = await apiService.getStoreMenuByCategoryId(categoryId);
 
       if(results.statusCode == 200){
-        print('successful');
+        final data = jsonDecode(results.body);
+        return data;
+      } else {
+        // Handle non-200 status codes
+        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
+        throw Exception('Failed to fetch stores. Status code: ${results.statusCode}');
       }
     } catch (e) {
 
