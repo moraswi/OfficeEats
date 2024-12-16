@@ -104,22 +104,26 @@ class StoreApiService {
       }else {
         // Handle non-200 status codes
         print('Error: ${results.statusCode} - ${results.reasonPhrase}');
-        throw Exception('Failed to fetch stores. Status code: ${results.statusCode}');
+        throw Exception('Failed to fetch stores.');
       }
     } catch (e) {
-
       print('getStoreMenuTopMealsReq Error: $e');
       rethrow;
     }
   }
 
   //getOrdersReq
-  Future<void> getOrdersReq(int userid) async {
+  Future<List<dynamic>> getOrdersReq(int userid) async {
     try {
       var results = await apiService.getOrders(userid);
 
       if(results.statusCode == 200){
-        print('successful');
+        final data = jsonDecode(results.body);
+        return data;
+      }else{
+        // Handle non-200 status codes
+        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
+        throw Exception('Failed to fetch stores.');
       }
     } catch (e) {
 

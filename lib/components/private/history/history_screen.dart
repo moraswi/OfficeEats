@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import '../../../http/storeApiService.dart';
 import '../../../shared/app_colors.dart';
 import '../../../shared/app_buttons.dart';
 
@@ -25,6 +26,8 @@ class _MenuItemState extends State<MenuItem> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -79,14 +82,16 @@ class _MenuItemState extends State<MenuItem> {
                   '/trackorder', (Route<dynamic> route) => true);
             },
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              // Text color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0), // Rounded corners
               ),
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                   horizontal: 16.0, vertical: 0.0), // Padding inside the button
             ),
-            child: Text(
+            child: const Text(
               'Track Order',
               style: TextStyle(
                 fontSize: 16.0, // Text size
@@ -107,6 +112,35 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> orderHistory = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getOrdersReq();
+  }
+
+  // getOrdersReq
+  Future<void> getOrdersReq() async {
+    try {
+      var userid = 0;
+      List<dynamic> response = await storeService.getOrdersReq(userid);
+      setState(() {
+        orderHistory = response;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get order failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,33 +163,36 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+
         child: Column(
           children: [
             const SizedBox(
               height: 20,
             ),
             Expanded(
-              child: ListView(
-                children: [
-                  MenuItem(
-                    imagePath: 'assets/images/image1.webp',
-                    name: 'Food Item 1',
-                    rating: 4.5,
-                    price: 12.99,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  MenuItem(
-                    imagePath: 'assets/images/food2.jpeg',
-                    name: 'Food Item 1',
-                    rating: 4.5,
-                    price: 12.99,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+              child: SingleChildScrollView(
+                // children: [
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: orderHistory.length,
+                      itemBuilder: (context, index) {
+                        var order = orderHistory[index];
+
+                        return MenuItem(
+                          imagePath: 'assets/images/image1.webp',
+                          name: 'Food Item 1',
+                          rating: 4.5,
+                          price: order['totalAmount'],
+                        );
+                      }),
+                ),
+
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // ],
               ),
             ),
           ],

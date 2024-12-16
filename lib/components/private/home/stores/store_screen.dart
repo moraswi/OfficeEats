@@ -23,7 +23,8 @@ class StoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.0), // Apply the same border radius
+        borderRadius: BorderRadius.circular(20.0),
+        // Apply the same border radius
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8.0),
           height: 200, // Adjust the height according to your needs
@@ -105,7 +106,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final StoreApiService storeService = StoreApiService();
   List<dynamic> stores = [];
   bool isLoading = true;
@@ -136,7 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +150,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_cart_sharp, size: 28,),
+            icon: Icon(
+              Icons.shopping_cart_sharp,
+              size: 28,
+            ),
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
                   '/cart', (Route<dynamic> route) => true);
@@ -161,11 +163,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-
-        child:Column(
-
+        child: Column(
           children: [
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
 
             InkWell(
               child: Container(
@@ -188,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   '/profile',
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
@@ -217,31 +219,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                     child: isLoading
                         ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 5, // Number of skeletons
-                      itemBuilder: (context, index) {
-                        return StoreSkeletonLoader();
-                      },
-                    ) :ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: stores.length,
-                    itemBuilder: (context, index) {
-                      var store = stores[index];
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 5, // Number of skeletons
+                            itemBuilder: (context, index) {
+                              return StoreSkeletonLoader();
+                            },
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: stores.length,
+                            itemBuilder: (context, index) {
+                              var store = stores[index];
 
-                      // address
-                      return StoreCard(
-                        imagePath: 'assets/images/image1.webp',
-                        // Replace with your image path
-                        storeName:  store['shopName'],
-                        rating: 4.5,
-                      );
-                    }
-                    )
+                              // address
+                              return StoreCard(
+                                imagePath: 'assets/images/image1.webp',
+                                // Replace with your image path
+                                storeName: store['shopName'],
+                                rating: 4.5,
+                              );
+                            })
 
-                  // ],
-                ),
+                    // ],
+                    ),
               ),
             ),
           ],
