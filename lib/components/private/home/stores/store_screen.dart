@@ -3,6 +3,8 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 
 import '../../../../http/storeApiService.dart';
+import '../../../../shared/skeleton_loader.dart';
+import '../../../../shared/store_skeleton_loader.dart';
 
 class StoreCard extends StatelessWidget {
   final String imagePath;
@@ -23,6 +25,7 @@ class StoreCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.0), // Apply the same border radius
         child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
           height: 200, // Adjust the height according to your needs
           decoration: BoxDecoration(
             color: backgroundColor, // Set background color of the card
@@ -210,13 +213,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height:15),
-                    // Example StoreCard instances with dummy data
-
-                    ListView.builder(
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: isLoading
+                        ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5, // Number of skeletons
+                      itemBuilder: (context, index) {
+                        return StoreSkeletonLoader();
+                      },
+                    ) :ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: stores.length,
@@ -233,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     )
 
-                  ],
+                  // ],
                 ),
               ),
             ),

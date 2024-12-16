@@ -3,6 +3,7 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/http/storeApiService.dart';
+import '../../../../shared/skeleton_loader.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -99,7 +100,7 @@ class _MenuItemState extends State<MenuItem> {
                         ),
                       ),
 
-                    SizedBox(width: 150 ,),
+                    SizedBox(width: 130 ,),
 
                         Row(
                           children: [
@@ -298,10 +299,18 @@ class _MenuPageState extends State<MenuPage> {
             TopBar(),
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListView.builder(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+
+                  child: isLoading
+                      ? ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 5, // Number of skeletons
+                    itemBuilder: (context, index) {
+                      return SkeletonLoader();
+                    },
+                  ) : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: menus.length,
@@ -319,7 +328,7 @@ class _MenuPageState extends State<MenuPage> {
                       }
                     ),
 
-                ],
+                // ],
                 ),
               ),
             ),
