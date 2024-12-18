@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../../../http/storeApiService.dart';
 import '../../../shared/app_buttons.dart';
 
 class FeedBack extends StatefulWidget {
@@ -21,6 +22,7 @@ class _FeedBackState extends State<FeedBack> {
   String improve = "";
   double rating = 1.0;
   String result = "";
+  int userId = 0;
 
   void _submitForm() {
     // Display the results of the checked checkboxes in the terminal
@@ -50,6 +52,29 @@ class _FeedBackState extends State<FeedBack> {
   //     print('cancelingReasons Error: $e');
   //   }
   // }
+
+  final StoreApiService storeService = StoreApiService();
+
+
+  // _feedback
+  Future<void> _feedback() async {
+    try {
+        _submitForm();
+        int rate = rating.toInt();
+        String improveResult = improve;
+        String message = feedbackController.text;
+      await storeService.rateAppReq(
+          context,
+          userId,
+          message,
+          rate,
+          improveResult);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Failed: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +335,8 @@ class _FeedBackState extends State<FeedBack> {
                 CustomButton(
                   label: 'Submit',
                   onTap: () {
-                    // Handle button press
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/feedbackconfirmed', (Route<dynamic> route) => true);
+                    _feedback();
+
                   },
                 ),
               ],

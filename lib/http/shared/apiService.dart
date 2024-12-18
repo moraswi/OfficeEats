@@ -113,11 +113,17 @@ class ApiService {
     return await httpService.delete(endpoint);
   }
 
-  //deleteUserAddress/////
-  // Future<dynamic> rate(int id) async {
-  //   final endpoint = 'rate';
-  //   return await httpService.post(endpoint);
-  // }
+  //deleteUserAddress
+  Future<dynamic> rateApp(int userId, String message, int rating, String improve) async {
+    final endpoint = 'rate';
+    final data = {
+      'userId': userId,
+      'message':message,
+      'improve':improve,
+      'rating':rating,
+    };
+    return await httpService.post(endpoint,data);
+  }
 
   //getStoreMenuCategories
   Future<dynamic> getOrders(int userid) async {

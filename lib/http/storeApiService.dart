@@ -2,6 +2,9 @@
 import 'dart:convert';
 
 import 'package:eats/http/shared/apiService.dart';
+import 'package:flutter/widgets.dart';
+
+import '../shared/loading_dialog.dart';
 
 class StoreApiService {
   ApiService apiService = ApiService();
@@ -153,6 +156,37 @@ class StoreApiService {
 
       if(results.statusCode == 200){
         print('successful');
+      }
+    } catch (e) {
+
+      print('placeOrderReq Error: $e');
+      rethrow;
+    }
+  }
+
+  //placeOrderReq
+  Future<void> rateAppReq(
+      BuildContext context,
+      int userId,
+      String message,
+      int rating,
+      String improve) async {
+    try {
+      // Show the loading dialog
+      LoadingDialog.show(context);
+
+      var results = await apiService.rateApp(
+          userId,
+          message,
+          rating,
+          improve);
+
+      if(results.statusCode == 200){
+        print('suc////////');
+        LoadingDialog.hide(context);
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/feedbackconfirmed', (Route<dynamic> route) => true);
       }
     } catch (e) {
 

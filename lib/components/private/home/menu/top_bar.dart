@@ -48,7 +48,7 @@ class _TopBarState extends State<TopBar> {
     return isCategoriesLoading
         ? const Center(child: CircularProgressIndicator())
         : SizedBox(
-      height: 120, // Adjust height to fit the circle avatar and text
+      height: 50, // Adjust height to fit the circle avatar and text
       child: ListView.builder(
         scrollDirection: Axis.horizontal, // Set horizontal scrolling
         itemCount: menus.length,
@@ -64,20 +64,26 @@ class _TopBarState extends State<TopBar> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircleAvatar(
-                    radius: 35, // Adjust size of the circle
-                    backgroundColor: AppColors.tertiaryColor,
-                    backgroundImage: AssetImage(menu['imagePath'] ?? 'assets/images/default.jpeg'),
-                  ),
-                  const SizedBox(height: 8.0), // Space between the circle and text
-                  Text(
-                    menu['name'] ?? 'Unknown',
-                    style: const TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10)
                     ),
-                  ),
+                    
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
+
+                      child: Text(
+                        menu['name'] ?? 'Unknown',
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    )
+
                 ],
               ),
             ),

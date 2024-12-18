@@ -41,12 +41,12 @@ class _MenuItemState extends State<MenuItem> {
       ),
       child: Row(
         children: [
-          Image.asset(
-            widget.imagePath,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
+          // Image.asset(
+          //   widget.imagePath,
+          //   width: 80,
+          //   height: 80,
+          //   fit: BoxFit.cover,
+          // ),
           SizedBox(width: 12),
           Expanded(
             child: Column(
