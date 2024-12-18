@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
-
+// import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../http/storeApiService.dart';
-import '../../../../shared/skeleton_loader.dart';
 import '../../../../shared/store_skeleton_loader.dart';
 
 class StoreCard extends StatelessWidget {
@@ -110,17 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> stores = [];
   bool isLoading = true;
 
+  int officeID = 2;
+
   @override
   void initState() {
     super.initState();
     getStoresReq();
+    getSharedPreferences();
+  }
+
+  // getSharedPreferences
+  void getSharedPreferences() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // officeID = prefs.getInt('officeID') ?? 0;
   }
 
   // getStoresReq
   Future<void> getStoresReq() async {
     try {
-      var officeId = 4;
-      List<dynamic> response = await storeService.getStoresReq(officeId);
+
+      List<dynamic> response = await storeService.getStoresReq(officeID);
       setState(() {
         stores = response;
         print(stores);

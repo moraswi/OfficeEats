@@ -7,14 +7,14 @@ import '../../../shared/app_buttons.dart';
 class MenuItem extends StatefulWidget {
   final String imagePath;
   final String name;
-  final double rating;
-  final double price;
+  final String orderDate;
+  final String orderCode;
 
   MenuItem({
     required this.imagePath,
     required this.name,
-    required this.rating,
-    required this.price,
+    required this.orderDate,
+    required this.orderCode,
   });
 
   @override
@@ -59,14 +59,11 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.amber, size: 16),
-                    Text('${widget.rating}', style: TextStyle(fontSize: 16)),
-                  ],
-                ),
+
+                    Text('${widget.orderDate}', style: TextStyle(fontSize: 16)),
+
                 Text(
-                  '\R${widget.price.toStringAsFixed(2)}',
+                  '${widget.orderCode}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -182,9 +179,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
                         return MenuItem(
                           imagePath: 'assets/images/image1.webp',
-                          name: 'Food Item 1',
-                          rating: 4.5,
-                          price: order['totalAmount'],
+                          name: order['storeName'],
+                          orderDate: order['orderDate'],
+                          orderCode: order['orderCode'],
                         );
                       }),
                 ),
