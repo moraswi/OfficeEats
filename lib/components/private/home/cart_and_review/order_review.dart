@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
+import '../../../../http/storeApiService.dart';
+import '../../../../shared/app_buttons.dart';
+
 class OrderReviewPage extends StatefulWidget {
   var routeName = '/orderreview';
 
@@ -10,6 +13,95 @@ class OrderReviewPage extends StatefulWidget {
 }
 
 class _OrderReviewPageState extends State<OrderReviewPage> {
+  final StoreApiService storeService = StoreApiService();
+
+  Future<void> submitOssrder() async {
+    try {
+      int userId = 0;
+      String deliveryAddress = "ADDRESS HERE";
+      String paymentMethod = "Cash";
+      int shopId = 0;
+      String orderCode = "ORD12345"; // Example order code
+      String storeName = "My Store"; // Example store name
+
+      final items = [
+        {'foodId': 1, 'quantity': 2, 'itemPrice': 10.0},
+        {'foodId': 2, 'quantity': 1, 'itemPrice': 5.5},
+      ];
+
+      // Define the list of items
+      List<Map<String, dynamic>> itkems = [
+        {
+          'foodId': 1,
+          'quantity': 2,
+          'itemPrice': 10.0,
+        },
+        {
+          'foodId': 2,
+          'quantity': 1,
+          'itemPrice': 20.0,
+        },
+      ];
+
+      // Call the updated `placeOrderReq` function
+      await storeService.placeOrderReq(
+        context,
+        userId,
+        deliveryAddress,
+        paymentMethod,
+        shopId,
+        orderCode,
+        storeName,
+        items,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Order Failed: $e')),
+      );
+    }
+  }
+
+  Future<void> submitOrder() async {
+    final int userId = 0;
+    final String deliveryAddress = "string";
+    final String paymentMethod = "string";
+    final int shopId = 0;
+    final String orderCode = "string";
+    final String storeName = "string";
+
+    // Construct the items list
+    final List<Map<String, dynamic>> items = [
+      {
+        "foodId": 1,
+        "quantity": 2,
+        "itemPrice": 5.5,
+      },
+      {
+        "foodId": 2,
+        "quantity": 1,
+        "itemPrice": 9.0,
+      },
+    ];
+
+    try {
+      await storeService.placeOrderReq(
+        context,
+        userId,
+        deliveryAddress,
+        paymentMethod,
+        shopId,
+        orderCode,
+        storeName,
+        items,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Order Failed: $e')),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,26 +199,34 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'mastercard',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
-                            Text('card ***3211',
-                                style: TextStyle(fontSize: 16)),
-
+                        const Text('card ***3211',
+                            style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            CustomButton(
+              label: 'Check out',
+              onTap: () {
+                submitOrder();
+                // Handle button press
+              },
             ),
           ],
         ),

@@ -40,21 +40,7 @@ class _FeedBackState extends State<FeedBack> {
     }
   }
 
-  // void _feedback() async {
-  //   _submitForm();
-  //   int rate = rating.toInt();
-  //   String improveResult = improve;
-  //   String message = feedbackController.text;
-  //
-  //   try {
-  //     await accountApiService.feedback(context, rate, improveResult, message);
-  //   } catch (e) {
-  //     print('cancelingReasons Error: $e');
-  //   }
-  // }
-
   final StoreApiService storeService = StoreApiService();
-
 
   // _feedback
   Future<void> _feedback() async {
@@ -71,7 +57,7 @@ class _FeedBackState extends State<FeedBack> {
           improveResult);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login Failed: $e')),
+        SnackBar(content: Text('Feedback Failed')),
       );
     }
   }

@@ -78,28 +78,29 @@ class ApiService {
     return await httpService.get(endpoint);
   }
 
-  //placeOrder
   Future<dynamic> placeOrder(
       int userId,
-      int foodId,
-      int quantity,
-      double itemPrice,
       String deliveryAddress,
       String paymentMethod,
-      int shopId) async {
-
+      int shopId,
+      String orderCode,
+      String storeName,
+      List<Map<String, dynamic>> items, // Pass items as a parameter
+      ) async {
     final endpoint = 'place-order';
     final data = {
       'userId': userId,
-      'foodId': foodId,
-      'quantity': quantity,
-      'itemPrice': itemPrice,
       'deliveryAddress': deliveryAddress,
       'paymentMethod': paymentMethod,
       'shopId': shopId,
+      'orderCode': orderCode,
+      'storeName': storeName,
+      'items': items, // Add items dynamically
     };
     return await httpService.post(endpoint, data);
   }
+
+
 
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {

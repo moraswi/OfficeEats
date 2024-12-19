@@ -137,32 +137,53 @@ class StoreApiService {
 
   //placeOrderReq
   Future<void> placeOrderReq(
+      BuildContext context,
       int userId,
-      int foodId,
-      int quantity,
-      double itemPrice,
       String deliveryAddress,
       String paymentMethod,
-      int shopId) async {
-    try {
-      var results = await apiService.placeOrder(
-          userId,
-           foodId,
-           quantity,
-           itemPrice,
-           deliveryAddress,
-           paymentMethod,
-           shopId);
+      int shopId,
+      String orderCode,
+      String storeName,
+      List<Map<String, dynamic>> items,
 
-      if(results.statusCode == 200){
-        print('successful');
+      ) async {
+    try {
+      LoadingDialog.show(context);
+
+      // Call the updated `placeOrder` function with the items list
+      var results = await apiService.placeOrder(
+        userId,
+        deliveryAddress,
+        paymentMethod,
+        shopId,
+        orderCode,
+        storeName,
+        items,
+
+      );
+
+      print(results);
+      print(results.body);
+      print(results.statusCode);
+
+      if (results.statusCode == 200) {
+        LoadingDialog.hide(context);
+
+        // Navigator.of(context).pushNamedAndRemoveUntil(
+        //   '/orderreview',
+        //       (Route<dynamic> route) => true,
+        // );
+        print('Order placed successfully');
       }
+
     } catch (e) {
+      LoadingDialog.hide(context);
 
       print('placeOrderReq Error: $e');
       rethrow;
     }
   }
+
 
   //placeOrderReq
   Future<void> rateAppReq(
@@ -182,7 +203,6 @@ class StoreApiService {
           improve);
 
       if(results.statusCode == 200){
-        print('suc////////');
         LoadingDialog.hide(context);
 
         Navigator.of(context).pushNamedAndRemoveUntil(
