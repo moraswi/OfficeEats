@@ -113,20 +113,18 @@ class AuthApiService {
   Future<bool> changePasswordReq(BuildContext context, int userId,
       String currentPassword, String newPassword) async {
     try {
-      // Assuming apiService.changePassword returns a Response object
       final response =
           await apiService.changePassword(userId, currentPassword, newPassword);
 
       if (response.statusCode == 200) {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/profilelanding', (Route<dynamic> route) => true);
-        return true; // Password changed successfully
+        return true;
       } else {
         print('API Error: ${response.statusCode}, ${response.body}');
-        return false; // Password change failed
+        return false;
       }
     } catch (e) {
-      print('changePasswordReq Error: $e');
       throw Exception('Failed to change password');
     }
   }
