@@ -13,21 +13,49 @@ class OfficePage extends StatefulWidget {
 
 class _OfficePageState extends State<OfficePage> {
   final StoreApiService storeService = StoreApiService();
+  final TextEditingController searchController = TextEditingController();
+
   List<dynamic> offices = [];
+  List<dynamic> filteredOffices = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     getOffices();
+    searchController.addListener(onSearchChanged);
   }
 
-  // getOffices
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void onSearchChanged() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredOffices = query.isEmpty
+          ? offices
+          : offices.where((office) {
+        return office['officeName']
+            .toString()
+            .toLowerCase()
+            .contains(query) ||
+            office['officeLocation']
+                .toString()
+                .toLowerCase()
+                .contains(query);
+      }).toList();
+    });
+  }
+
   Future<void> getOffices() async {
     try {
       List<dynamic> response = await storeService.getOfficesReq();
       setState(() {
         offices = response;
+        filteredOffices = response; // Initially, show all offices.
         isLoading = false;
       });
     } catch (e) {
@@ -47,10 +75,11 @@ class _OfficePageState extends State<OfficePage> {
         children: [
           const SizedBox(height: 70),
           Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
                 TextFormField(
+                  controller: searchController,
                   decoration: InputDecoration(
                     hintText: 'Search',
                     border: OutlineInputBorder(
@@ -69,7 +98,7 @@ class _OfficePageState extends State<OfficePage> {
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       const Expanded(
@@ -106,91 +135,81 @@ class _OfficePageState extends State<OfficePage> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: isLoading
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5, // Number of skeletons
-                        itemBuilder: (context, index) {
-                          return SkeletonLoader();
-                        },
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: offices.length,
-                        itemBuilder: (context, index) {
-                          var office = offices[index];
-                          int officeID = offices[index]['id'];
-                          String officeName = offices[index]['officeName'];
-
-                          return InkWell(
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              margin: const EdgeInsets.symmetric(vertical: 8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 4.0,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/officePackImage1.jpg',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Office Pack: ${office['officeName']}',
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Icon(Icons.location_on,
-                                                color: AppColors.primaryColor,
-                                                size: 20),
-                                            Text('${office['officeLocation']}',
-                                                style: const TextStyle(
-                                                    fontSize: 16)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            onTap: () async {
-                              // SharedPreferences prefs = await SharedPreferences.getInstance();
-                              // prefs.setInt("officeID", officeID);
-                              // prefs.setString("officeName", officeName);
-                              print(officeID);
-                              print(officeName);
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => true);
-                            },
-                          );
-                        },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: isLoading
+                  ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 5, // Number of skeletons
+                itemBuilder: (context, index) {
+                  return SkeletonLoader();
+                },
+              )
+                  : ListView.builder(
+                itemCount: filteredOffices.length,
+                itemBuilder: (context, index) {
+                  var office = filteredOffices[index];
+                  return InkWell(
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/officePackImage1.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Office Pack: ${office['officeName']}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on,
+                                        color: AppColors.primaryColor,
+                                        size: 20),
+                                    Text(
+                                      '${office['officeLocation']}',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      print(office['id']);
+                      print(office['officeName']);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/home', (Route<dynamic> route) => true);
+                    },
+                  );
+                },
               ),
             ),
           ),
@@ -198,49 +217,6 @@ class _OfficePageState extends State<OfficePage> {
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,
-      ),
-    );
-  }
-}
-
-// Skeleton loader widget
-class SkeletonLoaderdd extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            color: Colors.grey[400],
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 18,
-                  width: 150,
-                  color: Colors.grey[400],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  height: 14,
-                  width: 100,
-                  color: Colors.grey[400],
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

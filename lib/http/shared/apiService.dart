@@ -131,4 +131,10 @@ class ApiService {
     final endpoint = 'order/user/$userid';
     return await httpService.get(endpoint);
   }
+
+  //getOrderById
+  Future<dynamic> getOrderById(int orderid) async {
+    final endpoint = 'order/$orderid';
+    return await httpService.get(endpoint);
+  }
 }

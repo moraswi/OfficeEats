@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
+import '../../../http/storeApiService.dart';
+
 class TrackOrderPage extends StatefulWidget {
   var routeName = '/trackorder';
 
@@ -11,6 +13,39 @@ class TrackOrderPage extends StatefulWidget {
 }
 
 class _TrackOrderPageState extends State<TrackOrderPage> {
+  //
+
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> orderHistory = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getOrderByIdReq();
+  }
+
+  // getOrdersReq
+  Future<void> getOrderByIdReq() async {
+    try {
+      var orderId = 1;
+      Map<String, dynamic> response =
+          await storeService.getOrderByIdReq(orderId);
+      setState(() {
+        orderHistory = [response];
+        print(orderHistory);
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get order failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,13 +84,15 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Unit 54, Mogale Tech',
-                        style: TextStyle(
+                        orderHistory.isNotEmpty
+                            ? orderHistory[0]['deliveryAddress'] ?? ''
+                            : '',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -65,7 +102,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 const Align(
                   alignment: Alignment.centerLeft,
@@ -114,7 +151,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 const Align(
                   alignment: Alignment.centerLeft,
@@ -139,12 +176,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Method: Card',
+                        'Method: ${orderHistory.isNotEmpty ? orderHistory[0]['paymentMethod'] ?? '' : ''}',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -155,7 +192,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         height: 10,
                       ),
                       Text(
-                        'Total: R200.00',
+                        'Total: ${orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] ?? '' : ''}',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -166,7 +203,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         height: 10,
                       ),
                       Text(
-                        'Order: WAODAO23Q',
+                        'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -177,7 +214,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 const Align(
                   alignment: Alignment.centerLeft,
@@ -202,40 +239,85 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Submitted',
+                        '${orderHistory.isNotEmpty ? orderHistory[0]['orderStatus'] ?? '' : ''}',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Collected',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                    ],
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (orderHistory.isNotEmpty &&
+                          orderHistory[0]['items'] != null)
+                        ...List.generate(
+                          (orderHistory[0]['items'] as List).length,
+                          (index) {
+                            final item = orderHistory[0]['items'][index];
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                  children: [
+
+                                    Text(
+                                      'Food ID: ${item['foodId']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+
+                                    Text(
+                                      'Total Price: \R${item['totalPrice']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+
+                                    Text(
+                                      'Quantity: ${item['quantity']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ));
+                          },
+                        )
+                      else
+                        const Text(
+                          'No items available.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Received',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
                     ],
                   ),
                 ),

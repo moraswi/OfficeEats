@@ -7,14 +7,14 @@ import 'package:eats/shared/store_skeleton_loader.dart';
 class StoreCard extends StatelessWidget {
   final String imagePath;
   final String storeName;
-  final double rating; // Changed to double to support fractional ratings
+  final double rating;
   final Color backgroundColor;
 
   StoreCard({
     required this.imagePath,
     required this.storeName,
     required this.rating,
-    this.backgroundColor = Colors.grey, // Default color
+    this.backgroundColor = Colors.grey,
   });
 
   @override
@@ -22,14 +22,12 @@ class StoreCard extends StatelessWidget {
     return InkWell(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.0),
-        // Apply the same border radius
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8.0),
-          height: 200, // Adjust the height according to your needs
+          height: 200,
           decoration: BoxDecoration(
-            color: backgroundColor, // Set background color of the card
+            color: backgroundColor,
             boxShadow: const [
-              // Shadow for card elevation
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 6,
@@ -55,7 +53,6 @@ class StoreCard extends StatelessWidget {
                 right: 0,
                 child: Container(
                   color: Colors.black54,
-                  // Background color of the store name area
                   padding: EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,14 +64,12 @@ class StoreCard extends StatelessWidget {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                        textAlign: TextAlign.left,
                       ),
                       SizedBox(height: 8),
                       Row(
                         children: List.generate(5, (index) {
                           return Icon(
                             index < rating ? Icons.star : Icons.star_border,
-                            // Show filled or outlined star
                             color: Colors.yellow,
                             size: 20,
                           );
@@ -106,7 +101,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final StoreApiService storeService = StoreApiService();
   List<dynamic> stores = [];
+  List<dynamic> filteredStores = [];
   bool isLoading = true;
+
+  final TextEditingController searchController = TextEditingController();
 
   int officeID = 2;
 
@@ -114,22 +112,31 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getStoresReq();
-    getSharedPreferences();
+    searchController.addListener(_filterStores);
   }
 
-  // getSharedPreferences
-  void getSharedPreferences() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // officeID = prefs.getInt('officeID') ?? 0;
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
-  // getStoresReq
+  void _filterStores() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredStores = stores
+          .where((store) =>
+          store['shopName'].toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
   Future<void> getStoresReq() async {
     try {
       List<dynamic> response = await storeService.getStoresReq(officeID);
       setState(() {
         stores = response;
-        print(stores);
+        filteredStores = stores;
         isLoading = false;
       });
     } catch (e) {
@@ -150,7 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back action
             Navigator.of(context).pop();
           },
         ),
@@ -171,10 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: Column(
           children: [
-            SizedBox(
-              height: 15,
-            ),
-
+            SizedBox(height: 15),
             InkWell(
               child: Container(
                 width: double.infinity,
@@ -196,15 +199,13 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   '/profile',
-                  (Route<dynamic> route) => false,
+                      (Route<dynamic> route) => false,
                 );
               },
             ),
-
             const SizedBox(height: 15),
-
-            // search textfield
             TextFormField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: 'Search Store',
                 border: OutlineInputBorder(
@@ -216,48 +217,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 contentPadding: const EdgeInsets.all(8),
               ),
             ),
-
             const SizedBox(height: 5),
-
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                    child: isLoading
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 5, // Number of skeletons
-                            itemBuilder: (context, index) {
-                              return StoreSkeletonLoader();
-                            },
-                          )
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: stores.length,
-                            itemBuilder: (context, index) {
-                              var store = stores[index];
-
-                              // address
-                              return StoreCard(
-                                imagePath: 'assets/images/image1.webp',
-                                // Replace with your image path
-                                storeName: store['shopName'],
-                                rating: 4.5,
-                              );
-                            })
-
-                    // ],
-                    ),
+              child: isLoading
+                  ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return StoreSkeletonLoader();
+                },
+              )
+                  : ListView.builder(
+                itemCount: filteredStores.length,
+                itemBuilder: (context, index) {
+                  var store = filteredStores[index];
+                  return StoreCard(
+                    imagePath: 'assets/images/image1.webp',
+                    storeName: store['shopName'],
+                    rating: 4.5,
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: RoundedBottomBar(
-        selectedIndex: 0,
-      ),
+      bottomNavigationBar: RoundedBottomBar(selectedIndex: 0),
     );
   }
 }
