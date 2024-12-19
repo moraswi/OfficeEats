@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
@@ -5,7 +7,7 @@ import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/store_skeleton_loader.dart';
 
 class StoreCard extends StatelessWidget {
-  final String imagePath;
+  final Widget imagePath;
   final String storeName;
   final double rating;
   final Color backgroundColor;
@@ -37,23 +39,14 @@ class StoreCard extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(imagePath),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+              Positioned.fill(child: imagePath), // Use the Widget directly
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
                 child: Container(
                   color: Colors.black54,
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -65,7 +58,7 @@ class StoreCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Row(
                         children: List.generate(5, (index) {
                           return Icon(
@@ -125,8 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String query = searchController.text.toLowerCase();
     setState(() {
       filteredStores = stores
-          .where((store) =>
-          store['shopName'].toLowerCase().contains(query))
+          .where((store) => store['shopName'].toLowerCase().contains(query))
           .toList();
     });
   }
@@ -136,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
       List<dynamic> response = await storeService.getStoresReq(officeID);
       setState(() {
         stores = response;
+        print(stores);
         filteredStores = stores;
         isLoading = false;
       });
@@ -199,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   '/profile',
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
@@ -221,25 +214,45 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: isLoading
                   ? ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return StoreSkeletonLoader();
-                },
-              )
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return StoreSkeletonLoader();
+                      },
+                    )
                   : ListView.builder(
-                itemCount: filteredStores.length,
-                itemBuilder: (context, index) {
-                  var store = filteredStores[index];
-                  return StoreCard(
-                    imagePath: 'assets/images/image1.webp',
-                    storeName: store['shopName'],
-                    rating: 4.5,
-                  );
-                },
-              ),
-            ),
+                      itemCount: filteredStores.length,
+                      itemBuilder: (context, index) {
+                        var store = filteredStores[index];
+                        var storeImages = store['storeImages'];
+                        var base64Image =
+                            storeImages != null ? storeImages['base64'] : null;
+
+                        // Use Image.memory for base64 or fallback to Image.asset
+                        Widget imageWidget =
+                            base64Image != null && base64Image.isNotEmpty
+                                ? Image.memory(
+                                    base64Decode(base64Image),
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  )
+                                : Image.asset(
+                                    'assets/images/food2.jpeg',
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  );
+
+                        return StoreCard(
+                          imagePath: imageWidget,
+                          storeName: store['shopName'] ?? 'Unknown Store',
+                          rating: 4.5,
+                        );
+                      },
+                    ),
+            )
           ],
         ),
       ),

@@ -68,10 +68,10 @@ class _TopBarState extends State<TopBar> {
                         Container(
                           decoration: BoxDecoration(
                               color: Colors.grey,
-                              borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(15)),
                           child: Padding(
                             padding: EdgeInsets.only(
-                                left: 10, right: 10, top: 3, bottom: 3),
+                                left: 15, right: 15, top: 2, bottom: 2),
                             child: Text(
                               menu['name'] ?? 'Unknown',
                               style: const TextStyle(
