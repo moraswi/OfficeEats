@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
-import '../../../../http/storeApiService.dart';
-import '../../../../shared/app_buttons.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class OrderReviewPage extends StatefulWidget {
   var routeName = '/orderreview';
@@ -100,7 +100,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -199,26 +198,25 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'mastercard',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text('card ***3211',
-                            style: TextStyle(fontSize: 16)),
+                        Text('card ***3211', style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             CustomButton(

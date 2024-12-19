@@ -11,7 +11,8 @@ class ApiService {
   }
 
   //register
-  Future<dynamic> register(String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
+  Future<dynamic> register(String firstName, String lastName,
+      String phoneNumber, String email, String password, String role) async {
     final endpoint = 'register';
     final data = {
       'firstName': firstName,
@@ -25,7 +26,8 @@ class ApiService {
   }
 
   //changePassword
-  Future<dynamic> changePassword(int userId, String string, String newPassword) async {
+  Future<dynamic> changePassword(
+      int userId, String string, String newPassword) async {
     final endpoint = 'register';
     final data = {
       'userId': userId,
@@ -53,7 +55,6 @@ class ApiService {
     return await httpService.get(endpoint);
   }
 
-
   //getStoreMenuByCategoryId
   Future<dynamic> getStoreMenuByCategoryId(int categoryId) async {
     final endpoint = 'store-menu/category/$categoryId';
@@ -79,14 +80,14 @@ class ApiService {
   }
 
   Future<dynamic> placeOrder(
-      int userId,
-      String deliveryAddress,
-      String paymentMethod,
-      int shopId,
-      String orderCode,
-      String storeName,
-      List<Map<String, dynamic>> items, // Pass items as a parameter
-      ) async {
+    int userId,
+    String deliveryAddress,
+    String paymentMethod,
+    int shopId,
+    String orderCode,
+    String storeName,
+    List<Map<String, dynamic>> items, // Pass items as a parameter
+  ) async {
     final endpoint = 'place-order';
     final data = {
       'userId': userId,
@@ -99,8 +100,6 @@ class ApiService {
     };
     return await httpService.post(endpoint, data);
   }
-
-
 
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {
@@ -115,15 +114,16 @@ class ApiService {
   }
 
   //deleteUserAddress
-  Future<dynamic> rateApp(int userId, String message, int rating, String improve) async {
+  Future<dynamic> rateApp(
+      int userId, String message, int rating, String improve) async {
     final endpoint = 'rate';
     final data = {
       'userId': userId,
-      'message':message,
-      'improve':improve,
-      'rating':rating,
+      'message': message,
+      'improve': improve,
+      'rating': rating,
     };
-    return await httpService.post(endpoint,data);
+    return await httpService.post(endpoint, data);
   }
 
   //getStoreMenuCategories

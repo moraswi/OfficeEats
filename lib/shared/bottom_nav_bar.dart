@@ -13,7 +13,8 @@ class RoundedBottomBar extends StatefulWidget {
 class _RoundedBottomBarState extends State<RoundedBottomBar>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Color activeIconColor = AppColors.primaryColor; // Set your desired active icon color here
+  Color activeIconColor =
+      AppColors.primaryColor; // Set your desired active icon color here
   Color inactiveIconColor =
       Colors.grey; // Set your desired inactive icon color here
 
@@ -33,7 +34,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.all(16.0),
+        // padding: EdgeInsets.all(16.0),
         padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 10.0),
         child: Container(
           decoration: BoxDecoration(
@@ -60,7 +61,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                 unselectedLabelColor: inactiveIconColor,
                 // Set the inactive icon color
                 labelStyle:
-                TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400),
+                    TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400),
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(color: Colors.white, width: 0.0),
                   insets: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 40.0),
@@ -104,7 +105,6 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                     ),
                     text: 'Profile',
                   ),
-
                 ],
                 onTap: (index) {
                   setState(() {

@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:eats/shared/app_buttons.dart';
-
 import 'package:eats/http/authApiService.dart';
 
 class LogIn extends StatefulWidget {
@@ -36,7 +34,7 @@ class _LogInState extends State<LogIn> {
     String password = passwordController.text;
 
     try {
-       await authService.loginReq(context, email, password);
+      await authService.loginReq(context, email, password);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Failed: $e')),
@@ -140,10 +138,7 @@ class _LogInState extends State<LogIn> {
 
               const SizedBox(height: 20),
 
-              CustomButton(
-                label: 'Log In',
-                onTap: handleLogin
-              ),
+              CustomButton(label: 'Log In', onTap: handleLogin),
 
               const SizedBox(height: 20),
               //forgot Password

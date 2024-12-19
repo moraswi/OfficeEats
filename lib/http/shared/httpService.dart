@@ -3,6 +3,7 @@ import 'dart:convert';
 
 class HttpService {
   String baseUrl = 'https://10.0.2.2:7067/api/';
+
   // String apiKey = '';
 
   // HttpService({required this.baseUrl, required this.apiKey});

@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../../../http/storeApiService.dart';
-import '../../../shared/app_buttons.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class FeedBack extends StatefulWidget {
   var routeName = '/feedback';
@@ -45,16 +45,12 @@ class _FeedBackState extends State<FeedBack> {
   // _feedback
   Future<void> _feedback() async {
     try {
-        _submitForm();
-        int rate = rating.toInt();
-        String improveResult = improve;
-        String message = feedbackController.text;
+      _submitForm();
+      int rate = rating.toInt();
+      String improveResult = improve;
+      String message = feedbackController.text;
       await storeService.rateAppReq(
-          context,
-          userId,
-          message,
-          rate,
-          improveResult);
+          context, userId, message, rate, improveResult);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Feedback Failed')),
@@ -303,7 +299,7 @@ class _FeedBackState extends State<FeedBack> {
                         controller: feedbackController,
                         maxLines: 6,
                         keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
@@ -322,7 +318,6 @@ class _FeedBackState extends State<FeedBack> {
                   label: 'Submit',
                   onTap: () {
                     _feedback();
-
                   },
                 ),
               ],

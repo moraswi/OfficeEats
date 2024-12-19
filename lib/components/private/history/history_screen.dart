@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
-import '../../../http/storeApiService.dart';
-import '../../../shared/app_colors.dart';
-import '../../../shared/app_buttons.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/app_colors.dart';
 
 class MenuItem extends StatefulWidget {
   final String imagePath;
@@ -27,7 +26,6 @@ class _MenuItemState extends State<MenuItem> {
     return Container(
       padding: EdgeInsets.all(8.0),
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -59,9 +57,7 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                    Text('${widget.orderDate}', style: TextStyle(fontSize: 16)),
-
+                Text('${widget.orderDate}', style: TextStyle(fontSize: 16)),
                 Text(
                   '${widget.orderCode}',
                   style: const TextStyle(
@@ -160,7 +156,6 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-
         child: Column(
           children: [
             const SizedBox(

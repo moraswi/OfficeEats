@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-
-import '../../shared/app_colors.dart';
+import 'package:eats/shared/app_colors.dart';
 
 class LandingPage extends StatefulWidget {
   var routeName = '/landingPage';

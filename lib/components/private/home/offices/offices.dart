@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eats/shared/skeleton_loader.dart';
 
 class OfficePage extends StatefulWidget {
@@ -112,82 +111,86 @@ class _OfficePageState extends State<OfficePage> {
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: isLoading
                     ? ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 5, // Number of skeletons
-                  itemBuilder: (context, index) {
-                    return SkeletonLoader();
-                  },
-                ) : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: offices.length,
-                  itemBuilder: (context, index) {
-                    var office = offices[index];
-                    int officeID = offices[index]['id'];
-                    String officeName = offices[index]['officeName'];
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 5, // Number of skeletons
+                        itemBuilder: (context, index) {
+                          return SkeletonLoader();
+                        },
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: offices.length,
+                        itemBuilder: (context, index) {
+                          var office = offices[index];
+                          int officeID = offices[index]['id'];
+                          String officeName = offices[index]['officeName'];
 
-                    return InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4.0,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/officePackImage1.jpg',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Office Pack: ${office['officeName']}',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          return InkWell(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4.0,
+                                    offset: Offset(0, 2),
                                   ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.location_on,
-                                          color: AppColors.primaryColor, size: 20),
-                                      Text('${office['officeLocation']}',
-                                          style: const TextStyle(fontSize: 16)),
-                                    ],
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/officePackImage1.jpg',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Office Pack: ${office['officeName']}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.location_on,
+                                                color: AppColors.primaryColor,
+                                                size: 20),
+                                            Text('${office['officeLocation']}',
+                                                style: const TextStyle(
+                                                    fontSize: 16)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                            onTap: () async {
+                              // SharedPreferences prefs = await SharedPreferences.getInstance();
+                              // prefs.setInt("officeID", officeID);
+                              // prefs.setString("officeName", officeName);
+                              print(officeID);
+                              print(officeName);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/home', (Route<dynamic> route) => true);
+                            },
+                          );
+                        },
                       ),
-                      onTap: () async {
-                        // SharedPreferences prefs = await SharedPreferences.getInstance();
-                        // prefs.setInt("officeID", officeID);
-                        // prefs.setString("officeName", officeName);
-                        print(officeID);
-                        print(officeName);
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/home', (Route<dynamic> route) => true);
-                      },
-                    );
-                  },
-                ),
               ),
             ),
           ),

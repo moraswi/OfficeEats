@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
-import '../../../shared/app_buttons.dart';
-import '../../../shared/bottom_nav_bar.dart';
+import 'package:eats/shared/app_buttons.dart';
+import 'package:eats/shared/bottom_nav_bar.dart';
 
 class ChangePassword extends StatefulWidget {
   var routeName = '/changepassword';
@@ -11,7 +10,6 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-
   TextEditingController currentPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -146,7 +144,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         onTap: () {
                           setState(() {
                             isConfirmPasswordVisible =
-                            !isConfirmPasswordVisible;
+                                !isConfirmPasswordVisible;
                           });
                         },
                         child: Icon(

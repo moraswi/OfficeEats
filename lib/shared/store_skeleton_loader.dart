@@ -6,7 +6,8 @@ class StoreSkeletonLoader extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0), // Adds spacing between cards
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        // Adds spacing between cards
         height: 200,
         decoration: BoxDecoration(
           color: Colors.grey[300],
@@ -44,7 +45,7 @@ class StoreSkeletonLoader extends StatelessWidget {
                     Row(
                       children: List.generate(
                         5,
-                            (index) => Container(
+                        (index) => Container(
                           height: 20,
                           width: 20,
                           margin: const EdgeInsets.only(right: 4),

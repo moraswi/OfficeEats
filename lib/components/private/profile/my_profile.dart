@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
@@ -12,7 +11,6 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-
   TextEditingController currentPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -59,7 +57,6 @@ class _MyProfileState extends State<MyProfile> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   TextFormField(
                     controller: currentPasswordController,
                     decoration: InputDecoration(
@@ -74,7 +71,6 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-                  
                   const SizedBox(height: 14),
                   TextFormField(
                     controller: currentPasswordController,
@@ -90,7 +86,6 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-
                   const SizedBox(height: 14),
                   TextFormField(
                     controller: currentPasswordController,
@@ -106,7 +101,6 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-
                   const SizedBox(height: 14),
                   TextFormField(
                     controller: currentPasswordController,
@@ -122,13 +116,15 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            
-            Text("Add Address", style: TextStyle(  fontWeight: FontWeight.w700, color: AppColors.primaryColor)),
+
+            Text("Add Address",
+                style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryColor)),
             const SizedBox(height: 20),
 
             InkWell(
@@ -168,8 +164,7 @@ class _MyProfileState extends State<MyProfile> {
                           Row(
                             children: [
                               Icon(Icons.location_on,
-                                  color: AppColors.primaryColor,
-                                  size: 20),
+                                  color: AppColors.primaryColor, size: 20),
                               Text('Touch Tech, Unit A, 1st Floor',
                                   style: TextStyle(fontSize: 16)),
                             ],

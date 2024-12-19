@@ -1,9 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:eats/shared/app_buttons.dart';
-
-import '../../http/authApiService.dart';
+import 'package:eats/http/authApiService.dart';
 
 class SignUp extends StatefulWidget {
   var routeName = '/signUp';
@@ -35,9 +33,10 @@ class _SignUpState extends State<SignUp> {
     String password = passwordController.text;
     String role = "customer";
 
-    try{
-      await authService.registerReq(context, firstName, lastName, phoneNumber, email, password, role);
-    }catch(e){
+    try {
+      await authService.registerReq(
+          context, firstName, lastName, phoneNumber, email, password, role);
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Register Failed')),
       );
@@ -111,7 +110,6 @@ class _SignUpState extends State<SignUp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     TextFormField(
                       controller: firstNameController,
                       decoration: InputDecoration(
@@ -163,7 +161,6 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       controller: phoneNumberController,
                       keyboardType: TextInputType.number,
-
                       decoration: InputDecoration(
                         hintText: 'Phone Number',
                         border: OutlineInputBorder(
@@ -191,7 +188,6 @@ class _SignUpState extends State<SignUp> {
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
-
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -223,7 +219,6 @@ class _SignUpState extends State<SignUp> {
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
-
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -246,11 +241,7 @@ class _SignUpState extends State<SignUp> {
 
               const SizedBox(height: 20),
 
-
-              CustomButton(
-                label: 'Register',
-                onTap: register
-              ),
+              CustomButton(label: 'Register', onTap: register),
 
               const SizedBox(height: 10),
 

@@ -7,7 +7,7 @@ class AppColors {
   static const Color tertiaryColor = Color(0xFFB6B7B7);
   static const Color tertiaryColdor = Colors.yellow;
 
-  // Background Colors
-  //static const Color backgroundColor = Color(0xFFF5F5F5); // Light grey
-  //static const Color cardBackgroundColor = Color(0xFFFFFFFF); // White
+// Background Colors
+//static const Color backgroundColor = Color(0xFFF5F5F5); // Light grey
+//static const Color cardBackgroundColor = Color(0xFFFFFFFF); // White
 }

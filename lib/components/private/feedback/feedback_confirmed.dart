@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../shared/app_buttons.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class FeedBackConfirmed extends StatefulWidget {
   var routeName = '/feedbackconfirmed';
@@ -67,7 +67,9 @@ class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
-                        'assets/images/feedback/solar_like-bold.png', width: 122,height: 122,
+                        'assets/images/feedback/solar_like-bold.png',
+                        width: 122,
+                        height: 122,
                       ),
                       SizedBox(
                         height: 10,
@@ -100,7 +102,6 @@ class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
                               '/home', (Route<dynamic> route) => true);
                         },
                       ),
-
                     ],
                   ),
                 ),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../http/storeApiService.dart';
-import '../../../../shared/store_skeleton_loader.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/store_skeleton_loader.dart';
 
 class StoreCard extends StatelessWidget {
   final String imagePath;
@@ -127,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // getStoresReq
   Future<void> getStoresReq() async {
     try {
-
       List<dynamic> response = await storeService.getStoresReq(officeID);
       setState(() {
         stores = response;

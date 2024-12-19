@@ -1,4 +1,3 @@
-
 import 'package:eats/http/shared/apiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +5,11 @@ import 'package:flutter/material.dart';
 import '../shared/loading_dialog.dart';
 
 class AuthApiService {
-
   ApiService apiService = ApiService();
 
   //login
-  Future<bool> loginReq(BuildContext context, String email, String password) async {
+  Future<bool> loginReq(
+      BuildContext context, String email, String password) async {
     try {
       if (email.isEmpty || password.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -19,40 +18,48 @@ class AuthApiService {
         return false;
       }
 
-        // Show the loading dialog
-        LoadingDialog.show(context);
+      // Show the loading dialog
+      LoadingDialog.show(context);
 
-        var results = await apiService.login(email,password);
+      var results = await apiService.login(email, password);
 
-        if (results.statusCode == 200) {
-          LoadingDialog.hide(context);
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            '/office',
-                (Route<dynamic> route) => false,
-          );
-          return true;
-
-        } else {
-          // Show a failure message if login is not successful
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Invalid email or password')),
-          );
-          return false;
-        }
+      if (results.statusCode == 200) {
+        LoadingDialog.hide(context);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/office',
+          (Route<dynamic> route) => false,
+        );
+        return true;
+      } else {
+        // Show a failure message if login is not successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid email or password')),
+        );
+        return false;
+      }
     } catch (e) {
-
       print('loginReq Error: $e');
       rethrow;
-    }finally{
+    } finally {
       LoadingDialog.hide(context);
     }
   }
 
-
   //registerReq
-  Future<void> regcccisterReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
+  Future<void> regcccisterReq(
+      BuildContext context,
+      String firstName,
+      String lastName,
+      String phoneNumber,
+      String email,
+      String password,
+      String role) async {
     try {
-      if (firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty || email.isEmpty || password.isEmpty) {
+      if (firstName.isEmpty ||
+          lastName.isEmpty ||
+          phoneNumber.isEmpty ||
+          email.isEmpty ||
+          password.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('All the fields are required!')),
         );
@@ -69,12 +76,13 @@ class AuthApiService {
       // Show the loading dialog
       LoadingDialog.show(context);
 
-      var results = await apiService.register(firstName, lastName, phoneNumber, email, password, role);
-          print(results.statusCode);
+      var results = await apiService.register(
+          firstName, lastName, phoneNumber, email, password, role);
+      print(results.statusCode);
       if (results.statusCode == 200) {
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/logIn',
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -91,10 +99,21 @@ class AuthApiService {
     }
   }
 
-  Future<bool> registerReq(BuildContext context, String firstName, String lastName, String phoneNumber, String email, String password, String role) async {
+  Future<bool> registerReq(
+      BuildContext context,
+      String firstName,
+      String lastName,
+      String phoneNumber,
+      String email,
+      String password,
+      String role) async {
     try {
       // Validation: Ensure all fields are filled
-      if (firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty || email.isEmpty || password.isEmpty) {
+      if (firstName.isEmpty ||
+          lastName.isEmpty ||
+          phoneNumber.isEmpty ||
+          email.isEmpty ||
+          password.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('All fields are required!')),
         );
@@ -113,9 +132,11 @@ class AuthApiService {
       LoadingDialog.show(context);
 
       // Call API for registration
-      var results = await apiService.register(firstName, lastName, phoneNumber, email, password, role);
+      var results = await apiService.register(
+          firstName, lastName, phoneNumber, email, password, role);
 
-      if (results.statusCode == 201) { // Success
+      if (results.statusCode == 201) {
+        // Success
         LoadingDialog.hide(context); // Hide the dialog
 
         // Show success message
@@ -126,7 +147,8 @@ class AuthApiService {
         // Navigate to the login page
         Navigator.of(context).pushNamed('/login');
         return true;
-      } else { // Failure
+      } else {
+        // Failure
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Registration failed! Try again.')),
         );
@@ -142,15 +164,16 @@ class AuthApiService {
   }
 
   //changePasswordReq
-  Future<void> changePasswordReq(int userId, String string, String newPassword) async {
+  Future<void> changePasswordReq(
+      int userId, String string, String newPassword) async {
     try {
-      var results = await apiService.changePassword( userId, string, newPassword);
+      var results =
+          await apiService.changePassword(userId, string, newPassword);
 
-      if(results.statusCode == 200){
+      if (results.statusCode == 200) {
         print('successful');
       }
     } catch (e) {
-
       print('changePasswordReq Error: $e');
       rethrow;
     }
@@ -161,11 +184,10 @@ class AuthApiService {
     try {
       var results = await apiService.deleteProfile(id);
 
-      if(results.statusCode == 200){
+      if (results.statusCode == 200) {
         print('successful');
       }
     } catch (e) {
-
       print('deleteProfileReq Error: $e');
       rethrow;
     }
@@ -176,11 +198,10 @@ class AuthApiService {
     try {
       var results = await apiService.deleteUserAddress(id);
 
-      if(results.statusCode == 200){
+      if (results.statusCode == 200) {
         print('successful');
       }
     } catch (e) {
-
       print('deleteProfileReq Error: $e');
       rethrow;
     }
@@ -191,14 +212,12 @@ class AuthApiService {
     try {
       var results = await apiService.getUserAddress(userid);
 
-      if(results.statusCode == 200){
+      if (results.statusCode == 200) {
         print('successful');
       }
     } catch (e) {
-
       print('deleteProfileReq Error: $e');
       rethrow;
     }
   }
-
 }

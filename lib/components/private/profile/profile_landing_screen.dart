@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 
@@ -29,13 +28,11 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
           },
         ),
       ),
-
       body: Stack(
         children: [
           Center(
             child: Column(
               children: [
-
                 const SizedBox(
                   height: 10,
                 ),
@@ -46,7 +43,6 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                       borderRadius: BorderRadius.circular(100),
                       child: Image.asset('assets/images/food3.jpeg'),
                     )),
-
                 const SizedBox(
                   height: 10,
                 ),
@@ -61,7 +57,6 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                 SizedBox(
                   height: 20,
                 ),
-
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
@@ -109,7 +104,8 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                                   '/myprofile', (Route<dynamic> route) => true);
                             } else if (index == 1) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/changepassword', (Route<dynamic> route) => true);
+                                  '/changepassword',
+                                  (Route<dynamic> route) => true);
                             } else if (index == 2) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/home', (Route<dynamic> route) => true);
@@ -121,10 +117,10 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                           child: Container(
                             height: 65,
                             decoration: const BoxDecoration(
-                                color: Color(0xFFEFEFF0),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15.0),
-                                ),
+                              color: Color(0xFFEFEFF0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15.0),
+                              ),
                             ),
                             child: Center(
                               child: ListTile(

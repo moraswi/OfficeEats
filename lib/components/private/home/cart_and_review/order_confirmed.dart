@@ -11,10 +11,6 @@ class OrderConfirmed extends StatefulWidget {
 }
 
 class _OrderConfirmedState extends State<OrderConfirmed> {
-  bool overallService = false;
-  bool SpeedEfficiency = false;
-  bool customerSupport = false;
-  bool otherChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +60,32 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                     ],
                   ),
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
-                        'assets/images/feedback/solar_like-bold.png', width: 122,height: 122,
+                        'assets/images/feedback/solar_like-bold.png',
+                        width: 122,
+                        height: 122,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
-                      Text(
+                      const Text(
                         'Thank you',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
 
-                      Text(
+                      const Text(
                         'Your order has been submitted!',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w400),
                       ),
 
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       //button
@@ -101,7 +97,6 @@ class _OrderConfirmedState extends State<OrderConfirmed> {
                               '/history', (Route<dynamic> route) => true);
                         },
                       ),
-
                     ],
                   ),
                 ),
