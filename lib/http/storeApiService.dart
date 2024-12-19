@@ -167,12 +167,12 @@ class StoreApiService {
       print(results.statusCode);
 
       if (results.statusCode == 200) {
-        LoadingDialog.hide(context);
+        // LoadingDialog.hide(context);
 
-        // Navigator.of(context).pushNamedAndRemoveUntil(
-        //   '/orderreview',
-        //       (Route<dynamic> route) => true,
-        // );
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/orderconfirmed',
+              (Route<dynamic> route) => true,
+        );
         print('Order placed successfully');
       }
 

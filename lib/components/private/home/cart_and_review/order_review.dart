@@ -222,7 +222,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
               height: 15,
             ),
             CustomButton(
-              label: 'Check out',
+              label: 'Submit Order',
               onTap: () {
                 submitOrder();
                 // Handle button press
