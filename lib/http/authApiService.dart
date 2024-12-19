@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:eats/http/shared/apiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -158,12 +160,15 @@ class AuthApiService {
   }
 
   //deleteProfileReq
-  Future<void> getUserAddressReq(int userid) async {
+  Future<List<dynamic>> getUserAddressReq(int userid) async {
     try {
       var results = await apiService.getUserAddress(userid);
 
       if (results.statusCode == 200) {
-        print('successful');
+        final data = jsonDecode(results.body);
+        return data;
+      }else{
+        throw Exception("failed to get address");
       }
     } catch (e) {
       print('deleteProfileReq Error: $e');

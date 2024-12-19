@@ -3,6 +3,8 @@ import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 
+import '../../../http/authApiService.dart';
+
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
 
@@ -15,9 +17,40 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+  final AuthApiService authService = AuthApiService();
+
   bool isPasswordVisible = false;
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
+
+  List<dynamic> addressList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getUserAddressReq();
+  }
+
+  // getOrdersReq
+  Future<void> getUserAddressReq() async {
+    try {
+      var userid = 0;
+      List<dynamic> response = await authService.getUserAddressReq(userid);
+      setState(() {
+        addressList = response;
+        print(addressList);
+        // isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        // isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get order failed: $e')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
