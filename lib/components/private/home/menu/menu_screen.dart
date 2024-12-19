@@ -200,16 +200,16 @@ class _MenuPageState extends State<MenuPage> {
         preferredSize: Size.fromHeight(180),
         child: AppBar(
           backgroundColor: Colors.pink,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(100),
                   bottomRight: Radius.circular(0))),
           flexibleSpace: ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(100),
                 bottomRight: Radius.circular(0)),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/food2.jpeg"),
                       fit: BoxFit.fill)),

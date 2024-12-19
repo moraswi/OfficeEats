@@ -45,60 +45,6 @@ class AuthApiService {
     }
   }
 
-  //registerReq
-  Future<void> regcccisterReq(
-      BuildContext context,
-      String firstName,
-      String lastName,
-      String phoneNumber,
-      String email,
-      String password,
-      String role) async {
-    try {
-      if (firstName.isEmpty ||
-          lastName.isEmpty ||
-          phoneNumber.isEmpty ||
-          email.isEmpty ||
-          password.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('All the fields are required!')),
-        );
-        return;
-      }
-
-      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Enter a valid email address')),
-        );
-        return;
-      }
-
-      // Show the loading dialog
-      LoadingDialog.show(context);
-
-      var results = await apiService.register(
-          firstName, lastName, phoneNumber, email, password, role);
-      print(results.statusCode);
-      if (results.statusCode == 200) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/logIn',
-          (Route<dynamic> route) => false,
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: ${results.body}')),
-        );
-      }
-    } catch (e) {
-      print('registerReq Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $e')),
-      );
-    } finally {
-      LoadingDialog.hide(context);
-    }
-  }
-
   Future<bool> registerReq(
       BuildContext context,
       String firstName,
@@ -137,7 +83,7 @@ class AuthApiService {
 
       if (results.statusCode == 201) {
         // Success
-        LoadingDialog.hide(context); // Hide the dialog
+        LoadingDialog.hide(context);
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -164,18 +110,24 @@ class AuthApiService {
   }
 
   //changePasswordReq
-  Future<void> changePasswordReq(
-      int userId, String string, String newPassword) async {
+  Future<bool> changePasswordReq(BuildContext context, int userId,
+      String currentPassword, String newPassword) async {
     try {
-      var results =
-          await apiService.changePassword(userId, string, newPassword);
+      // Assuming apiService.changePassword returns a Response object
+      final response =
+          await apiService.changePassword(userId, currentPassword, newPassword);
 
-      if (results.statusCode == 200) {
-        print('successful');
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
+        return true; // Password changed successfully
+      } else {
+        print('API Error: ${response.statusCode}, ${response.body}');
+        return false; // Password change failed
       }
     } catch (e) {
       print('changePasswordReq Error: $e');
-      rethrow;
+      throw Exception('Failed to change password');
     }
   }
 

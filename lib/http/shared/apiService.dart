@@ -27,11 +27,11 @@ class ApiService {
 
   //changePassword
   Future<dynamic> changePassword(
-      int userId, String string, String newPassword) async {
-    final endpoint = 'register';
+      int userId, String currentPassword, String newPassword) async {
+    final endpoint = 'change-password';
     final data = {
       'userId': userId,
-      'string': string,
+      'currentPassword': currentPassword,
       'newPassword': newPassword,
     };
     return await httpService.post(endpoint, data);

@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  // _filterStores
   void _filterStores() {
     String query = searchController.text.toLowerCase();
     setState(() {
@@ -123,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // getStoresReq
   Future<void> getStoresReq() async {
     try {
       List<dynamic> response = await storeService.getStoresReq(officeID);
@@ -239,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: double.infinity,
                                   )
                                 : Image.asset(
-                                    'assets/images/food2.jpeg',
+                                    'assets/images/image1.webp',
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: double.infinity,
