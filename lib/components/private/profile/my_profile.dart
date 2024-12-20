@@ -29,18 +29,39 @@ class _MyProfileState extends State<MyProfile> {
   void initState() {
     super.initState();
     getUserAddressReq();
+    getUserByIdReq();
   }
 
   // getOrdersReq
   Future<void> getUserAddressReq() async {
     try {
       var userid = 0;
-      List<dynamic> response = await authService.getUserAddressReq(userid);
+      List<dynamic> response = await authService.getUserAddressReq(context, userid);
       setState(() {
         addressList = response;
         print(addressList);
         // isLoading = false;
       });
+    } catch (e) {
+      // setState(() {
+        // isLoading = false;
+      // });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get order failed: $e')),
+      );
+    }
+  }
+
+  Future<void> getUserByIdReq() async {
+    try {
+      var userid = 0;
+      var response = await authService.getUserByIdReq(context, userid);
+      print(response);
+      // setState(() {
+      //   addressList = response;
+      //   print(addressList);
+      //   isLoading = false;
+      // });
     } catch (e) {
       setState(() {
         // isLoading = false;

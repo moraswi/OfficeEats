@@ -101,6 +101,12 @@ class ApiService {
     return await httpService.post(endpoint, data);
   }
 
+  //getUserById
+  Future<dynamic> getUserById(int userid) async {
+    final endpoint = 'user/$userid';
+    return await httpService.get(endpoint);
+  }
+
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {
     final endpoint = 'addresses/$userid';

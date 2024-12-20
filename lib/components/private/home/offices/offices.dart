@@ -74,10 +74,12 @@ class _OfficePageState extends State<OfficePage> {
       body: Column(
         children: [
           const SizedBox(height: 70),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
+                // Search
                 TextFormField(
                   controller: searchController,
                   decoration: InputDecoration(
@@ -91,7 +93,9 @@ class _OfficePageState extends State<OfficePage> {
                     contentPadding: const EdgeInsets.all(8),
                   ),
                 ),
+
                 const SizedBox(height: 15),
+
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -134,6 +138,7 @@ class _OfficePageState extends State<OfficePage> {
               ],
             ),
           ),
+
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

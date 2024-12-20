@@ -160,8 +160,10 @@ class AuthApiService {
   }
 
   //deleteProfileReq
-  Future<List<dynamic>> getUserAddressReq(int userid) async {
+  Future<List<dynamic>> getUserAddressReq(BuildContext context, userid) async {
     try {
+      LoadingDialog.hide(context);
+
       var results = await apiService.getUserAddress(userid);
 
       if (results.statusCode == 200) {
@@ -173,6 +175,33 @@ class AuthApiService {
     } catch (e) {
       print('deleteProfileReq Error: $e');
       rethrow;
+    } finally {
+      // Ensure the loading dialog is hidden in all cases
+      LoadingDialog.hide(context);
     }
   }
+
+  // getUserByIdReq
+  Future<dynamic> getUserByIdReq(BuildContext context, userid) async {
+    try {
+      LoadingDialog.hide(context);
+
+      var results = await apiService.getUserById(userid);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body);
+        return data;
+      }else{
+        throw Exception("failed to get address");
+      }
+    } catch (e) {
+      print('deleteProfileReq Error: $e');
+      rethrow;
+    } finally {
+      // Ensure the loading dialog is hidden in all cases
+      LoadingDialog.hide(context);
+    }
+  }
+
+
 }
