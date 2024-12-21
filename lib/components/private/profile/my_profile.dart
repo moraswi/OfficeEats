@@ -23,32 +23,32 @@ class _MyProfileState extends State<MyProfile> {
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
 
-  List<dynamic> addressList = [];
+  var getAddress;
   var userData;
+  String officePackText = '';
+  String officeAddressText = '';
 
   @override
   void initState() {
     super.initState();
-    // getUserAddressReq();
+    getUserAddressReq();
     getUserByIdReq();
   }
 
   // getOrdersReq
   Future<void> getUserAddressReq() async {
     try {
-      var userid = 0;
-      List<dynamic> response = await authService.getUserAddressReq(context, userid);
+      var userId = 0; // Replace with the actual user ID
+      Map<String, dynamic> response = await authService.getUserAddressReq(userId);
       setState(() {
-        addressList = response;
-        print(addressList);
-        // isLoading = false;
+        getAddress = [response]; // Wrap the response in a list
+        officePackText = 'Office Pack: ${getAddress[0]['officePack'] ?? 'N/A'}';
+        officeAddressText = getAddress[0]['officeAddress'] ?? 'N/A';
+        print('Address Details: $getAddress');
       });
     } catch (e) {
-      // setState(() {
-        // isLoading = false;
-      // });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get order failed: $e')),
+        SnackBar(content: Text('Get address failed: $e')),
       );
     }
   }
@@ -56,7 +56,7 @@ class _MyProfileState extends State<MyProfile> {
   Future<void> getUserByIdReq() async {
     try {
       var userid = 1;
-      var response = await authService.getUserByIdReq( context, userid);
+      var response = await authService.getUserByIdReq(context, userid);
       // print(response);
       setState(() {
         userData = response;
@@ -65,19 +65,18 @@ class _MyProfileState extends State<MyProfile> {
         emailController.text = userData['email'];
         phoneNumberController.text = userData['phoneNumber'];
         // userData
-        print(userData);
+        // print(userData);
         // isLoading = false;
       });
     } catch (e) {
       // setState(() {
-        // isLoading = false;
+      // isLoading = false;
       // });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Get order failed: $e')),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +145,7 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-
                   const SizedBox(height: 14),
-
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -163,9 +160,7 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-
                   const SizedBox(height: 14),
-
                   TextFormField(
                     controller: phoneNumberController,
                     decoration: InputDecoration(
@@ -215,12 +210,12 @@ class _MyProfileState extends State<MyProfile> {
                       fit: BoxFit.cover,
                     ),
                     const SizedBox(width: 12),
-                    const Expanded(
+                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Office Pack: Moreleta park',
+                            officePackText,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -230,7 +225,7 @@ class _MyProfileState extends State<MyProfile> {
                             children: [
                               Icon(Icons.location_on,
                                   color: AppColors.primaryColor, size: 20),
-                              Text('Touch Tech, Unit A, 1st Floor',
+                              Text(officeAddressText,
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),

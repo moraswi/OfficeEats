@@ -38,15 +38,15 @@ class _OfficePageState extends State<OfficePage> {
       filteredOffices = query.isEmpty
           ? offices
           : offices.where((office) {
-        return office['officeName']
-            .toString()
-            .toLowerCase()
-            .contains(query) ||
-            office['officeLocation']
-                .toString()
-                .toLowerCase()
-                .contains(query);
-      }).toList();
+              return office['officeName']
+                      .toString()
+                      .toLowerCase()
+                      .contains(query) ||
+                  office['officeLocation']
+                      .toString()
+                      .toLowerCase()
+                      .contains(query);
+            }).toList();
     });
   }
 
@@ -74,7 +74,6 @@ class _OfficePageState extends State<OfficePage> {
       body: Column(
         children: [
           const SizedBox(height: 70),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -144,78 +143,80 @@ class _OfficePageState extends State<OfficePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: isLoading
                   ? ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5, // Number of skeletons
-                itemBuilder: (context, index) {
-                  return SkeletonLoader();
-                },
-              )
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5, // Number of skeletons
+                      itemBuilder: (context, index) {
+                        return SkeletonLoader();
+                      },
+                    )
                   : ListView.builder(
-                itemCount: filteredOffices.length,
-                itemBuilder: (context, index) {
-                  var office = filteredOffices[index];
-                  return InkWell(
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4.0,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/officePackImage1.jpg',
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Office Pack: ${office['officeName']}',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                      itemCount: filteredOffices.length,
+                      itemBuilder: (context, index) {
+                        var office = filteredOffices[index];
+                        return InkWell(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4.0,
+                                  offset: Offset(0, 2),
                                 ),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        color: AppColors.primaryColor,
-                                        size: 20),
-                                    Text(
-                                      '${office['officeLocation']}',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/officePackImage1.jpg',
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Office Pack: ${office['officeName']}',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.location_on,
+                                              color: AppColors.primaryColor,
+                                              size: 20),
+                                          Text(
+                                            '${office['officeLocation']}',
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                          onTap: () {
+                            print(office['id']);
+                            print(office['officeName']);
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home', (Route<dynamic> route) => true);
+                          },
+                        );
+                      },
                     ),
-                    onTap: () {
-                      print(office['id']);
-                      print(office['officeName']);
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/home', (Route<dynamic> route) => true);
-                    },
-                  );
-                },
-              ),
             ),
           ),
         ],
