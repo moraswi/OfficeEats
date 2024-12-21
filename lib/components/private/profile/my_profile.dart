@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
-
-import '../../../http/authApiService.dart';
+import 'package:eats/http/authApiService.dart';
 
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
 
   @override
-  State<MyProfile> createState() => _MyProfileState();
+  _MyProfileState createState() => _MyProfileState();
 }
 
 class _MyProfileState extends State<MyProfile> {
-  TextEditingController currentPasswordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
 
   final AuthApiService authService = AuthApiService();
 
@@ -24,11 +24,12 @@ class _MyProfileState extends State<MyProfile> {
   bool isConfirmPasswordVisible = false;
 
   List<dynamic> addressList = [];
+  var userData;
 
   @override
   void initState() {
     super.initState();
-    getUserAddressReq();
+    // getUserAddressReq();
     getUserByIdReq();
   }
 
@@ -54,18 +55,23 @@ class _MyProfileState extends State<MyProfile> {
 
   Future<void> getUserByIdReq() async {
     try {
-      var userid = 0;
-      var response = await authService.getUserByIdReq(context, userid);
-      print(response);
-      // setState(() {
-      //   addressList = response;
-      //   print(addressList);
-      //   isLoading = false;
-      // });
-    } catch (e) {
+      var userid = 1;
+      var response = await authService.getUserByIdReq( context, userid);
+      // print(response);
       setState(() {
+        userData = response;
+        firstNameController.text = userData['firstName'];
+        surnameController.text = userData['lastName'];
+        emailController.text = userData['email'];
+        phoneNumberController.text = userData['phoneNumber'];
+        // userData
+        print(userData);
         // isLoading = false;
       });
+    } catch (e) {
+      // setState(() {
+        // isLoading = false;
+      // });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Get order failed: $e')),
       );
@@ -112,7 +118,7 @@ class _MyProfileState extends State<MyProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
-                    controller: currentPasswordController,
+                    controller: firstNameController,
                     decoration: InputDecoration(
                       labelText: 'First Name', // Corrected property name
                       border: UnderlineInputBorder(
@@ -127,7 +133,7 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   const SizedBox(height: 14),
                   TextFormField(
-                    controller: currentPasswordController,
+                    controller: surnameController,
                     decoration: InputDecoration(
                       labelText: 'Surname', // Corrected property name
                       border: UnderlineInputBorder(
@@ -140,9 +146,11 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
+
                   const SizedBox(height: 14),
+
                   TextFormField(
-                    controller: currentPasswordController,
+                    controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'Email Address', // Corrected property name
                       border: UnderlineInputBorder(
@@ -155,9 +163,11 @@ class _MyProfileState extends State<MyProfile> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
+
                   const SizedBox(height: 14),
+
                   TextFormField(
-                    controller: currentPasswordController,
+                    controller: phoneNumberController,
                     decoration: InputDecoration(
                       labelText: 'Phone number', // Corrected property name
                       border: UnderlineInputBorder(
@@ -173,6 +183,7 @@ class _MyProfileState extends State<MyProfile> {
                 ],
               ),
             ),
+
             const SizedBox(height: 30),
 
             Text("Add Address",

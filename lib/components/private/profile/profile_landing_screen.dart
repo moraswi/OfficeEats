@@ -111,7 +111,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                                   '/home', (Route<dynamic> route) => true);
                             } else if (index == 3) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/login', (Route<dynamic> route) => true);
+                                  '/logIn', (Route<dynamic> route) => true);
                             }
                           },
                           child: Container(

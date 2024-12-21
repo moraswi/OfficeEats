@@ -184,7 +184,7 @@ class AuthApiService {
   // getUserByIdReq
   Future<dynamic> getUserByIdReq(BuildContext context, userid) async {
     try {
-      LoadingDialog.hide(context);
+      // LoadingDialog.hide(context);
 
       var results = await apiService.getUserById(userid);
 
@@ -192,14 +192,14 @@ class AuthApiService {
         final data = jsonDecode(results.body);
         return data;
       }else{
-        throw Exception("failed to get address");
+        throw Exception("failed to get user");
       }
     } catch (e) {
       print('deleteProfileReq Error: $e');
       rethrow;
     } finally {
       // Ensure the loading dialog is hidden in all cases
-      LoadingDialog.hide(context);
+      // LoadingDialog.hide(context);
     }
   }
 
