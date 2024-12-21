@@ -119,6 +119,19 @@ class ApiService {
     return await httpService.delete(endpoint);
   }
 
+  //addAddress
+  Future<dynamic> addAddress(
+      String officePack, String officeAddress, int userId) async {
+    final endpoint = 'address';
+    final data = {
+      "officePack": "officePack",
+      "officeAddress": officeAddress,
+      "userId": 0,
+      "active": true
+    };
+    return await httpService.post(endpoint, data);
+  }
+
   //deleteUserAddress
   Future<dynamic> rateApp(
       int userId, String message, int rating, String improve) async {

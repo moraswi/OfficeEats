@@ -28,7 +28,7 @@ class _MyProfileState extends State<MyProfile> {
   var userData;
   String officePackText = '';
   String officeAddressText = '';
-
+  int addressId = 0;
   String? selectedAddressType;
 
   @override
@@ -85,6 +85,8 @@ class _MyProfileState extends State<MyProfile> {
                         SnackBar(content: Text('Please fill in all fields')),
                       );
                     }
+
+                    addAddressReq();
                   },
                   child: Text('Save Address'),
                 ),
@@ -96,6 +98,7 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
+  // getUserAddressReq
   Future<void> getUserAddressReq() async {
     try {
       var userId = 0; // Replace with the actual user ID
@@ -103,8 +106,9 @@ class _MyProfileState extends State<MyProfile> {
           await authService.getUserAddressReq(userId);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
-        officePackText = 'Office Pack: ${getAddress[0]['officePack'] ?? 'N/A'}';
+        officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
         officeAddressText = getAddress[0]['officeAddress'] ?? 'N/A';
+        addressId = getAddress[0]['id'] ?? 0;
         print('Address Details: $getAddress');
       });
     } catch (e) {
@@ -114,6 +118,7 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  // getUserByIdReq
   Future<void> getUserByIdReq() async {
     try {
       var userid = 1;
@@ -132,10 +137,26 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  // deleteUserAddressReq
   Future<void> deleteUserAddressReq() async {
     try {
-      int addressId = 2;
-      await authService.deleteUserAddressReq(addressId);
+      // int addressId = 3;
+      await authService.deleteUserAddressReq(context, addressId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete address')),
+      );
+    }
+  }
+
+  // addAddressReq
+  Future<void> addAddressReq() async {
+    try {
+      String officePack = "Villas";
+      String officeAddress = "Soft, 2nd floor, unit 1";
+      int userId = 0;
+      await authService.addAddressReq(
+          context, officePack, officeAddress, userId);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete address')),
@@ -177,6 +198,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // First Name
                   TextFormField(
                     controller: firstNameController,
                     decoration: InputDecoration(
@@ -188,6 +210,8 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                   ),
                   const SizedBox(height: 14),
+
+                  // Surname
                   TextFormField(
                     controller: surnameController,
                     decoration: InputDecoration(
@@ -199,6 +223,8 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                   ),
                   const SizedBox(height: 14),
+
+                  // Email Address
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -210,6 +236,8 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                   ),
                   const SizedBox(height: 14),
+
+                  // Phone number
                   TextFormField(
                     controller: phoneNumberController,
                     decoration: InputDecoration(
@@ -224,14 +252,10 @@ class _MyProfileState extends State<MyProfile> {
               ),
             ),
             const SizedBox(height: 30),
-            // ElevatedButton(
-            //   onPressed: _showAddAddressDialog,
-            //   child: Text('Add Address'),
-            // ),
 
             InkWell(
               onTap: _showAddAddressDialog,
-              child: Text("Add Address",
+              child: const Text("Add Address",
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: AppColors.primaryColor)),
@@ -267,7 +291,7 @@ class _MyProfileState extends State<MyProfile> {
                         if (officePackText.isNotEmpty)
                           Text(
                             officePackText,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -275,7 +299,7 @@ class _MyProfileState extends State<MyProfile> {
                         if (officeAddressText.isNotEmpty)
                           Row(
                             children: [
-                              Icon(Icons.location_on,
+                              const Icon(Icons.location_on,
                                   color: AppColors.primaryColor, size: 20),
                               Text(officeAddressText,
                                   style: TextStyle(fontSize: 16)),

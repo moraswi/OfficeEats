@@ -137,7 +137,7 @@ class AuthApiService {
       var results = await apiService.deleteProfile(id);
 
       if (results.statusCode == 200) {
-        print('successful');
+        print('Successful');
       }
     } catch (e) {
       print('deleteProfileReq Error: $e');
@@ -146,18 +146,44 @@ class AuthApiService {
   }
 
   //deleteUserAddressReq
-  Future<void> deleteUserAddressReq(int id) async {
+  Future<void> deleteUserAddressReq(BuildContext context, int id) async {
     try {
+      LoadingDialog.show(context);
+
       var results = await apiService.deleteUserAddress(id);
-      print(results);
-      print(results.status);
-      print(results.body);
-      // if (results.statusCode == 200) {
-      //   print('successful');
-      // }
+
+      if (results.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Successful')),
+        );
+      }
     } catch (e) {
-      print('deleteProfileReq Error: $e');
+      print('Something went wrong');
       rethrow;
+    } finally {
+      LoadingDialog.hide(context);
+    }
+  }
+
+  // addAddressReq
+  Future<void> addAddressReq(BuildContext context, officePack,
+      String officeAddress, int userId) async {
+    try {
+      LoadingDialog.show(context);
+
+      var results =
+          await apiService.addAddress(officePack, officeAddress, userId);
+
+      if (results.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Successful')),
+        );
+      }
+    } catch (e) {
+      print('Something went wrong');
+      rethrow;
+    } finally {
+      LoadingDialog.hide(context);
     }
   }
 
@@ -169,7 +195,8 @@ class AuthApiService {
       if (results.statusCode == 200) {
         return jsonDecode(results.body);
       } else {
-        throw Exception('Failed to fetch address. Status code: ${results.statusCode}');
+        throw Exception(
+            'Something went wrong');
       }
     } catch (e) {
       print('Error in getUserAddressReq: $e');
