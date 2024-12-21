@@ -39,7 +39,8 @@ class _MyProfileState extends State<MyProfile> {
   Future<void> getUserAddressReq() async {
     try {
       var userId = 0; // Replace with the actual user ID
-      Map<String, dynamic> response = await authService.getUserAddressReq(userId);
+      Map<String, dynamic> response =
+          await authService.getUserAddressReq(userId);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
         officePackText = 'Office Pack: ${getAddress[0]['officePack'] ?? 'N/A'}';
@@ -74,6 +75,17 @@ class _MyProfileState extends State<MyProfile> {
       // });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Get order failed: $e')),
+      );
+    }
+  }
+
+  Future<void> deleteUserAddressReq() async {
+    try {
+      int addressId = 2;
+      await authService.deleteUserAddressReq(addressId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete address')),
       );
     }
   }
@@ -187,33 +199,33 @@ class _MyProfileState extends State<MyProfile> {
                     color: AppColors.primaryColor)),
             const SizedBox(height: 20),
 
-            InkWell(
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4.0,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/officePackImage1.jpg',
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(width: 12),
-                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4.0,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/officePackImage1.jpg',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (officePackText.isNotEmpty)
                           Text(
                             officePackText,
                             style: TextStyle(
@@ -221,6 +233,7 @@ class _MyProfileState extends State<MyProfile> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                        if (officeAddressText.isNotEmpty)
                           Row(
                             children: [
                               Icon(Icons.location_on,
@@ -229,17 +242,34 @@ class _MyProfileState extends State<MyProfile> {
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
-                        ],
-                      ),
+                        //
+                        // Text('Address not found')
+
+                        // if (officeAddressText.isNotEmpty)
+                        //   Icon(Icons.location_on,
+                        //       color: AppColors.primaryColor, size: 20),
+                        // if (officeAddressText.isNotEmpty)
+                        //   Text(officeAddressText,
+                        //       style: TextStyle(fontSize: 16)),
+                        if (officeAddressText.isEmpty || officePackText.isEmpty)
+                          Text('Address not found'),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  if (officeAddressText.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        deleteUserAddressReq();
+                      },
+                    ),
+                ],
               ),
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/profilelanding', (Route<dynamic> route) => true);
-              },
             ),
+
             const SizedBox(height: 20),
             CustomButton(
               label: 'Save',

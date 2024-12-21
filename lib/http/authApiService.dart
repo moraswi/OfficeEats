@@ -149,10 +149,12 @@ class AuthApiService {
   Future<void> deleteUserAddressReq(int id) async {
     try {
       var results = await apiService.deleteUserAddress(id);
-
-      if (results.statusCode == 200) {
-        print('successful');
-      }
+      print(results);
+      print(results.status);
+      print(results.body);
+      // if (results.statusCode == 200) {
+      //   print('successful');
+      // }
     } catch (e) {
       print('deleteProfileReq Error: $e');
       rethrow;
