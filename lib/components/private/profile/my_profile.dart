@@ -16,6 +16,7 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController surnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   final AuthApiService authService = AuthApiService();
 
@@ -28,6 +29,8 @@ class _MyProfileState extends State<MyProfile> {
   String officePackText = '';
   String officeAddressText = '';
 
+  String? selectedAddressType;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +38,64 @@ class _MyProfileState extends State<MyProfile> {
     getUserByIdReq();
   }
 
-  // getOrdersReq
+  // Show Add Address Dialog
+  void _showAddAddressDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Address'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(labelText: 'Address'),
+                ),
+                SizedBox(height: 20),
+                DropdownButton<String>(
+                  hint: Text('Select Address Type'),
+                  value: selectedAddressType,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedAddressType = newValue;
+                    });
+                  },
+                  items: <String>['Home', 'Office', 'Other']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Save the address
+                    if (addressController.text.isNotEmpty &&
+                        selectedAddressType != null) {
+                      // Handle address save logic here
+                      print('Address: ${addressController.text}');
+                      print('Address Type: $selectedAddressType');
+                      Navigator.pop(context);
+                    } else {
+                      // Handle validation
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Please fill in all fields')),
+                      );
+                    }
+                  },
+                  child: Text('Save Address'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> getUserAddressReq() async {
     try {
       var userId = 0; // Replace with the actual user ID
@@ -58,21 +118,14 @@ class _MyProfileState extends State<MyProfile> {
     try {
       var userid = 1;
       var response = await authService.getUserByIdReq(context, userid);
-      // print(response);
       setState(() {
         userData = response;
         firstNameController.text = userData['firstName'];
         surnameController.text = userData['lastName'];
         emailController.text = userData['email'];
         phoneNumberController.text = userData['phoneNumber'];
-        // userData
-        // print(userData);
-        // isLoading = false;
       });
     } catch (e) {
-      // setState(() {
-      // isLoading = false;
-      // });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Get order failed: $e')),
       );
@@ -119,10 +172,6 @@ class _MyProfileState extends State<MyProfile> {
               'Account Details',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
-            // const Text(
-            //   'your new desired password.',
-            //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-            // ),
             const SizedBox(height: 30),
             Form(
               child: Column(
@@ -131,13 +180,9 @@ class _MyProfileState extends State<MyProfile> {
                   TextFormField(
                     controller: firstNameController,
                     decoration: InputDecoration(
-                      labelText: 'First Name', // Corrected property name
+                      labelText: 'First Name',
                       border: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(9.0),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.solid,
-                        ),
                       ),
                       contentPadding: const EdgeInsets.all(8),
                     ),
@@ -146,13 +191,9 @@ class _MyProfileState extends State<MyProfile> {
                   TextFormField(
                     controller: surnameController,
                     decoration: InputDecoration(
-                      labelText: 'Surname', // Corrected property name
+                      labelText: 'Surname',
                       border: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(9.0),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.solid,
-                        ),
                       ),
                       contentPadding: const EdgeInsets.all(8),
                     ),
@@ -161,13 +202,9 @@ class _MyProfileState extends State<MyProfile> {
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'Email Address', // Corrected property name
+                      labelText: 'Email Address',
                       border: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(9.0),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.solid,
-                        ),
                       ),
                       contentPadding: const EdgeInsets.all(8),
                     ),
@@ -176,13 +213,9 @@ class _MyProfileState extends State<MyProfile> {
                   TextFormField(
                     controller: phoneNumberController,
                     decoration: InputDecoration(
-                      labelText: 'Phone number', // Corrected property name
+                      labelText: 'Phone number',
                       border: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(9.0),
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.solid,
-                        ),
                       ),
                       contentPadding: const EdgeInsets.all(8),
                     ),
@@ -190,15 +223,21 @@ class _MyProfileState extends State<MyProfile> {
                 ],
               ),
             ),
-
             const SizedBox(height: 30),
+            // ElevatedButton(
+            //   onPressed: _showAddAddressDialog,
+            //   child: Text('Add Address'),
+            // ),
 
-            Text("Add Address",
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primaryColor)),
+            InkWell(
+              onTap: _showAddAddressDialog,
+              child: Text("Add Address",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryColor)),
+            ),
+
             const SizedBox(height: 20),
-
             Container(
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
@@ -242,15 +281,6 @@ class _MyProfileState extends State<MyProfile> {
                                   style: TextStyle(fontSize: 16)),
                             ],
                           ),
-                        //
-                        // Text('Address not found')
-
-                        // if (officeAddressText.isNotEmpty)
-                        //   Icon(Icons.location_on,
-                        //       color: AppColors.primaryColor, size: 20),
-                        // if (officeAddressText.isNotEmpty)
-                        //   Text(officeAddressText,
-                        //       style: TextStyle(fontSize: 16)),
                         if (officeAddressText.isEmpty || officePackText.isEmpty)
                           Text('Address not found'),
                       ],
@@ -269,16 +299,15 @@ class _MyProfileState extends State<MyProfile> {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
             CustomButton(
               label: 'Save',
               onTap: () {
-                // Handle button press
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/profilelanding', (Route<dynamic> route) => true);
               },
             ),
+            // Add button to show dialog
           ],
         ),
       ),
