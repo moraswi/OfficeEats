@@ -141,7 +141,7 @@ class _CartPageState extends State<CartPage> {
                     height: 20,
                   ),
                   CustomButton(
-                    label: 'Check out',
+                    label: 'Check Out',
                     onTap: () {
                       // Handle button press
                       Navigator.of(context).pushNamedAndRemoveUntil(

@@ -104,11 +104,21 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(''),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Handle back action
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
         child: Column(
           children: [
-            const SizedBox(height: 120),
+            // const SizedBox(height: 120),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -175,6 +185,12 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+
+            Text(
+              'NB: Collect your food when the order is complete',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 30),
             Container(
               padding: const EdgeInsets.all(8.0),
@@ -209,7 +225,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('card ***3211', style: TextStyle(fontSize: 16)),
+                        Text('Cash only at the moment.',
+                            style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   ),

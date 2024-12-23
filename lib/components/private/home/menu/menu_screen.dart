@@ -199,7 +199,7 @@ class _MenuPageState extends State<MenuPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(180),
         child: AppBar(
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(100),

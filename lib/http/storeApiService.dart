@@ -15,14 +15,13 @@ class StoreApiService {
 
       if (results.statusCode == 200) {
         final data = jsonDecode(results.body);
-
-        return data; // Return the decoded data to the caller
+        return data;
       } else {
         throw Exception('Failed to fetch offices: ${results.statusCode}');
       }
     } catch (e) {
       print('getOfficesReq Error: $e');
-      rethrow; // Rethrow the error to be handled by the caller
+      rethrow;
     }
   }
 
@@ -34,8 +33,6 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        // Handle non-200 status codes
-        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
         throw Exception(
             'Failed to fetch stores. Status code: ${results.statusCode}');
       }
@@ -54,8 +51,6 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        // Handle non-200 status codes
-        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
         throw Exception(
             'Failed to fetch stores. Status code: ${results.statusCode}');
       }
@@ -68,11 +63,7 @@ class StoreApiService {
   //getStoreMenuPromotionMealsReq
   Future<void> getStoreMenuPromotionMealsReq(int storeId) async {
     try {
-      var results = await apiService.getStoreMenuPromotionMeals(storeId);
-
-      if (results.statusCode == 200) {
-        print('successful');
-      }
+      await apiService.getStoreMenuPromotionMeals(storeId);
     } catch (e) {
       print('getStoreMenuPromotionMealsReq Error: $e');
       rethrow;
@@ -82,11 +73,7 @@ class StoreApiService {
   //getStoreMenuTopMealsReq
   Future<void> getStoreMenuTopMealsReq(int storeId) async {
     try {
-      var results = await apiService.getStoreMenuTopMeals(storeId);
-
-      if (results.statusCode == 200) {
-        print('successful');
-      }
+      await apiService.getStoreMenuTopMeals(storeId);
     } catch (e) {
       print('getStoreMenuTopMealsReq Error: $e');
       rethrow;
@@ -102,8 +89,6 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        // Handle non-200 status codes
-        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
         throw Exception('Failed to fetch stores.');
       }
     } catch (e) {
@@ -121,8 +106,6 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        // Handle non-200 status codes
-        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
         throw Exception('Failed to fetch stores.');
       }
     } catch (e) {
@@ -130,6 +113,7 @@ class StoreApiService {
       rethrow;
     }
   }
+
   // getOrderById
   Future<Map<String, dynamic>> getOrderByIdReq(int orderId) async {
     try {
@@ -139,8 +123,6 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        // Handle non-200 status codes
-        print('Error: ${results.statusCode} - ${results.reasonPhrase}');
         throw Exception('Failed to fetch order.');
       }
     } catch (e) {
@@ -174,9 +156,12 @@ class StoreApiService {
         items,
       );
 
+      print("results>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       print(results);
+      print(results.status);
       print(results.body);
-      print(results.statusCode);
+      print("results>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
       if (results.statusCode == 200) {
         // LoadingDialog.hide(context);
@@ -185,12 +170,9 @@ class StoreApiService {
           '/orderconfirmed',
           (Route<dynamic> route) => true,
         );
-        print('Order placed successfully');
       }
     } catch (e) {
       LoadingDialog.hide(context);
-
-      print('placeOrderReq Error: $e');
       rethrow;
     }
   }
@@ -202,10 +184,6 @@ class StoreApiService {
       // Show the loading dialog
       LoadingDialog.show(context);
 
-      if(message.isEmpty){
-        
-      }
-
       var results = await apiService.rateApp(userId, message, rating, improve);
 
       if (results.statusCode == 200) {
@@ -215,7 +193,6 @@ class StoreApiService {
             '/feedbackconfirmed', (Route<dynamic> route) => true);
       }
     } catch (e) {
-      print('placeOrderReq Error: $e');
       rethrow;
     }
   }
