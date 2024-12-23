@@ -95,11 +95,11 @@ class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
                       ),
                       //button
                       CustomButton(
-                        label: 'Submit',
+                        label: 'Ok',
                         onTap: () {
                           // Handle button press
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/home', (Route<dynamic> route) => true);
+                              '/office', (Route<dynamic> route) => true);
                         },
                       ),
                     ],

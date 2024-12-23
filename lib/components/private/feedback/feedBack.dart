@@ -32,9 +32,9 @@ class _FeedBackState extends State<FeedBack> {
     if (SpeedEfficiency) {
       result += 'Speed and efficiency\n';
     }
-    if (customerSupport) {
-      result += 'Customer support\n';
-    }
+    // if (customerSupport) {
+    //   result += 'Customer support\n';
+    // }
     if (otherChecked) {
       result += 'Other\n';
     }
@@ -49,6 +49,21 @@ class _FeedBackState extends State<FeedBack> {
       int rate = rating.toInt();
       String improveResult = improve;
       String message = feedbackController.text;
+
+      if(improveResult.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Select options')),
+        );
+      }
+
+      if(message.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Write a comment')),
+        );
+
+        return;
+      }
+
       await storeService.rateAppReq(
           context, userId, message, rate, improveResult);
     } catch (e) {
@@ -233,34 +248,34 @@ class _FeedBackState extends State<FeedBack> {
                       ),
 
                       //Don’t need cover anymore
-                      Row(
-                        children: <Widget>[
-                          Transform.scale(
-                            scale: 1.1,
-                            // Increase the size by adjusting the scale factor
-                            child: Checkbox(
-                              value: customerSupport,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  customerSupport = value!;
-                                  if (customerSupport) {
-                                    improve = "Customer support";
-                                    print('Checked: $improve');
-                                  }
-                                });
-                              },
-                              activeColor: Colors.red,
-                            ),
-                          ),
-                          const Text(
-                            'Customer support',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color(0xFF434344)),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Transform.scale(
+                      //       scale: 1.1,
+                      //       // Increase the size by adjusting the scale factor
+                      //       child: Checkbox(
+                      //         value: customerSupport,
+                      //         onChanged: (bool? value) {
+                      //           setState(() {
+                      //             customerSupport = value!;
+                      //             if (customerSupport) {
+                      //               improve = "Customer support";
+                      //               print('Checked: $improve');
+                      //             }
+                      //           });
+                      //         },
+                      //         activeColor: Colors.red,
+                      //       ),
+                      //     ),
+                      //     const Text(
+                      //       'Customer support',
+                      //       style: TextStyle(
+                      //           fontWeight: FontWeight.w400,
+                      //           fontSize: 16,
+                      //           color: Color(0xFF434344)),
+                      //     ),
+                      //   ],
+                      // ),
 
                       // Other reason
                       Row(

@@ -12,7 +12,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
   final List<String> itemNames = [
     'My profile',
     'Change my password',
-    'Payments method',
+    // 'Payments method',
     'Log out'
   ]; // List of item names
 
@@ -106,10 +106,12 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/changepassword',
                                   (Route<dynamic> route) => true);
-                            } else if (index == 2) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => true);
-                            } else if (index == 3) {
+                            }
+                            // else if (index == 2) {
+                            //   Navigator.of(context).pushNamedAndRemoveUntil(
+                            //       '/home', (Route<dynamic> route) => true);
+                            // }
+                            else if (index == 2) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/logIn', (Route<dynamic> route) => true);
                             }

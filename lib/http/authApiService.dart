@@ -115,6 +115,8 @@ class AuthApiService {
   Future<bool> changePasswordReq(BuildContext context, int userId,
       String currentPassword, String newPassword) async {
     try {
+      LoadingDialog.show(context);
+
       final response =
           await apiService.changePassword(userId, currentPassword, newPassword);
 
@@ -128,6 +130,8 @@ class AuthApiService {
       }
     } catch (e) {
       throw Exception('Failed to change password');
+    } finally {
+      // LoadingDialog.hide(context);
     }
   }
 

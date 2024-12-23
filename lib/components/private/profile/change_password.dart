@@ -41,6 +41,12 @@ class _ChangePasswordState extends State<ChangePassword> {
         );
         return; // Exit early if passwords don't match
       }
+      if(currentPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('empty field not required')),
+        );
+        return;
+      }
 
       // Call the password change service
       bool isSuccess = await authService.changePasswordReq(context, userId, currentPassword, newPassword);

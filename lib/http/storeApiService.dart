@@ -202,6 +202,10 @@ class StoreApiService {
       // Show the loading dialog
       LoadingDialog.show(context);
 
+      if(message.isEmpty){
+        
+      }
+
       var results = await apiService.rateApp(userId, message, rating, improve);
 
       if (results.statusCode == 200) {
