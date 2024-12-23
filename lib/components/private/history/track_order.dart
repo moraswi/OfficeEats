@@ -40,9 +40,9 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get order failed: $e')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Get order failed: $e')),
+      // );
     }
   }
 
@@ -50,7 +50,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Order'),
+        title: Text('Track Order'),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -58,6 +58,110 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (orderHistory.isNotEmpty &&
+                          orderHistory[0]['items'] != null)
+                        ...List.generate(
+                          (orderHistory[0]['items'] as List).length,
+                          (index) {
+                            final item = orderHistory[0]['items'][index];
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item['foodName'],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Total Price: \R${item['totalPrice']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Quantity: ${item['quantity']}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ));
+                          },
+                        )
+                      else
+                        const Text(
+                          'No items available.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  // Aligns the text widget to the left of its parent
+                  child: Text(
+                    'Order Status',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                  //alignment: Alignment.,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        orderHistory.isNotEmpty
+                            ? orderHistory[0]['orderStatus'] ?? ''
+                            : 'Loading...',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -182,142 +286,34 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     children: [
                       Text(
                         'Method: ${orderHistory.isNotEmpty ? orderHistory[0]['paymentMethod'] ?? '' : ''}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
                         'Total: ${orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] ?? '' : ''}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
-                        'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
-                        style: TextStyle(
+                        'Order Code: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
-                  child: Text(
-                    'Order Status',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                  //alignment: Alignment.,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${orderHistory.isNotEmpty ? orderHistory[0]['orderStatus'] ?? '' : ''}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (orderHistory.isNotEmpty &&
-                          orderHistory[0]['items'] != null)
-                        ...List.generate(
-                          (orderHistory[0]['items'] as List).length,
-                          (index) {
-                            final item = orderHistory[0]['items'][index];
-                            return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                                  children: [
-
-                                    Text(
-                                      'Food ID: ${item['foodId']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-
-                                    Text(
-                                      'Total Price: \R${item['totalPrice']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-
-                                    Text(
-                                      'Quantity: ${item['quantity']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ));
-                          },
-                        )
-                      else
-                        const Text(
-                          'No items available.',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
                     ],
                   ),
                 ),

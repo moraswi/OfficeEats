@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/profile',
+                  '/myprofile',
                   (Route<dynamic> route) => false,
                 );
               },

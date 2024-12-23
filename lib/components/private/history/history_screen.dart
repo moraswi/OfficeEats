@@ -60,7 +60,8 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(DateFormatter.formatDate(widget.orderDate), style: TextStyle(fontSize: 16)),
+                Text(DateFormatter.formatDate(widget.orderDate),
+                    style: TextStyle(fontSize: 16)),
                 Text(
                   '${widget.orderCode}',
                   style: const TextStyle(
@@ -149,13 +150,7 @@ class _HistoryPageState extends State<HistoryPage> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_sharp,
-                size: 28, color: AppColors.primaryColor),
-            onPressed: () {},
-          ),
-        ],
+
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
