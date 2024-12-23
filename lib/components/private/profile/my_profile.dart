@@ -16,7 +16,7 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController surnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  TextEditingController officeAddressController = TextEditingController();
 
   final AuthApiService authService = AuthApiService();
 
@@ -29,7 +29,7 @@ class _MyProfileState extends State<MyProfile> {
   String officePackText = '';
   String officeAddressText = '';
   int addressId = 0;
-  String? selectedAddressType;
+  String? addSelectedOfficePack;
 
   @override
   void initState() {
@@ -49,16 +49,16 @@ class _MyProfileState extends State<MyProfile> {
             child: Column(
               children: [
                 TextField(
-                  controller: addressController,
+                  controller: officeAddressController,
                   decoration: InputDecoration(labelText: 'Address'),
                 ),
                 SizedBox(height: 20),
                 DropdownButton<String>(
                   hint: Text('Select Address Type'),
-                  value: selectedAddressType,
+                  value: addSelectedOfficePack,
                   onChanged: (String? newValue) {
                     setState(() {
-                      selectedAddressType = newValue;
+                      addSelectedOfficePack = newValue;
                     });
                   },
                   items: <String>['Home', 'Office', 'Other']
@@ -71,13 +71,16 @@ class _MyProfileState extends State<MyProfile> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
                   onPressed: () {
                     // Save the address
-                    if (addressController.text.isNotEmpty &&
-                        selectedAddressType != null) {
+                    if (officeAddressController.text.isNotEmpty &&
+                        addSelectedOfficePack != null) {
                       // Handle address save logic here
-                      print('Address: ${addressController.text}');
-                      print('Address Type: $selectedAddressType');
+                      print('Address: ${officeAddressController.text}');
+                      print('Address Type: $addSelectedOfficePack');
                       Navigator.pop(context);
                     } else {
                       // Handle validation
@@ -88,7 +91,10 @@ class _MyProfileState extends State<MyProfile> {
 
                     addAddressReq();
                   },
-                  child: Text('Save Address'),
+                  child: Text(
+                    'Save Address',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -112,9 +118,7 @@ class _MyProfileState extends State<MyProfile> {
         print('Address Details: $getAddress');
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get address failed: $e')),
-      );
+      print(getAddress);
     }
   }
 
@@ -142,6 +146,11 @@ class _MyProfileState extends State<MyProfile> {
     try {
       // int addressId = 3;
       await authService.deleteUserAddressReq(context, addressId);
+
+      setState(() {
+        officePackText = '';
+        officeAddressText = '';
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete address')),
@@ -152,11 +161,15 @@ class _MyProfileState extends State<MyProfile> {
   // addAddressReq
   Future<void> addAddressReq() async {
     try {
-      String officePack = "Villas";
-      String officeAddress = "Soft, 2nd floor, unit 1";
+      String? officePack = addSelectedOfficePack;
+      String officeAddress = officeAddressController.text;
       int userId = 0;
       await authService.addAddressReq(
           context, officePack, officeAddress, userId);
+
+      setState(() {
+        getUserAddressReq();
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete address')),
@@ -253,13 +266,14 @@ class _MyProfileState extends State<MyProfile> {
             ),
             const SizedBox(height: 30),
 
-            InkWell(
-              onTap: _showAddAddressDialog,
-              child: const Text("Add Address",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primaryColor)),
-            ),
+            if (officeAddressText.isEmpty || officePackText.isEmpty)
+              InkWell(
+                onTap: _showAddAddressDialog,
+                child: const Text("Add Address",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryColor)),
+              ),
 
             const SizedBox(height: 20),
             Container(

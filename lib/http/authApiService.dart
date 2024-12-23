@@ -195,8 +195,7 @@ class AuthApiService {
       if (results.statusCode == 200) {
         return jsonDecode(results.body);
       } else {
-        throw Exception(
-            'Something went wrong');
+        throw Exception('Something went wrong');
       }
     } catch (e) {
       print('Error in getUserAddressReq: $e');
