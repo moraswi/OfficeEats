@@ -4,6 +4,8 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/http/authApiService.dart';
 
+import '../../../http/storeApiService.dart';
+
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
 
@@ -19,12 +21,14 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController officeAddressController = TextEditingController();
 
   final AuthApiService authService = AuthApiService();
+  final StoreApiService storeService = StoreApiService();
 
   bool isPasswordVisible = false;
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
 
   var getAddress;
+  var getOfficePacks;
   var userData;
   String officePackText = '';
   String officeAddressText = '';
@@ -36,6 +40,7 @@ class _MyProfileState extends State<MyProfile> {
     super.initState();
     getUserAddressReq();
     getUserByIdReq();
+    getOffices();
   }
 
   // Show Add Address Dialog
@@ -61,13 +66,15 @@ class _MyProfileState extends State<MyProfile> {
                       addSelectedOfficePack = newValue;
                     });
                   },
-                  items: <String>['Home', 'Office', 'Other']
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items: getOfficePacks
+                      .map<DropdownMenuItem<String>>((office) {
                     return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                      value: office['officeName'],
+                      child: Text(office['officeName']),
                     );
-                  }).toList(),
+                  })
+                      .toList(),
+
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -173,6 +180,21 @@ class _MyProfileState extends State<MyProfile> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete address')),
+      );
+    }
+  }
+
+  Future<void> getOffices() async {
+    try {
+      List<dynamic> response = await storeService.getOfficesReq();
+      setState(() {
+        getOfficePacks = response;
+      });
+    } catch (e) {
+      setState(() {
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Get offices failed: $e')),
       );
     }
   }
