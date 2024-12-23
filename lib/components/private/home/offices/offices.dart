@@ -137,7 +137,6 @@ class _OfficePageState extends State<OfficePage> {
               ],
             ),
           ),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

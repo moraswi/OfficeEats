@@ -3,6 +3,9 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/app_colors.dart';
 
+import '../../../shared/date_formatter.dart';
+import '../../../shared/skeleton_loader.dart';
+
 class MenuItem extends StatefulWidget {
   final String imagePath;
   final String name;
@@ -57,7 +60,7 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('${widget.orderDate}', style: TextStyle(fontSize: 16)),
+                Text(DateFormatter.formatDate(widget.orderDate), style: TextStyle(fontSize: 16)),
                 Text(
                   '${widget.orderCode}',
                   style: const TextStyle(
@@ -166,19 +169,28 @@ class _HistoryPageState extends State<HistoryPage> {
                 // children: [
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: orderHistory.length,
-                      itemBuilder: (context, index) {
-                        var order = orderHistory[index];
+                  child: isLoading
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 5, // Number of skeletons
+                          itemBuilder: (context, index) {
+                            return SkeletonLoader();
+                          },
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: orderHistory.length,
+                          itemBuilder: (context, index) {
+                            var order = orderHistory[index];
 
-                        return MenuItem(
-                          imagePath: 'assets/images/image1.webp',
-                          name: order['storeName'],
-                          orderDate: order['orderDate'],
-                          orderCode: order['orderCode'],
-                        );
-                      }),
+                            return MenuItem(
+                              imagePath: 'assets/images/image1.webp',
+                              name: order['storeName'],
+                              orderDate: order['orderDate'],
+                              orderCode: order['orderCode'],
+                            );
+                          }),
                 ),
 
                 // const SizedBox(
