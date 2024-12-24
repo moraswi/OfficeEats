@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/authApiService.dart';
 
@@ -14,7 +15,6 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-
   final AuthApiService authService = AuthApiService();
 
   TextEditingController currentPasswordController = TextEditingController();
@@ -25,23 +25,41 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
 
+  int getUserId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
+  }
+
   // changePasswordReq
   Future<void> changePasswordReq() async {
     String currentPassword = currentPasswordController.text.trim();
     String newPassword = newPasswordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
 
-    int userId = 0; // Replace with a method to retrieve the current user's ID.
-
     try {
       // Validate input
       if (newPassword != confirmPassword) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('New and confirm password must be the same')),
+          const SnackBar(
+              content: Text('New and confirm password must be the same')),
         );
-        return; // Exit early if passwords don't match
+        return;
       }
-      if(currentPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty){
+      if (currentPassword.isEmpty ||
+          newPassword.isEmpty ||
+          confirmPassword.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('empty field not required')),
         );
@@ -49,7 +67,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       }
 
       // Call the password change service
-      bool isSuccess = await authService.changePasswordReq(context, userId, currentPassword, newPassword);
+      bool isSuccess = await authService.changePasswordReq(
+          context, getUserId, currentPassword, newPassword);
 
       if (isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -66,8 +85,6 @@ class _ChangePasswordState extends State<ChangePassword> {
       );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +233,6 @@ class _ChangePasswordState extends State<ChangePassword> {
               onTap: () {
                 changePasswordReq();
                 // Handle button press
-
               },
             ),
           ],

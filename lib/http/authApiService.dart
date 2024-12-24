@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eats/http/shared/apiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../shared/loading_dialog.dart';
 
@@ -26,7 +27,19 @@ class AuthApiService {
       var results = await apiService.login(email, password);
 
       if (results.statusCode == 200) {
+        var userData = jsonDecode(results.body);
+
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setInt('userId', userData['id']);
+        prefs.setString('firstName', userData['firstName']);
+        prefs.setString('lastName', userData['lastName']);
+        prefs.setString('phoneNumber', userData['phoneNumber']);
+        prefs.setString('email', userData['email']);
+        prefs.setString('role', userData['role']);
+
         LoadingDialog.hide(context);
+
+
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/office',
           (Route<dynamic> route) => false,

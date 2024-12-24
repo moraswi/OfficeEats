@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileLandingPage extends StatefulWidget {
   var routeName = '/profilelanding';
@@ -9,6 +10,25 @@ class ProfileLandingPage extends StatefulWidget {
 }
 
 class _ProfileLandingPageState extends State<ProfileLandingPage> {
+  String getFirstName = "";
+  String getEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getFirstName = prefs.getString('firstName') ?? '';
+      getEmail = prefs.getString('email') ?? '';
+    });
+  }
+
   final List<String> itemNames = [
     'My profile',
     'Change my password',
@@ -46,15 +66,15 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  "Blessing Mothapo",
+                Text(
+                  getFirstName,
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
                 ),
-                const Text(
-                  "Bless@gmail.com",
+                Text(
+                  getEmail,
                   style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -68,17 +88,17 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                         backgroundColor: Colors.blue,
                         side: BorderSide.none,
                         shape: StadiumBorder()),
-                    child: Text(
+                    child: const Text(
                       'Rate App',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Divider(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],

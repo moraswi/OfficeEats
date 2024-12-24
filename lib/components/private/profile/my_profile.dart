@@ -3,6 +3,7 @@ import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/http/authApiService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/storeApiService.dart';
 
@@ -34,13 +35,24 @@ class _MyProfileState extends State<MyProfile> {
   String officeAddressText = '';
   int addressId = 0;
   String? addSelectedOfficePack;
+  int getUserId = 0;
 
   @override
   void initState() {
     super.initState();
+    getSharedPreferenceData();
     getUserAddressReq();
     getUserByIdReq();
     getOffices();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
   }
 
   // Show Add Address Dialog
@@ -66,15 +78,12 @@ class _MyProfileState extends State<MyProfile> {
                       addSelectedOfficePack = newValue;
                     });
                   },
-                  items: getOfficePacks
-                      .map<DropdownMenuItem<String>>((office) {
+                  items: getOfficePacks.map<DropdownMenuItem<String>>((office) {
                     return DropdownMenuItem<String>(
                       value: office['officeName'],
                       child: Text(office['officeName']),
                     );
-                  })
-                      .toList(),
-
+                  }).toList(),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -114,9 +123,9 @@ class _MyProfileState extends State<MyProfile> {
   // getUserAddressReq
   Future<void> getUserAddressReq() async {
     try {
-      var userId = 0; // Replace with the actual user ID
+      // var userId = 0; // Replace with the actual user ID
       Map<String, dynamic> response =
-          await authService.getUserAddressReq(userId);
+          await authService.getUserAddressReq(getUserId);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
         officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
@@ -132,8 +141,7 @@ class _MyProfileState extends State<MyProfile> {
   // getUserByIdReq
   Future<void> getUserByIdReq() async {
     try {
-      var userid = 1;
-      var response = await authService.getUserByIdReq(context, userid);
+      var response = await authService.getUserByIdReq(context, getUserId);
       setState(() {
         userData = response;
         firstNameController.text = userData['firstName'];
@@ -151,7 +159,6 @@ class _MyProfileState extends State<MyProfile> {
   // deleteUserAddressReq
   Future<void> deleteUserAddressReq() async {
     try {
-      // int addressId = 3;
       await authService.deleteUserAddressReq(context, addressId);
 
       setState(() {
@@ -170,9 +177,9 @@ class _MyProfileState extends State<MyProfile> {
     try {
       String? officePack = addSelectedOfficePack;
       String officeAddress = officeAddressController.text;
-      int userId = 0;
+
       await authService.addAddressReq(
-          context, officePack, officeAddress, userId);
+          context, officePack, officeAddress, getUserId);
 
       setState(() {
         getUserAddressReq();
@@ -191,11 +198,12 @@ class _MyProfileState extends State<MyProfile> {
         getOfficePacks = response;
       });
     } catch (e) {
-      setState(() {
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get offices failed: $e')),
-      );
+      // setState(() {});
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Get offices failed: $e')),
+      // );
+
+      print("failed");
     }
   }
 
