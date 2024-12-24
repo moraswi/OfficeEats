@@ -35,14 +35,13 @@ class _MyProfileState extends State<MyProfile> {
   String officeAddressText = '';
   int addressId = 0;
   String? addSelectedOfficePack;
-  int getUserId = 0;
+  int? getUserId;
 
   @override
   void initState() {
     super.initState();
     getSharedPreferenceData();
-    getUserAddressReq();
-    getUserByIdReq();
+
     getOffices();
   }
 
@@ -53,6 +52,9 @@ class _MyProfileState extends State<MyProfile> {
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
     });
+
+    getUserAddressReq();
+    getUserByIdReq();
   }
 
   // Show Add Address Dialog
@@ -125,7 +127,7 @@ class _MyProfileState extends State<MyProfile> {
     try {
       // var userId = 0; // Replace with the actual user ID
       Map<String, dynamic> response =
-          await authService.getUserAddressReq(getUserId);
+          await authService.getUserAddressReq(getUserId!);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
         officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
@@ -179,7 +181,7 @@ class _MyProfileState extends State<MyProfile> {
       String officeAddress = officeAddressController.text;
 
       await authService.addAddressReq(
-          context, officePack, officeAddress, getUserId);
+          context, officePack, officeAddress, getUserId!);
 
       setState(() {
         getUserAddressReq();

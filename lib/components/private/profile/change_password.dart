@@ -25,7 +25,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
 
-  int getUserId = 0;
+  int? getUserId;
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
       // Call the password change service
       bool isSuccess = await authService.changePasswordReq(
-          context, getUserId, currentPassword, newPassword);
+          context, getUserId!, currentPassword, newPassword);
 
       if (isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(

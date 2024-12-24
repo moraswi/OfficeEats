@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
-import 'package:eats/shared/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../shared/date_formatter.dart';
 import '../../../shared/skeleton_loader.dart';
+
+import 'package:flutter/material.dart';
 
 class MenuItem extends StatefulWidget {
   final String imagePath;
   final String name;
   final String orderDate;
   final String orderCode;
+  final VoidCallback onTrackOrder; // Callback for the button press
 
   MenuItem({
     required this.imagePath,
     required this.name,
     required this.orderDate,
     required this.orderCode,
+    required this.onTrackOrder,
   });
 
   @override
@@ -42,19 +46,13 @@ class _MenuItemState extends State<MenuItem> {
       ),
       child: Row(
         children: [
-          // Image.asset(
-          //   widget.imagePath,
-          //   width: 80,
-          //   height: 80,
-          //   fit: BoxFit.cover,
-          // ),
           SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.name,
+                  widget.name, // Access widget properties with 'widget.'
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -63,7 +61,7 @@ class _MenuItemState extends State<MenuItem> {
                 Text(DateFormatter.formatDate(widget.orderDate),
                     style: TextStyle(fontSize: 16)),
                 Text(
-                  '${widget.orderCode}',
+                  widget.orderCode,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -74,25 +72,19 @@ class _MenuItemState extends State<MenuItem> {
           ),
           SizedBox(width: 12),
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/trackorder', (Route<dynamic> route) => true);
-            },
+            onPressed: widget.onTrackOrder, // Trigger the callback
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.blue,
-              // Text color
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0), // Rounded corners
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0, vertical: 0.0), // Padding inside the button
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
             ),
             child: const Text(
               'Track Order',
-              style: TextStyle(
-                fontSize: 16.0, // Text size
-              ),
+              style: TextStyle(fontSize: 16.0),
             ),
           ),
         ],
@@ -112,18 +104,30 @@ class _HistoryPageState extends State<HistoryPage> {
   final StoreApiService storeService = StoreApiService();
   List<dynamic> orderHistory = [];
   bool isLoading = true;
+  late int getUserId;
 
   @override
   void initState() {
     super.initState();
+    getSharedPreferenceData();
+  }
+
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+      // print(getUserId);
+    });
+
     getOrdersReq();
   }
 
-  // getOrdersReq
   Future<void> getOrdersReq() async {
     try {
-      var userid = 0;
-      List<dynamic> response = await storeService.getOrdersReq(userid);
+      print('getUserId');
+      print(getUserId);
+      List<dynamic> response = await storeService.getOrdersReq(getUserId);
       setState(() {
         orderHistory = response;
         isLoading = false;
@@ -132,9 +136,6 @@ class _HistoryPageState extends State<HistoryPage> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get order failed: $e')),
-      );
     }
   }
 
@@ -146,11 +147,9 @@ class _HistoryPageState extends State<HistoryPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back action
             Navigator.of(context).pop();
           },
         ),
-
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -161,9 +160,9 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                // children: [
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16.0, bottom: 106.0),
                   child: isLoading
                       ? ListView.builder(
                           shrinkWrap: true,
@@ -184,14 +183,20 @@ class _HistoryPageState extends State<HistoryPage> {
                               name: order['storeName'],
                               orderDate: order['orderDate'],
                               orderCode: order['orderCode'],
+                              // Pass orderCode
+                              onTrackOrder: () async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setInt('orderId', order['id']);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/trackorder',
+                                  (Route<dynamic> route) => true,
+                                );
+                              },
                             );
-                          }),
+                          },
+                        ),
                 ),
-
-                // const SizedBox(
-                //   height: 20,
-                // ),
-                // ],
               ),
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/app_buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedBack extends StatefulWidget {
   var routeName = '/feedback';
@@ -12,6 +13,8 @@ class FeedBack extends StatefulWidget {
 }
 
 class _FeedBackState extends State<FeedBack> {
+  final StoreApiService storeService = StoreApiService();
+
   TextEditingController feedbackController = TextEditingController();
 
   bool overallService = false;
@@ -22,7 +25,7 @@ class _FeedBackState extends State<FeedBack> {
   String improve = "";
   double rating = 1.0;
   String result = "";
-  int userId = 0;
+  int getUserId = 0;
 
   void _submitForm() {
     // Display the results of the checked checkboxes in the terminal
@@ -40,7 +43,20 @@ class _FeedBackState extends State<FeedBack> {
     }
   }
 
-  final StoreApiService storeService = StoreApiService();
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
+  }
 
   // _feedback
   Future<void> _feedback() async {
@@ -50,13 +66,13 @@ class _FeedBackState extends State<FeedBack> {
       String improveResult = improve;
       String message = feedbackController.text;
 
-      if(improveResult.isEmpty){
+      if (improveResult.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Select options')),
         );
       }
 
-      if(message.isEmpty){
+      if (message.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Write a comment')),
         );
@@ -65,7 +81,7 @@ class _FeedBackState extends State<FeedBack> {
       }
 
       await storeService.rateAppReq(
-          context, userId, message, rate, improveResult);
+          context, getUserId, message, rate, improveResult);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Feedback Failed')),

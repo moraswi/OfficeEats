@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/storeApiService.dart';
 
@@ -18,31 +19,41 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   final StoreApiService storeService = StoreApiService();
   List<dynamic> orderHistory = [];
   bool isLoading = true;
+  int getOrderId = 0;
+  String getPhoneNumber = "";
+  String getFirstName = "";
 
   @override
   void initState() {
     super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getOrderId = prefs.getInt('orderId') ?? 0;
+      getFirstName = prefs.getString('firstName') ?? '';
+      getPhoneNumber = prefs.getString('phoneNumber') ?? '';
+    });
     getOrderByIdReq();
   }
 
   // getOrdersReq
   Future<void> getOrderByIdReq() async {
     try {
-      var orderId = 1;
       Map<String, dynamic> response =
-          await storeService.getOrderByIdReq(orderId);
+          await storeService.getOrderByIdReq(getOrderId);
       setState(() {
         orderHistory = [response];
-        print(orderHistory);
         isLoading = false;
       });
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Get order failed: $e')),
-      // );
     }
   }
 
@@ -231,21 +242,21 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
-                  child: const Column(
+                  child:  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Mpho Molepo',
-                        style: TextStyle(
+                        getFirstName,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
                       Text(
-                        '078 321 1232',
-                        style: TextStyle(
+                        getPhoneNumber,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
