@@ -5,6 +5,7 @@ import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/skeleton_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../cart_and_review/cart_screen.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -29,11 +30,25 @@ class MenuItem extends StatefulWidget {
 class _MenuItemState extends State<MenuItem> {
   int quantity = 0;
 
-  void _increment() {
+  void _increment() async {
     setState(() {
       quantity++;
     });
-    widget.onQuantityChanged(quantity); // Notify parent
+    widget.onQuantityChanged(quantity);
+
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cartItems = prefs.getStringList('cartItems') ?? [];
+
+    // Add the item as a JSON string
+    cartItems.add({
+      'name': widget.name,
+      'description': widget.description,
+      'price': widget.price,
+      'quantity': quantity,
+    }.toString());
+print(cartItems);
+    // Save updated cart
+    prefs.setStringList('cartItems', cartItems);
   }
 
   void _decrement() {
@@ -125,7 +140,7 @@ class _MenuItemState extends State<MenuItem> {
                       ),
                       InkWell(
                         borderRadius: BorderRadius.circular(50),
-                        onTap: _decrement,
+                        onTap: _increment,
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.red[600],
@@ -352,9 +367,10 @@ class _MenuPageState extends State<MenuPage> {
             CustomButton(
               label: 'My Cart',
               onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CartPage()));
                 // Handle button press
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/cart', (Route<dynamic> route) => true);
+                // Navigator.of(context).pushNamedAndRemoveUntil(
+                //     '/cart', (Route<dynamic> route) => true);
               },
             ),
           ],
