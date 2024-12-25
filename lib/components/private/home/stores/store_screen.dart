@@ -22,65 +22,59 @@ class StoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          height: 200,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(child: imagePath), // Use the Widget directly
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  color: Colors.black54,
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        storeName,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20.0),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        height: 200,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 6,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(child: imagePath), // Use the Widget directly
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black54,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      storeName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: List.generate(5, (index) {
-                          return Icon(
-                            index < rating ? Icons.star : Icons.star_border,
-                            color: Colors.yellow,
-                            size: 20,
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: List.generate(5, (index) {
+                        return Icon(
+                          index < rating ? Icons.star : Icons.star_border,
+                          color: Colors.yellow,
+                          size: 20,
+                        );
+                      }),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      onTap: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/storemenu', (Route<dynamic> route) => true);
-      },
     );
   }
 }
@@ -124,8 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
       getOfficeId = prefs.getInt('officeId') ?? 0;
       getOfficeName = prefs.getString('officeName') ?? '';
     });
-    print('getOfficeId//////////////////////////////////////////////');
-    print(getOfficeId);
+
     getStoresReq();
   }
 
@@ -173,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.shopping_cart_sharp,
               size: 28,
             ),
@@ -200,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   getOfficeName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
@@ -279,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: StoreCard(
                               imagePath: imageWidget,
                               storeName: store['shopName'] ?? 'Unknown Store',
-                              rating: 4.5,
+                              rating: 5,
                             ));
                       },
                     ),

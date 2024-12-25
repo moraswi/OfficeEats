@@ -102,7 +102,7 @@ class _OfficePageState extends State<OfficePage> {
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
                     children: [
                       const Expanded(
@@ -118,7 +118,7 @@ class _OfficePageState extends State<OfficePage> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'Enjoy effortless, delicious meals delivered right to your office door.',
+                              'Enjoy effortless, delicious meals ready for quick and easy pickup',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,

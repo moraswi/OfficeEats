@@ -161,6 +161,8 @@ class _MenuPageState extends State<MenuPage> {
   List<dynamic> menus = [];
   bool isLoading = true;
   late int getCategoryId;
+  String getShopName = "";
+  String getOfficeName = "";
 
   @override
   void initState() {
@@ -172,6 +174,8 @@ class _MenuPageState extends State<MenuPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       getCategoryId = prefs.getInt('categoryId') ?? 0;
+      getShopName = prefs.getString('shopName') ?? "";
+      getOfficeName = prefs.getString('officeName') ?? '';
     });
     if (getCategoryId != null) {
       getStoreMenuByCategoryIdReq();
@@ -266,15 +270,15 @@ class _MenuPageState extends State<MenuPage> {
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Mac D",
+                      getShopName,
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                     ),
-                    Text("Villaboas Office Pack"),
+                    Text("${getOfficeName} Office Pack"),
                   ],
                 ),
               ),
