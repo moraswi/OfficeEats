@@ -193,6 +193,7 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  // getOffices
   Future<void> getOffices() async {
     try {
       List<dynamic> response = await storeService.getOfficesReq();
@@ -218,7 +219,8 @@ class _MyProfileState extends State<MyProfile> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/profilelanding', (Route<dynamic> route) => true);
           },
         ),
         title: const Text(

@@ -4,6 +4,7 @@ import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/skeleton_loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../menu/top_bar.dart';
 
 class MenuItem extends StatefulWidget {
@@ -159,22 +160,33 @@ class _MenuPageState extends State<MenuPage> {
   final StoreApiService storeService = StoreApiService();
   List<dynamic> menus = [];
   bool isLoading = true;
+  late int getCategoryId;
 
   @override
   void initState() {
     super.initState();
-    getStoreMenuByCategoryIdReq();
+    getSharedPreferenceData();
+  }
+
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      getCategoryId = prefs.getInt('categoryId') ?? 0;
+    });
+    if (getCategoryId != null) {
+      getStoreMenuByCategoryIdReq();
+    }
   }
 
   // getStoresReq
   Future<void> getStoreMenuByCategoryIdReq() async {
     try {
-      var categoryId = 0;
+      // var categoryId = 0;
       List<dynamic> response =
-          await storeService.getStoreMenuByCategoryIdReq(categoryId);
+          await storeService.getStoreMenuByCategoryIdReq(getCategoryId);
       setState(() {
         menus = response;
-        print(menus);
+        // print(menus);
         isLoading = false;
       });
     } catch (e) {
@@ -185,6 +197,18 @@ class _MenuPageState extends State<MenuPage> {
         SnackBar(content: Text('store menu failed: $e')),
       );
     }
+  }
+
+  // _onCategorySelected
+  void _onCategorySelected(int categoryId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('categoryId', categoryId);
+
+    setState(() {
+      getCategoryId = categoryId;
+      isLoading = true;
+    });
+    getStoreMenuByCategoryIdReq();
   }
 
   void _updateTotalQuantity(int quantity) {
@@ -282,7 +306,7 @@ class _MenuPageState extends State<MenuPage> {
                 size: 20,
               ),
             ]),
-            TopBar(),
+            TopBar(onCategorySelected: _onCategorySelected),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(

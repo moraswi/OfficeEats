@@ -5,6 +5,7 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/store_skeleton_loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StoreCard extends StatelessWidget {
   final Widget imagePath;
@@ -99,12 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final TextEditingController searchController = TextEditingController();
 
-  int officeID = 2;
+  late int getOfficeId;
+  String getOfficeName = "";
 
   @override
   void initState() {
     super.initState();
-    getStoresReq();
+    getSharedPreferenceData();
     searchController.addListener(_filterStores);
   }
 
@@ -112,6 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     searchController.dispose();
     super.dispose();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getOfficeId = prefs.getInt('officeId') ?? 0;
+      getOfficeName = prefs.getString('officeName') ?? '';
+    });
+    print('getOfficeId//////////////////////////////////////////////');
+    print(getOfficeId);
+    getStoresReq();
   }
 
   // _filterStores
@@ -127,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // getStoresReq
   Future<void> getStoresReq() async {
     try {
-      List<dynamic> response = await storeService.getStoresReq(officeID);
+      List<dynamic> response = await storeService.getStoresReq(getOfficeId);
       setState(() {
         stores = response;
         print(stores);
@@ -152,7 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/office', (Route<dynamic> route) => true);
           },
         ),
         actions: [
@@ -182,8 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  'Unit 54, Mogale Tech',
+                child: Text(
+                  getOfficeName,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -247,11 +263,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: double.infinity,
                                   );
 
-                        return StoreCard(
-                          imagePath: imageWidget,
-                          storeName: store['shopName'] ?? 'Unknown Store',
-                          rating: 4.5,
-                        );
+                        return GestureDetector(
+                            onTap: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.setInt('storeId', store['id']);
+                              await prefs.setString(
+                                  'shopName', store['shopName']);
+
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/storemenu',
+                                (Route<dynamic> route) => true,
+                              );
+                            },
+                            child: StoreCard(
+                              imagePath: imageWidget,
+                              storeName: store['shopName'] ?? 'Unknown Store',
+                              rating: 4.5,
+                            ));
                       },
                     ),
             )

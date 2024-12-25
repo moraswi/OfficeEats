@@ -3,6 +3,7 @@ import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/skeleton_loader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OfficePage extends StatefulWidget {
   var routeName = '/office';
@@ -207,9 +208,12 @@ class _OfficePageState extends State<OfficePage> {
                               ],
                             ),
                           ),
-                          onTap: () {
-                            print(office['id']);
-                            print(office['officeName']);
+                          onTap: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setInt('officeId', office['id']);
+                            await prefs.setString(
+                                'officeName', office['officeName']);
+
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/home', (Route<dynamic> route) => true);
                           },

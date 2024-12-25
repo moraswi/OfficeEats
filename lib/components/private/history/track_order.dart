@@ -242,7 +242,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
-                  child:  Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
