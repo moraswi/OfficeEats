@@ -22,6 +22,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   int getOrderId = 0;
   String getPhoneNumber = "";
   String getFirstName = "";
+  String getShorpName = "";
+  double totalPrice = 0.0;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
 
     setState(() {
       getOrderId = prefs.getInt('orderId') ?? 0;
+      getShorpName = prefs.getString('storeName') ?? '';
       getFirstName = prefs.getString('firstName') ?? '';
       getPhoneNumber = prefs.getString('phoneNumber') ?? '';
     });
@@ -70,13 +73,34 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             child: Column(
               children: [
                 const SizedBox(
+                  height: 15,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  // Aligns the text widget to the left of its parent
+                  child: Text(
+                    getShorpName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(
                   height: 5,
                 ),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        // offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   child: Column(
@@ -97,23 +121,25 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                                     Text(
                                       item['foodName'],
                                       style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
                                     ),
                                     Text(
-                                      'Total Price: \R${item['totalPrice']}',
+                                      'Price: \R${item['totalPrice']}',
                                       style: const TextStyle(
-                                        color: Colors.white,
                                         fontSize: 14,
                                       ),
                                     ),
                                     Text(
                                       'Quantity: ${item['quantity']}',
                                       style: const TextStyle(
-                                        color: Colors.white,
                                         fontSize: 14,
                                       ),
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      thickness: 1.0,
+                                      height: 16.0,
                                     ),
                                   ],
                                 ));
@@ -131,28 +157,75 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
-                ),
-                const SizedBox(
                   height: 15,
                 ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
-                  child: Text(
-                    'Order Status',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
+                Builder(builder: (context) {
+                  double totalPrice = 0.0;
+                  for (var item in orderHistory[0]['items']) {
+                    totalPrice += (item['totalPrice'] ?? 0) * (item['quantity'] ?? 0);
+                  }
+                  return Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4.0,
+                          // offset: Offset(2, 2),
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.left,
-                  ),
+                    padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                    //alignment: Alignment.,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Subtotal: R${totalPrice.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Text(
+                          'Delivery Fee: R0.00',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Divider(
+                          color: Colors.grey,
+                          thickness: 1.0,
+                          height: 16.0,
+                        ),
+                        Text(
+                          'Total: R${(totalPrice).toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+                const SizedBox(
+                  height: 15,
                 ),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        // offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
@@ -160,13 +233,23 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'Order Status',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        height: 16.0,
+                      ),
                       Text(
                         orderHistory.isNotEmpty
                             ? orderHistory[0]['orderStatus'] ?? ''
                             : 'Loading...',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
@@ -174,28 +257,20 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
-                  child: Text(
-                    'Address',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        // offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
@@ -203,13 +278,23 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'Address',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        height: 16.0,
+                      ),
                       Text(
                         orderHistory.isNotEmpty
                             ? orderHistory[0]['deliveryAddress'] ?? ''
                             : '',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
@@ -219,26 +304,18 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
-                  child: Text(
-                    'User Detail',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        // offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
@@ -246,19 +323,30 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'User Detail',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        height: 16.0,
+                      ),
                       Text(
                         getFirstName,
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       Text(
                         getPhoneNumber,
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
@@ -268,26 +356,18 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
-                  child: Text(
-                    'Payment',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.secondaryColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        // offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                   //alignment: Alignment.,
@@ -295,11 +375,21 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'Payment',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        height: 16.0,
+                      ),
                       Text(
                         'Method: ${orderHistory.isNotEmpty ? orderHistory[0]['paymentMethod'] ?? '' : ''}',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
@@ -309,8 +399,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                       Text(
                         'Total: ${orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] ?? '' : ''}',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
@@ -318,10 +406,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         height: 10,
                       ),
                       Text(
-                        'Order Code: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
+                        'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
