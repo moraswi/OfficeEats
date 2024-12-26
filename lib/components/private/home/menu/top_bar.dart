@@ -38,8 +38,7 @@ class _TopBarState extends State<TopBar> {
     setState(() {
       getStoreId = prefs.getInt('storeId') ?? 1;
     });
-    print('getStoreId//////////////////////////');
-    print(getStoreId);
+
     if (getStoreId != null) {
       getStoreMenuCategoriesReq();
     }
@@ -58,9 +57,7 @@ class _TopBarState extends State<TopBar> {
       setState(() {
         isCategoriesLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Store categories failed: $e')),
-      );
+
     }
   }
 

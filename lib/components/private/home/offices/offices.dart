@@ -136,10 +136,15 @@ class _OfficePageState extends State<OfficePage> {
                           ],
                         ),
                       ),
-                      Image.asset(
-                        'assets/images/order.png',
-                        height: 160,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10), // Adjust the radius value as needed
+                        child: Image.asset(
+                          'assets/images/order.png',
+                          height: 160,
+                          fit: BoxFit.cover, // Optional, to handle image scaling
+                        ),
                       ),
+
                     ],
                   ),
                 ),
@@ -221,6 +226,7 @@ class _OfficePageState extends State<OfficePage> {
                             await prefs.setInt('officeId', office['id']);
                             await prefs.setString(
                                 'officeName', office['officeName']);
+                            await prefs.setInt('categoryId', 0);
 
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/home', (Route<dynamic> route) => true);

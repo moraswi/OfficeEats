@@ -254,7 +254,7 @@ class _MenuPageState extends State<MenuPage> {
             child: Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/images/burgermeal.pngb"),
+                      image: AssetImage("assets/images/burgermeal.png"),
                       fit: BoxFit.fill)),
             ),
           ),

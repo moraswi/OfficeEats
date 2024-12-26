@@ -5,6 +5,8 @@ import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../shared/bottom_nav_bar.dart';
+
 class FeedBack extends StatefulWidget {
   var routeName = '/feedback';
 
@@ -355,6 +357,9 @@ class _FeedBackState extends State<FeedBack> {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: RoundedBottomBar(
+        selectedIndex: 2,
       ),
     );
   }
