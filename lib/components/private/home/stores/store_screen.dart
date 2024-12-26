@@ -28,7 +28,7 @@ class StoreCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         height: 200,
         decoration: BoxDecoration(
-          color: backgroundColor,
+            color: Colors.white,
           boxShadow: const [
             BoxShadow(
               color: Colors.black26,
@@ -250,10 +250,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: double.infinity,
                                   )
                                 : Image.asset(
-                                    'assets/images/image1.webp',
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: double.infinity,
+                                    'assets/images/noimage.png',
+                                    //fit: BoxFit.cover,
+                                     width: double.infinity,
+                                     height: double.infinity,
                                   );
 
                         return GestureDetector(
