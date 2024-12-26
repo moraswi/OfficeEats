@@ -69,11 +69,13 @@ class _MyProfileState extends State<MyProfile> {
               children: [
                 TextField(
                   controller: officeAddressController,
-                  decoration: InputDecoration(labelText: 'Address'),
+                  decoration: InputDecoration(
+                      labelText: 'Address',
+                      hintText: 'e.g Company name, Unit 8, 1st Floor'),
                 ),
                 SizedBox(height: 20),
                 DropdownButton<String>(
-                  hint: Text('Select Address Type'),
+                  hint: Text('Select Office Pack'),
                   value: addSelectedOfficePack,
                   onChanged: (String? newValue) {
                     setState(() {
@@ -96,9 +98,6 @@ class _MyProfileState extends State<MyProfile> {
                     // Save the address
                     if (officeAddressController.text.isNotEmpty &&
                         addSelectedOfficePack != null) {
-                      // Handle address save logic here
-                      print('Address: ${officeAddressController.text}');
-                      print('Address Type: $addSelectedOfficePack');
                       Navigator.pop(context);
                     } else {
                       // Handle validation
@@ -326,7 +325,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Row(
                 children: [
                   Image.asset(
-                    'assets/images/officePackImage1.jpg',
+                    'assets/images/officepack.png',
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
@@ -354,7 +353,7 @@ class _MyProfileState extends State<MyProfile> {
                             ],
                           ),
                         if (officeAddressText.isEmpty || officePackText.isEmpty)
-                          Text('Address not found'),
+                          Text('Add your office address'),
                       ],
                     ),
                   ),

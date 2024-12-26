@@ -74,7 +74,7 @@ class _OfficePageState extends State<OfficePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 70),
+          const SizedBox(height: 50),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -99,10 +99,19 @@ class _OfficePageState extends State<OfficePage> {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    // color: AppColors.secondaryColor,
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  // padding: const EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       const Expanded(
@@ -128,8 +137,7 @@ class _OfficePageState extends State<OfficePage> {
                         ),
                       ),
                       Image.asset(
-                        'assets/images/image1.webp',
-                        width: 160,
+                        'assets/images/order.png',
                         height: 160,
                       ),
                     ],
@@ -172,7 +180,7 @@ class _OfficePageState extends State<OfficePage> {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  'assets/images/officePackImage1.jpg',
+                                  'assets/images/officepack.png',
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,

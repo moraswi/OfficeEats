@@ -61,7 +61,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                     height: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image.asset('assets/images/food3.jpeg'),
+                      child: Image.asset('assets/images/userprofile.png'),
                     )),
                 const SizedBox(
                   height: 10,

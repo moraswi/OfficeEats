@@ -21,14 +21,21 @@ class _LandingPageState extends State<LandingPage> {
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 200,
+              height: 80,
+            ),
+            Image.asset(
+              'assets/images/motorbike2.png',
+              height: 150,
+            ),
+            const SizedBox(
+              height: 50,
             ),
             const Text(
               'Office Eats',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
             ),
             const SizedBox(
-              height: 40,
+              height: 10,
             ),
             const Text(
               "Welcome to Office Eats! Enjoy delicious meals delivered or ready for pickup, Simplify order with our tailored service!",
