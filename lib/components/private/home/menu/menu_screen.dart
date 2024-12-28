@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
@@ -7,160 +9,6 @@ import 'package:eats/shared/skeleton_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../cart_and_review/cart_screen.dart';
 import '../menu/top_bar.dart';
-
-class MenuItem extends StatefulWidget {
-  final String imagePath;
-  final String name;
-  final String description;
-  final double price;
-  final Function(int) onQuantityChanged; // Callback to notify parent
-
-  MenuItem({
-    required this.imagePath,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.onQuantityChanged,
-  });
-
-  @override
-  _MenuItemState createState() => _MenuItemState();
-}
-
-class _MenuItemState extends State<MenuItem> {
-  int quantity = 0;
-
-  void _increment() async {
-    setState(() {
-      quantity++;
-    });
-    widget.onQuantityChanged(quantity);
-
-    final prefs = await SharedPreferences.getInstance();
-    List<String> cartItems = prefs.getStringList('cartItems') ?? [];
-
-    // Add the item as a JSON string
-    cartItems.add({
-      'name': widget.name,
-      'description': widget.description,
-      'price': widget.price,
-      'quantity': quantity,
-    }.toString());
-print(cartItems);
-    // Save updated cart
-    prefs.setStringList('cartItems', cartItems);
-  }
-
-  void _decrement() {
-    if (quantity > 0) {
-      setState(() {
-        quantity--;
-      });
-      widget.onQuantityChanged(quantity); // Notify parent
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            widget.imagePath,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Name Of Food
-              Text(
-                widget.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-
-              // description
-              Text('${widget.description}', style: TextStyle(fontSize: 13)),
-
-              // button and amount
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '\R${widget.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.secondaryColor),
-                  ),
-                  SizedBox(
-                    width: 130,
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(50),
-                        onTap: _decrement,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.red[600],
-                            shape: BoxShape.circle,
-                          ),
-                          padding: EdgeInsets.all(0.0),
-                          child: Icon(Icons.remove, color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                        '$quantity',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(50),
-                        onTap: _increment,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.red[600],
-                            shape: BoxShape.circle,
-                          ),
-                          padding: EdgeInsets.all(0.0),
-                          child: Icon(Icons.add, color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class MenuPage extends StatefulWidget {
   var routeName = '/storemenu';
@@ -367,7 +215,8 @@ class _MenuPageState extends State<MenuPage> {
             CustomButton(
               label: 'My Cart',
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CartPage()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => CartPage()));
                 // Handle button press
                 // Navigator.of(context).pushNamedAndRemoveUntil(
                 //     '/cart', (Route<dynamic> route) => true);
@@ -378,6 +227,163 @@ class _MenuPageState extends State<MenuPage> {
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 0,
+      ),
+    );
+  }
+}
+
+// MenuItem
+class MenuItem extends StatefulWidget {
+  final String imagePath;
+  final String name;
+  final String description;
+  final double price;
+  final Function(int) onQuantityChanged; // Callback to notify parent
+
+  MenuItem({
+    required this.imagePath,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.onQuantityChanged,
+  });
+
+  @override
+  _MenuItemState createState() => _MenuItemState();
+}
+
+class _MenuItemState extends State<MenuItem> {
+  int quantity = 0;
+
+  void _increment() async {
+    setState(() {
+      quantity++;
+    });
+    widget.onQuantityChanged(quantity);
+
+    final prefs = await SharedPreferences.getInstance();
+    List<String> cartItems = prefs.getStringList('cartItems') ?? [];
+
+    // Add the item as a JSON string
+    cartItems.add(json.encode({
+      'name': widget.name,
+      'description': widget.description,
+      'price': widget.price,
+      'quantity': quantity,
+    }));
+
+    print(cartItems);
+    // Save updated cart
+    prefs.setStringList('cartItems', cartItems);
+    // prefs.setStringList('cartItems', []);
+  }
+
+  void _decrement() {
+    if (quantity > 0) {
+      setState(() {
+        quantity--;
+      });
+      widget.onQuantityChanged(quantity); // Notify parent
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4.0,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            widget.imagePath,
+            width: 80,
+            height: 80,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Name Of Food
+              Text(
+                widget.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+
+              // description
+              Text('${widget.description}', style: TextStyle(fontSize: 13)),
+
+              // button and amount
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '\R${widget.price.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.secondaryColor),
+                  ),
+                  SizedBox(
+                    width: 130,
+                  ),
+                  Row(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: _decrement,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red[600],
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(0.0),
+                          child: Icon(Icons.remove, color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        '$quantity',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: _increment,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red[600],
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(0.0),
+                          child: Icon(Icons.add, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

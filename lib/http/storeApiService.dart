@@ -138,7 +138,6 @@ class StoreApiService {
     String deliveryAddress,
     String paymentMethod,
     int shopId,
-    String orderCode,
     String storeName,
     List<Map<String, dynamic>> items,
   ) async {
@@ -151,17 +150,9 @@ class StoreApiService {
         deliveryAddress,
         paymentMethod,
         shopId,
-        orderCode,
         storeName,
         items,
       );
-
-      print("results>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      print(results);
-      print(results.status);
-      print(results.body);
-      print("results>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
 
       if (results.statusCode == 200) {
         // LoadingDialog.hide(context);

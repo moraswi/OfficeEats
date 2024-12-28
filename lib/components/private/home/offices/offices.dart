@@ -226,6 +226,8 @@ class _OfficePageState extends State<OfficePage> {
                             await prefs.setInt('officeId', office['id']);
                             await prefs.setString(
                                 'officeName', office['officeName']);
+                            await prefs.setString(
+                                'officeLocation', office['officeLocation']);
                             await prefs.setInt('categoryId', 0);
 
                             Navigator.of(context).pushNamedAndRemoveUntil(

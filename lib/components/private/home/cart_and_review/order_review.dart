@@ -4,6 +4,7 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/app_buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderReviewPage extends StatefulWidget {
   var routeName = '/orderreview';
@@ -15,59 +16,47 @@ class OrderReviewPage extends StatefulWidget {
 class _OrderReviewPageState extends State<OrderReviewPage> {
   final StoreApiService storeService = StoreApiService();
 
-  Future<void> submitOssrder() async {
-    try {
-      int userId = 0;
-      String deliveryAddress = "ADDRESS HERE";
-      String paymentMethod = "Cash";
-      int shopId = 0;
-      String orderCode = "ORD12345"; // Example order code
-      String storeName = "My Store"; // Example store name
+  TextEditingController orderInstructionController = TextEditingController();
 
-      final items = [
-        {'foodId': 1, 'quantity': 2, 'itemPrice': 10.0},
-        {'foodId': 2, 'quantity': 1, 'itemPrice': 5.5},
-      ];
+  String getOfficeName = "";
+  String getOfficeLocation = "";
+  String getFirstName = "";
+  String getSurname = "";
+  String getPhoneNumber = "";
 
-      // Define the list of items
-      List<Map<String, dynamic>> itkems = [
-        {
-          'foodId': 1,
-          'quantity': 2,
-          'itemPrice': 10.0,
-        },
-        {
-          'foodId': 2,
-          'quantity': 1,
-          'itemPrice': 20.0,
-        },
-      ];
+   int getUserId = 0;
+   String deliveryAddress = "N/A";
+   String paymentMethod = "Cash";
+   int getStoreId = 0;
+   String getShopName = "N/A";
 
-      // Call the updated `placeOrderReq` function
-      await storeService.placeOrderReq(
-        context,
-        userId,
-        deliveryAddress,
-        paymentMethod,
-        shopId,
-        orderCode,
-        storeName,
-        items,
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order Failed: $e')),
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
   }
 
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getOfficeName = prefs.getString('officeName') ?? "";
+      getOfficeLocation = prefs.getString('officeLocation') ?? "";
+      getFirstName = prefs.getString('firstName') ?? "";
+      getSurname = prefs.getString('lastName') ?? "";
+      getPhoneNumber = prefs.getString('phoneNumber') ?? "";
+
+      getUserId = prefs.getInt('userId') ?? 0;
+      getStoreId = prefs.getInt('storeId') ?? 0;
+      getShopName = prefs.getString('shopName') ?? "";
+
+    });
+  }
+
+  // submitOrder
   Future<void> submitOrder() async {
-    final int userId = 0;
-    final String deliveryAddress = "string";
-    final String paymentMethod = "string";
-    final int shopId = 0;
-    final String orderCode = "string";
-    final String storeName = "string";
+
 
     // Construct the items list
     final List<Map<String, dynamic>> items = [
@@ -86,12 +75,11 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     try {
       await storeService.placeOrderReq(
         context,
-        userId,
+        getUserId,
         deliveryAddress,
         paymentMethod,
-        shopId,
-        orderCode,
-        storeName,
+        getStoreId,
+        getShopName,
         items,
       );
     } catch (e) {
@@ -129,11 +117,17 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Moreleta Pack, Unite B, Office 4, Office Eats Tech',
+                  Text(
+                    'Office Address',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Text(
+                    '$getOfficeName, $getOfficeLocation',
+                    style: TextStyle(
+                      fontSize: 15,
                     ),
                   ),
                   Container(
@@ -150,12 +144,26 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const Text(
-                    'Call me when you are near my office',
-                    style: TextStyle(
-                      fontSize: 17,
+                  SizedBox(height: 2,),
+                  TextFormField(
+                    controller: orderInstructionController,
+                    decoration: InputDecoration(
+                      hintText: 'Note',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
+                  // const Text(
+                  //   'Call me when you are near my office',
+                  //   style: TextStyle(
+                  //     fontSize: 15,
+                  //   ),
+                  // ),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
                     height: 2,
@@ -170,16 +178,16 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const Text(
-                    'Katlego Molepo',
-                    style: TextStyle(
-                      fontSize: 17,
+                  Text(
+                    '$getFirstName $getSurname',
+                    style: const TextStyle(
+                      fontSize: 15,
                     ),
                   ),
-                  const Text(
-                    '073 232 1122',
-                    style: TextStyle(
-                      fontSize: 17,
+                  Text(
+                    getPhoneNumber,
+                    style: const TextStyle(
+                      fontSize: 15,
                     ),
                   ),
                 ],
@@ -188,7 +196,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             const SizedBox(height: 10),
 
             Text(
-              'NB: Collect your food when the order is complete',
+              'Collect your food when the order status is complete',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),

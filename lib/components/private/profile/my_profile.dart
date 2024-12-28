@@ -200,11 +200,6 @@ class _MyProfileState extends State<MyProfile> {
         getOfficePacks = response;
       });
     } catch (e) {
-      // setState(() {});
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Get offices failed: $e')),
-      // );
-
       print("failed");
     }
   }
