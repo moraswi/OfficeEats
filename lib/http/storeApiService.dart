@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eats/http/shared/apiService.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shared/loading_dialog.dart';
@@ -139,6 +140,7 @@ class StoreApiService {
     String paymentMethod,
     int shopId,
     String storeName,
+    description,
     List<Map<String, dynamic>> items,
   ) async {
     try {
@@ -151,20 +153,25 @@ class StoreApiService {
         paymentMethod,
         shopId,
         storeName,
+        description,
         items,
       );
 
       if (results.statusCode == 200) {
         // LoadingDialog.hide(context);
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Successfully registered!')),
+        );
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/orderconfirmed',
-          (Route<dynamic> route) => true,
+              (Route<dynamic> route) => false, // Clears all previous routes
         );
       }
     } catch (e) {
       LoadingDialog.hide(context);
       rethrow;
+    } finally {
+      LoadingDialog.hide(context);
     }
   }
 

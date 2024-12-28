@@ -96,7 +96,7 @@ class AuthApiService {
       var results = await apiService.register(
           firstName, lastName, phoneNumber, email, password, role);
 
-      if (results.statusCode == 201) {
+      if (results.statusCode == 200) {
         // Success
         LoadingDialog.hide(context);
 

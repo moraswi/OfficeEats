@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
@@ -18,17 +20,19 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
 
   TextEditingController orderInstructionController = TextEditingController();
 
+  List<Map<String, dynamic>> orderItems = [];
+
   String getOfficeName = "";
   String getOfficeLocation = "";
   String getFirstName = "";
   String getSurname = "";
   String getPhoneNumber = "";
 
-   int getUserId = 0;
-   String deliveryAddress = "N/A";
-   String paymentMethod = "Cash";
-   int getStoreId = 0;
-   String getShopName = "N/A";
+  int getUserId = 0;
+  String deliveryAddress = "N/A";
+  String paymentMethod = "Cash";
+  int getStoreId = 0;
+  String getShopName = "N/A";
 
   @override
   void initState() {
@@ -41,6 +45,15 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      List<String> cartItemsData = prefs.getStringList('cartItems') ?? [];
+
+      orderItems = cartItemsData
+          .map((item) => json.decode(item))
+          .toList()
+          .cast<Map<String, dynamic>>();
+      print('cartItemsData////////////////////////////////');
+      print(orderItems);
+      print('cartItemsData//////////////////////////////////');
       getOfficeName = prefs.getString('officeName') ?? "";
       getOfficeLocation = prefs.getString('officeLocation') ?? "";
       getFirstName = prefs.getString('firstName') ?? "";
@@ -50,25 +63,27 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       getUserId = prefs.getInt('userId') ?? 0;
       getStoreId = prefs.getInt('storeId') ?? 0;
       getShopName = prefs.getString('shopName') ?? "";
-
     });
   }
 
   // submitOrder
   Future<void> submitOrder() async {
-
-
-    // Construct the items list
+String description = orderInstructionController.text;
+// Construct the items list
     final List<Map<String, dynamic>> items = [
       {
         "foodId": 1,
         "quantity": 2,
         "itemPrice": 5.5,
+        "foodName": "string"
+
       },
       {
         "foodId": 2,
         "quantity": 1,
         "itemPrice": 9.0,
+        "foodName": "string"
+
       },
     ];
 
@@ -80,7 +95,9 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
         paymentMethod,
         getStoreId,
         getShopName,
+        description,
         items,
+        // orderItems,
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -117,7 +134,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Office Address',
                     style: TextStyle(
                       fontSize: 17,
@@ -126,7 +143,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                   ),
                   Text(
                     '$getOfficeName, $getOfficeLocation',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
@@ -138,13 +155,15 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                     ),
                   ),
                   const Text(
-                    'Delivery Instruction',
+                    'Order Instruction',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(height: 2,),
+                  SizedBox(
+                    height: 2,
+                  ),
                   TextFormField(
                     controller: orderInstructionController,
                     decoration: InputDecoration(
