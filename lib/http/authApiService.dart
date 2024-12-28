@@ -39,7 +39,6 @@ class AuthApiService {
 
         LoadingDialog.hide(context);
 
-
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/office',
           (Route<dynamic> route) => false,
@@ -67,7 +66,8 @@ class AuthApiService {
       String phoneNumber,
       String email,
       String password,
-      String role) async {
+      String role,
+      String confirmPassword) async {
     try {
       // Validation: Ensure all fields are filled
       if (firstName.isEmpty ||
@@ -82,12 +82,12 @@ class AuthApiService {
       }
 
       // Validation: Check if passwords match
-      // if (password != confirmPassword) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('Passwords do not match!')),
-      //   );
-      //   return false; // Stay on the same page
-      // }
+      if (password != confirmPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Passwords do not match!')),
+        );
+        return false; // Stay on the same page
+      }
 
       // Show the loading dialog
       LoadingDialog.show(context);
@@ -98,7 +98,7 @@ class AuthApiService {
 
       if (results.statusCode == 200) {
         // Success
-        LoadingDialog.hide(context);
+        // LoadingDialog.hide(context);
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(

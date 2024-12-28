@@ -31,16 +31,11 @@ class _SignUpState extends State<SignUp> {
     String email = emailController.text;
     String phoneNumber = phoneNumberController.text;
     String password = passwordController.text;
+    String confirmPassword = confirmPasswordController.text;
     String role = "customer";
 
-    try {
-      await authService.registerReq(
-          context, firstName, lastName, phoneNumber, email, password, role);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Register Failed')),
-      );
-    }
+    await authService.registerReq(context, firstName, lastName, phoneNumber,
+        email, password, role, confirmPassword);
   }
 
   @override
