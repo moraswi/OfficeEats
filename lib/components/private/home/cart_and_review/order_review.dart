@@ -70,7 +70,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     getUserAddressReq();
   }
 
-  List<Map<String, dynamic>> consolidateQuantities(List<Map<String, dynamic>> items) {
+  List<Map<String, dynamic>> consolidateQuantities(
+      List<Map<String, dynamic>> items) {
     final Map<int, Map<String, dynamic>> consolidatedItems = {};
 
     for (final item in items) {
@@ -104,7 +105,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     }
 
     // Consolidate quantities in the order items
-    final List<Map<String, dynamic>> consolidatedItems = consolidateQuantities(orderItems);
+    final List<Map<String, dynamic>> consolidatedItems =
+        consolidateQuantities(orderItems);
 
     try {
       await storeService.placeOrderReq(
@@ -123,7 +125,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       );
     }
   }
-
 
   // getUserAddressReq
   Future<void> getUserAddressReq() async {
@@ -212,12 +213,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                       contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
-                  // const Text(
-                  //   'Call me when you are near my office',
-                  //   style: TextStyle(
-                  //     fontSize: 15,
-                  //   ),
-                  // ),
                   Container(
                     margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
                     height: 2,
@@ -249,7 +244,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             ),
             const SizedBox(height: 10),
 
-            Text(
+            const Text(
               'Collect your food when the order status is complete',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),

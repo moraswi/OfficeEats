@@ -28,7 +28,6 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     getSharedPreferenceData();
-    // getStoreMenuCategoriesReq();
   }
 
   // getSharedPreferenceData
@@ -49,15 +48,26 @@ class _TopBarState extends State<TopBar> {
     try {
       List<dynamic> response =
           await storeService.getStoreMenuCategoriesReq(getStoreId);
-      setState(() {
-        menus = response;
-        isCategoriesLoading = false;
-      });
+
+      if (response.isNotEmpty) {
+        final firstCategoryId = response[0]['id'];
+
+        // Update SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('categoryId', firstCategoryId);
+
+        // Notify parent widget
+        widget.onCategorySelected(firstCategoryId);
+
+        setState(() {
+          menus = response;
+          isCategoriesLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         isCategoriesLoading = false;
       });
-
     }
   }
 

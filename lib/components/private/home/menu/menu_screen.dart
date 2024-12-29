@@ -33,36 +33,35 @@ class _MenuPageState extends State<MenuPage> {
     getSharedPreferenceData();
   }
 
+  // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
     final prefs = await SharedPreferences.getInstance();
+    final categoryId = prefs.getInt('categoryId') ?? 0;
     setState(() {
-      getCategoryId = prefs.getInt('categoryId') ?? 0;
+      getCategoryId = categoryId;
       getShopName = prefs.getString('shopName') ?? "";
       getOfficeName = prefs.getString('officeName') ?? '';
     });
+
     if (getCategoryId != null) {
       getStoreMenuByCategoryIdReq();
     }
   }
 
-  // getStoresReq
+  // getStoreMenuByCategoryIdReq
   Future<void> getStoreMenuByCategoryIdReq() async {
     try {
-      // var categoryId = 0;
       List<dynamic> response =
           await storeService.getStoreMenuByCategoryIdReq(getCategoryId);
+
       setState(() {
         menus = response;
-        // print(menus);
         isLoading = false;
       });
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('store menu failed: $e')),
-      );
     }
   }
 
