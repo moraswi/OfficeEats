@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:eats/shared/app_buttons.dart';
 
 class OrderConfirmed extends StatefulWidget {
