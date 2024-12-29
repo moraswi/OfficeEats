@@ -73,11 +73,10 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  // Aligns the text widget to the left of its parent
                   child: Text(
                     getShorpName,
                     style: TextStyle(
@@ -86,8 +85,17 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     ),
                   ),
                 ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
                 const SizedBox(
-                  height: 5,
+                  height: 15,
                 ),
                 Container(
                   width: double.infinity,
@@ -162,7 +170,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 Builder(builder: (context) {
                   double totalPrice = 0.0;
                   for (var item in orderHistory[0]['items']) {
-                    totalPrice += (item['totalPrice'] ?? 0) * (item['quantity'] ?? 0);
+                    totalPrice += (item['totalPrice'] ?? 0);
                   }
                   return Container(
                     width: double.infinity,
@@ -192,6 +200,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         const Text(
                           'Delivery Fee: R0.00',
                           style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Method: ${orderHistory.isNotEmpty ? orderHistory[0]['paymentMethod'] ?? '' : ''}',
+                          style: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
@@ -301,6 +315,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     ],
                   ),
                 ),
+
                 const SizedBox(
                   height: 15,
                 ),
@@ -324,7 +339,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'User Detail',
+                        'User Details',
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
@@ -346,67 +361,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                       ),
                       Text(
                         getPhoneNumber,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4.0,
-                        // offset: Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                  //alignment: Alignment.,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Payment',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const Divider(
-                        color: Colors.grey,
-                        thickness: 1.0,
-                        height: 16.0,
-                      ),
-                      Text(
-                        'Method: ${orderHistory.isNotEmpty ? orderHistory[0]['paymentMethod'] ?? '' : ''}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Total: ${orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] ?? '' : ''}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
                         style: const TextStyle(
                           fontSize: 16,
                         ),

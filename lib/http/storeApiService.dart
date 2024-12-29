@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eats/http/shared/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../shared/loading_dialog.dart';
 
@@ -159,12 +160,13 @@ class StoreApiService {
 
       if (results.statusCode == 200) {
         // LoadingDialog.hide(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Successfully registered!')),
-        );
+
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setStringList('cartItems', []);
+
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/orderconfirmed',
-              (Route<dynamic> route) => false, // Clears all previous routes
+          (Route<dynamic> route) => false, // Clears all previous routes
         );
       }
     } catch (e) {

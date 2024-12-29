@@ -8,6 +8,8 @@ import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/app_buttons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../http/authApiService.dart';
+
 class OrderReviewPage extends StatefulWidget {
   var routeName = '/orderreview';
 
@@ -17,19 +19,21 @@ class OrderReviewPage extends StatefulWidget {
 
 class _OrderReviewPageState extends State<OrderReviewPage> {
   final StoreApiService storeService = StoreApiService();
+  final AuthApiService authService = AuthApiService();
 
   TextEditingController orderInstructionController = TextEditingController();
 
   List<Map<String, dynamic>> orderItems = [];
 
+  var getAddress;
   String getOfficeName = "";
   String getOfficeLocation = "";
   String getFirstName = "";
   String getSurname = "";
   String getPhoneNumber = "";
+  String getOfficeAddress = "";
 
   int getUserId = 0;
-  String deliveryAddress = "N/A";
   String paymentMethod = "Cash";
   int getStoreId = 0;
   String getShopName = "N/A";
@@ -62,57 +66,78 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       getStoreId = prefs.getInt('storeId') ?? 0;
       getShopName = prefs.getString('shopName') ?? "";
     });
+
+    getUserAddressReq();
   }
 
-  List<Map<String, dynamic>> removeDuplicates(
-      List<Map<String, dynamic>> orderItems) {
-    final Map<int, Map<String, dynamic>> uniqueItems = {};
+  List<Map<String, dynamic>> consolidateQuantities(List<Map<String, dynamic>> items) {
+    final Map<int, Map<String, dynamic>> consolidatedItems = {};
 
-    for (final item in orderItems) {
+    for (final item in items) {
       final int foodId = item['foodId'];
-      if (uniqueItems.containsKey(foodId)) {
-        // If the item already exists, keep the one with the largest quantity
-        if (item['quantity'] > uniqueItems[foodId]!['quantity']) {
-          uniqueItems[foodId] = item;
-        }
+
+      if (consolidatedItems.containsKey(foodId)) {
+        // Increment the quantity for the existing foodId
+        consolidatedItems[foodId]!['quantity'] += 1;
       } else {
-        // Add the item if it's not in the map
-        uniqueItems[foodId] = item;
+        // Add the item with an initial quantity of 1
+        consolidatedItems[foodId] = {
+          ...item,
+          'quantity': 1, // Reset quantity to count occurrences
+        };
       }
     }
 
     // Convert the map back to a list
-    return uniqueItems.values.toList();
+    return consolidatedItems.values.toList();
   }
 
-  // submitOrder
   Future<void> submitOrder() async {
-    final List<Map<String, dynamic>> deduplicatedItems =
-        removeDuplicates(orderItems);
-
     String description = orderInstructionController.text;
-// Construct the items list
-    final List<Map<String, dynamic>> items = [
-      {"foodId": 1, "quantity": 2, "itemPrice": 5.5, "foodName": "string"},
-      {"foodId": 2, "quantity": 1, "itemPrice": 9.0, "foodName": "string"},
-    ];
+
+    if (getOfficeAddress == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Add your office address')),
+      );
+
+      return;
+    }
+
+    // Consolidate quantities in the order items
+    final List<Map<String, dynamic>> consolidatedItems = consolidateQuantities(orderItems);
 
     try {
       await storeService.placeOrderReq(
         context,
         getUserId,
-        deliveryAddress,
+        getOfficeAddress,
         paymentMethod,
         getStoreId,
         getShopName,
         description,
-        deduplicatedItems,
-        // orderItems,
+        consolidatedItems,
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Order Failed: $e')),
       );
+    }
+  }
+
+
+  // getUserAddressReq
+  Future<void> getUserAddressReq() async {
+    try {
+      Map<String, dynamic> response =
+          await authService.getUserAddressReq(getUserId);
+      setState(() {
+        getAddress = [response];
+        getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';
+
+        print('Address Details: $getOfficeAddress');
+      });
+    } catch (e) {
+      print(getAddress);
     }
   }
 
