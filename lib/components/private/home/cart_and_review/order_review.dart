@@ -51,9 +51,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           .map((item) => json.decode(item))
           .toList()
           .cast<Map<String, dynamic>>();
-      print('cartItemsData////////////////////////////////');
-      print(orderItems);
-      print('cartItemsData//////////////////////////////////');
+
       getOfficeName = prefs.getString('officeName') ?? "";
       getOfficeLocation = prefs.getString('officeLocation') ?? "";
       getFirstName = prefs.getString('firstName') ?? "";
@@ -66,25 +64,37 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     });
   }
 
+  List<Map<String, dynamic>> removeDuplicates(
+      List<Map<String, dynamic>> orderItems) {
+    final Map<int, Map<String, dynamic>> uniqueItems = {};
+
+    for (final item in orderItems) {
+      final int foodId = item['foodId'];
+      if (uniqueItems.containsKey(foodId)) {
+        // If the item already exists, keep the one with the largest quantity
+        if (item['quantity'] > uniqueItems[foodId]!['quantity']) {
+          uniqueItems[foodId] = item;
+        }
+      } else {
+        // Add the item if it's not in the map
+        uniqueItems[foodId] = item;
+      }
+    }
+
+    // Convert the map back to a list
+    return uniqueItems.values.toList();
+  }
+
   // submitOrder
   Future<void> submitOrder() async {
-String description = orderInstructionController.text;
+    final List<Map<String, dynamic>> deduplicatedItems =
+        removeDuplicates(orderItems);
+
+    String description = orderInstructionController.text;
 // Construct the items list
     final List<Map<String, dynamic>> items = [
-      {
-        "foodId": 1,
-        "quantity": 2,
-        "itemPrice": 5.5,
-        "foodName": "string"
-
-      },
-      {
-        "foodId": 2,
-        "quantity": 1,
-        "itemPrice": 9.0,
-        "foodName": "string"
-
-      },
+      {"foodId": 1, "quantity": 2, "itemPrice": 5.5, "foodName": "string"},
+      {"foodId": 2, "quantity": 1, "itemPrice": 9.0, "foodName": "string"},
     ];
 
     try {
@@ -96,7 +106,7 @@ String description = orderInstructionController.text;
         getStoreId,
         getShopName,
         description,
-        items,
+        deduplicatedItems,
         // orderItems,
       );
     } catch (e) {

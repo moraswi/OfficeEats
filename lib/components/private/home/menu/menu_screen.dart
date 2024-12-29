@@ -198,6 +198,7 @@ class _MenuPageState extends State<MenuPage> {
                             // address
                             return MenuItem(
                               imagePath: 'assets/images/image1.webp',
+                              id: menu['id'],
                               name: menu['name'],
                               description: menu['description'],
                               price: menu['price'],
@@ -234,6 +235,7 @@ class _MenuPageState extends State<MenuPage> {
 
 // MenuItem
 class MenuItem extends StatefulWidget {
+  final int id;
   final String imagePath;
   final String name;
   final String description;
@@ -241,6 +243,7 @@ class MenuItem extends StatefulWidget {
   final Function(int) onQuantityChanged; // Callback to notify parent
 
   MenuItem({
+    required this.id,
     required this.imagePath,
     required this.name,
     required this.description,
@@ -266,9 +269,10 @@ class _MenuItemState extends State<MenuItem> {
 
     // Add the item as a JSON string
     cartItems.add(json.encode({
-      'name': widget.name,
+      'foodId': widget.id,
+      'foodName': widget.name,
       'description': widget.description,
-      'price': widget.price,
+      'itemPrice': widget.price,
       'quantity': quantity,
     }));
 

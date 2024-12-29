@@ -85,9 +85,9 @@ class _CartPageState extends State<CartPage> {
                       MenuItem(
                         imagePath:
                             item['imagePath'] ?? 'assets/images/burgermeal.png',
-                        name: item['name'] ?? 'Loading...',
+                        name: item['foodName'] ?? 'Loading...',
                         description: item['description'] ?? 0.0,
-                        price: item['price'] ?? 0.0,
+                        price: item['itemPrice'] ?? 0.0,
                         onDelete: () => _removeItem(index),
                       ),
                       SizedBox(height: 20),
