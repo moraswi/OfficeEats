@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:eats/shared/app_buttons.dart';
+import 'package:eats/http/authApiService.dart';
 
 class LogIn extends StatefulWidget {
   var routeName = '/logIn';
@@ -14,6 +14,8 @@ class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final AuthApiService authService = AuthApiService();
+
   bool isChecked = false;
   bool isPasswordVisible = false;
 
@@ -24,6 +26,20 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     super.initState();
+  }
+
+  // handleLogin
+  Future<void> handleLogin() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text;
+
+    try {
+      await authService.loginReq(context, email, password);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Failed: $e')),
+      );
+    }
   }
 
   @override
@@ -122,14 +138,7 @@ class _LogInState extends State<LogIn> {
 
               const SizedBox(height: 20),
 
-              CustomButton(
-                label: 'Log In',
-                onTap: () {
-                  // Handle button press
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/office', (Route<dynamic> route) => true);
-                },
-              ),
+              CustomButton(label: 'Log In', onTap: handleLogin),
 
               const SizedBox(height: 20),
               //forgot Password

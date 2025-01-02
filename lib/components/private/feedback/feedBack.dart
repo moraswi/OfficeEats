@@ -1,7 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../../../shared/app_buttons.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/app_buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../shared/bottom_nav_bar.dart';
 
 class FeedBack extends StatefulWidget {
   var routeName = '/feedback';
@@ -11,6 +15,8 @@ class FeedBack extends StatefulWidget {
 }
 
 class _FeedBackState extends State<FeedBack> {
+  final StoreApiService storeService = StoreApiService();
+
   TextEditingController feedbackController = TextEditingController();
 
   bool overallService = false;
@@ -21,6 +27,7 @@ class _FeedBackState extends State<FeedBack> {
   String improve = "";
   double rating = 1.0;
   String result = "";
+  int getUserId = 0;
 
   void _submitForm() {
     // Display the results of the checked checkboxes in the terminal
@@ -30,26 +37,59 @@ class _FeedBackState extends State<FeedBack> {
     if (SpeedEfficiency) {
       result += 'Speed and efficiency\n';
     }
-    if (customerSupport) {
-      result += 'Customer support\n';
-    }
+    // if (customerSupport) {
+    //   result += 'Customer support\n';
+    // }
     if (otherChecked) {
       result += 'Other\n';
     }
   }
 
-  // void _feedback() async {
-  //   _submitForm();
-  //   int rate = rating.toInt();
-  //   String improveResult = improve;
-  //   String message = feedbackController.text;
-  //
-  //   try {
-  //     await accountApiService.feedback(context, rate, improveResult, message);
-  //   } catch (e) {
-  //     print('cancelingReasons Error: $e');
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
+  }
+
+  // _feedback
+  Future<void> _feedback() async {
+    try {
+      _submitForm();
+      int rate = rating.toInt();
+      String improveResult = improve;
+      String message = feedbackController.text;
+
+      if (improveResult.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Select options')),
+        );
+      }
+
+      if (message.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Write a comment')),
+        );
+
+        return;
+      }
+
+      await storeService.rateAppReq(
+          context, getUserId, message, rate, improveResult);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Feedback Failed')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,34 +266,34 @@ class _FeedBackState extends State<FeedBack> {
                       ),
 
                       //Don’t need cover anymore
-                      Row(
-                        children: <Widget>[
-                          Transform.scale(
-                            scale: 1.1,
-                            // Increase the size by adjusting the scale factor
-                            child: Checkbox(
-                              value: customerSupport,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  customerSupport = value!;
-                                  if (customerSupport) {
-                                    improve = "Customer support";
-                                    print('Checked: $improve');
-                                  }
-                                });
-                              },
-                              activeColor: Colors.red,
-                            ),
-                          ),
-                          const Text(
-                            'Customer support',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color(0xFF434344)),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Transform.scale(
+                      //       scale: 1.1,
+                      //       // Increase the size by adjusting the scale factor
+                      //       child: Checkbox(
+                      //         value: customerSupport,
+                      //         onChanged: (bool? value) {
+                      //           setState(() {
+                      //             customerSupport = value!;
+                      //             if (customerSupport) {
+                      //               improve = "Customer support";
+                      //               print('Checked: $improve');
+                      //             }
+                      //           });
+                      //         },
+                      //         activeColor: Colors.red,
+                      //       ),
+                      //     ),
+                      //     const Text(
+                      //       'Customer support',
+                      //       style: TextStyle(
+                      //           fontWeight: FontWeight.w400,
+                      //           fontSize: 16,
+                      //           color: Color(0xFF434344)),
+                      //     ),
+                      //   ],
+                      // ),
 
                       // Other reason
                       Row(
@@ -292,7 +332,7 @@ class _FeedBackState extends State<FeedBack> {
                         controller: feedbackController,
                         maxLines: 6,
                         keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
@@ -310,15 +350,16 @@ class _FeedBackState extends State<FeedBack> {
                 CustomButton(
                   label: 'Submit',
                   onTap: () {
-                    // Handle button press
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/feedbackconfirmed', (Route<dynamic> route) => true);
+                    _feedback();
                   },
                 ),
               ],
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: RoundedBottomBar(
+        selectedIndex: 2,
       ),
     );
   }

@@ -2,18 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:eats/shared/app_buttons.dart';
 
-class FeedBackConfirmed extends StatefulWidget {
-  var routeName = '/feedbackconfirmed';
+class OrderConfirmed extends StatefulWidget {
+  var routeName = '/orderconfirmed';
 
   @override
-  State<FeedBackConfirmed> createState() => _FeedBackConfirmedState();
+  State<OrderConfirmed> createState() => _OrderConfirmedState();
 }
 
-class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
-  bool overallService = false;
-  bool SpeedEfficiency = false;
-  bool customerSupport = false;
-  bool otherChecked = false;
+class _OrderConfirmedState extends State<OrderConfirmed> {
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +25,7 @@ class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
           },
         ),
         title: const Text(
-          'Feedback',
+          'Order Submitted',
           style: TextStyle(
             color: Colors.black,
             fontSize: 29,
@@ -63,43 +59,41 @@ class _FeedBackConfirmedState extends State<FeedBackConfirmed> {
                     ],
                   ),
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
                         'assets/images/feedback/solar_like-bold.png',
                         width: 122,
                         height: 122,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
-                      Text(
+                      const Text(
                         'Thank you',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
 
-                      Text(
-                        'Your feedback is appreciated!',
+                      const Text(
+                        'Your order has been submitted!',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w400),
                       ),
 
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       //button
                       CustomButton(
-                        label: 'Ok',
+                        label: 'Track Order',
                         onTap: () {
                           // Handle button press
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/office', (Route<dynamic> route) => true);
+                              '/history', (Route<dynamic> route) => true);
                         },
                       ),
                     ],

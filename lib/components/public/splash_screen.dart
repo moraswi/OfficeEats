@@ -29,15 +29,17 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            Image.asset(
+              'assets/images/motorbike2.png',
+
+              height: 150,
+            ),
+            SizedBox(height: 15,),
+            const Text(
               'Office Eats',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
             )
-            // Image.asset(
-            //   'assets/legacyLogo.png',
-            //   width: 200,
-            //   height: 200,
-            // ),
+
           ],
         ),
       ),

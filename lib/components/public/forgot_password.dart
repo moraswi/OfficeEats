@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/app_buttons.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class ForgotPassword extends StatefulWidget {
   var routeName = '/forgotPassword';

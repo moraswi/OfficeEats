@@ -1,9 +1,6 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'httpService.dart';
-import 'dart:io';
 
-class apiService {
+class ApiService {
   HttpService httpService = HttpService();
 
   //login
@@ -14,10 +11,12 @@ class apiService {
   }
 
   //register
-  Future<dynamic> register(String fullName, String phoneNumber, String email, String password, String role) async {
+  Future<dynamic> register(String firstName, String lastName,
+      String phoneNumber, String email, String password, String role) async {
     final endpoint = 'register';
     final data = {
-      'fullName': fullName,
+      'firstName': firstName,
+      'lastName': lastName,
       'phoneNumber': phoneNumber,
       'email': email,
       'password': password,
@@ -27,11 +26,12 @@ class apiService {
   }
 
   //changePassword
-  Future<dynamic> changePassword(int userId, String string, String newPassword) async {
-    final endpoint = 'register';
+  Future<dynamic> changePassword(int userId, String currentPassword,
+      String newPassword) async {
+    final endpoint = 'change-password';
     final data = {
       'userId': userId,
-      'string': string,
+      'currentPassword': currentPassword,
       'newPassword': newPassword,
     };
     return await httpService.post(endpoint, data);
@@ -51,10 +51,9 @@ class apiService {
 
   //getStores
   Future<dynamic> getStores(int officeId) async {
-    final endpoint = 'shop/$officeId';
+    final endpoint = 'stores/$officeId';
     return await httpService.get(endpoint);
   }
-
 
   //getStoreMenuByCategoryId
   Future<dynamic> getStoreMenuByCategoryId(int categoryId) async {
@@ -80,15 +79,84 @@ class apiService {
     return await httpService.get(endpoint);
   }
 
+  Future<dynamic> placeOrder
+
+  (
+
+  int userId,
+  String deliveryAddress,
+  String paymentMethod,
+  int shopId,
+  String storeName,
+  description,
+  List<Map<String, dynamic>> items, // Pass items as a parameter
+  ) async {
+  final endpoint = 'place-order';
+  final data = {
+  'userId': userId,
+  'deliveryAddress': deliveryAddress,
+  'paymentMethod': paymentMethod,
+  'shopId': shopId,
+  'storeName': storeName,
+  'description': description,
+  'items': items, // Add items dynamically
+  };
+  return await httpService.post(endpoint, data);
+  }
+
+  //getUserById
+  Future<dynamic> getUserById(int userid) async {
+  final endpoint = 'user/$userid';
+  return await httpService.get(endpoint);
+  }
+
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {
-    final endpoint = 'addresses/$userid';
-    return await httpService.get(endpoint);
+  final endpoint = 'addresses/$userid';
+  return await httpService.get(endpoint);
+  }
+
+  //deleteUserAddress/////
+  Future<dynamic> deleteUserAddress(int id) async {
+  final endpoint = 'address/$id';
+  return await httpService.delete(endpoint);
+  }
+
+  //addAddress
+  Future<dynamic> addAddress(
+  String officePack, String officeAddress, int userId) async {
+  final endpoint = 'address';
+  final data = {
+  "officePack": "officePack",
+  "officeAddress": officeAddress,
+  "userId": 0,
+  "active": true
+  };
+  return await httpService.post(endpoint, data);
+  }
+
+  //deleteUserAddress
+  Future<dynamic> rateApp(
+  int userId, String message, int rating, String improve) async {
+  final endpoint = 'rate';
+  final data = {
+  'userId': userId,
+  'message': message,
+  'improve': improve,
+  'rating': rating,
+  };
+  return await httpService.post(endpoint, data);
   }
 
   //getStoreMenuCategories
   Future<dynamic> getOrders(int userid) async {
-    final endpoint = 'order/user/$userid';
-    return await httpService.get(endpoint);
+  final endpoint = 'order/user/$userid';
+  return await httpService.get(endpoint);
+  }
+
+  //getOrderById
+  Future<dynamic> getOrderById(int orderid) async {
+  final endpoint = 'order/$orderid';
+  return await httpService.get(endpoint);
   }
 }

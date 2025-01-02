@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../shared/app_buttons.dart';
+import 'package:eats/shared/app_buttons.dart';
 
 class ResetPassword extends StatefulWidget {
   var routeName = '/resetPassword';
@@ -69,7 +68,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                         filled: true,
                         fillColor: Colors.grey[200],
                         contentPadding: const EdgeInsets.all(8),
-
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -129,7 +127,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                             '/logIn', (Route<dynamic> route) => true);
                       },
                     ),
-
                   ],
                 ),
               ),

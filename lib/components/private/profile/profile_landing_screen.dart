@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileLandingPage extends StatefulWidget {
   var routeName = '/profilelanding';
@@ -10,10 +10,29 @@ class ProfileLandingPage extends StatefulWidget {
 }
 
 class _ProfileLandingPageState extends State<ProfileLandingPage> {
+  String getFirstName = "";
+  String getEmail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getFirstName = prefs.getString('firstName') ?? '';
+      getEmail = prefs.getString('email') ?? '';
+    });
+  }
+
   final List<String> itemNames = [
     'My profile',
     'Change my password',
-    'Payments method',
+    // 'Payments method',
     'Log out'
   ]; // List of item names
 
@@ -29,13 +48,11 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
           },
         ),
       ),
-
       body: Stack(
         children: [
           Center(
             child: Column(
               children: [
-
                 const SizedBox(
                   height: 10,
                 ),
@@ -44,24 +61,22 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                     height: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: Image.asset('assets/images/food3.jpeg'),
+                      child: Image.asset('assets/images/userprofile.png'),
                     )),
-
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  "Blessing Mothapo",
+                Text(
+                  getFirstName,
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
                 ),
-                const Text(
-                  "Bless@gmail.com",
+                Text(
+                  getEmail,
                   style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
@@ -73,17 +88,17 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                         backgroundColor: Colors.blue,
                         side: BorderSide.none,
                         shape: StadiumBorder()),
-                    child: Text(
+                    child: const Text(
                       'Rate App',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Divider(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],
@@ -109,22 +124,25 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                                   '/myprofile', (Route<dynamic> route) => true);
                             } else if (index == 1) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/changepassword', (Route<dynamic> route) => true);
-                            } else if (index == 2) {
+                                  '/changepassword',
+                                  (Route<dynamic> route) => true);
+                            }
+                            // else if (index == 2) {
+                            //   Navigator.of(context).pushNamedAndRemoveUntil(
+                            //       '/home', (Route<dynamic> route) => true);
+                            // }
+                            else if (index == 2) {
                               Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => true);
-                            } else if (index == 3) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/login', (Route<dynamic> route) => true);
+                                  '/logIn', (Route<dynamic> route) => true);
                             }
                           },
                           child: Container(
                             height: 65,
                             decoration: const BoxDecoration(
-                                color: Color(0xFFEFEFF0),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15.0),
-                                ),
+                              color: Color(0xFFEFEFF0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15.0),
+                              ),
                             ),
                             child: Center(
                               child: ListTile(

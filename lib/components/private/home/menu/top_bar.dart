@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:eats/shared/app_colors.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodCategory {
   final String name;
@@ -8,57 +9,112 @@ class FoodCategory {
   FoodCategory({required this.name, required this.imagePath});
 }
 
-// Define a list of food categories
-final List<FoodCategory> foodCategories = [
-  FoodCategory(name: 'Meal', imagePath: 'assets/images/food10.jpeg'),
-  FoodCategory(name: 'Drinks', imagePath: 'assets/images/food9.jpeg'),
-  FoodCategory(name: 'Fast Food', imagePath: 'assets/images/food9.jpeg'),
-  FoodCategory(name: 'Hot Deals', imagePath: 'assets/images/food8.jpeg'),
-  FoodCategory(name: 'All', imagePath: 'assets/images/food7.jpeg'),
-  // Add more categories as needed
-];
+class TopBar extends StatefulWidget {
+  final Function(int) onCategorySelected;
 
-class TopBar extends StatelessWidget {
+  const TopBar({Key? key, required this.onCategorySelected}) : super(key: key);
+
+  @override
+  _TopBarState createState() => _TopBarState();
+}
+
+class _TopBarState extends State<TopBar> {
+  final StoreApiService storeService = StoreApiService();
+  List<dynamic> menus = [];
+  bool isCategoriesLoading = true;
+  late int getStoreId;
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getStoreId = prefs.getInt('storeId') ?? 1;
+    });
+
+    if (getStoreId != null) {
+      getStoreMenuCategoriesReq();
+    }
+  }
+
+  // getStoreMenuCategoriesReq
+  Future<void> getStoreMenuCategoriesReq() async {
+    try {
+      List<dynamic> response =
+          await storeService.getStoreMenuCategoriesReq(getStoreId);
+
+      if (response.isNotEmpty) {
+        final firstCategoryId = response[0]['id'];
+
+        // Update SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('categoryId', firstCategoryId);
+
+        // Notify parent widget
+        widget.onCategorySelected(firstCategoryId);
+
+        setState(() {
+          menus = response;
+          isCategoriesLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isCategoriesLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container( // Adjusted to accommodate the title below the circle
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(foodCategories.length, (index) {
-            final category = foodCategories[index];
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
-              child: GestureDetector(
-                onTap: () {
-                  // Handle the tap event here
-                  print('${category.name} tapped');
-                  // You can navigate to another page or show a dialog here
-                },
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35, // Adjust the size of the circle
-                      backgroundColor: AppColors.tertiaryColor,
-                      backgroundImage: AssetImage(category.imagePath),
+    return isCategoriesLoading
+        ? const Center(child: CircularProgressIndicator())
+        : SizedBox(
+            height: 50,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: menus.length,
+              itemBuilder: (context, index) {
+                var menu = menus[index];
+                return GestureDetector(
+                  onTap: () {
+                    widget.onCategorySelected(menu['id']); // Notify parent
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 3),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 2),
+                            child: Text(
+                              menu['name'] ?? 'Unknown',
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    SizedBox(height: 8.0),
-                    // Space between the circle and the title
-                    Text(
-                      category.name,
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-        ),
-      ),
-    );
+                  ),
+                );
+              },
+            ),
+          );
   }
 }
