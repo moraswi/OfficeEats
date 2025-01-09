@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/date_formatter.dart';
 import '../../../shared/delivery_bottom_navbar.dart';
@@ -14,6 +15,7 @@ class MenuItem extends StatefulWidget {
   final String orderCode;
   final String orderAddress;
   final String orderStatus;
+  final VoidCallback chat; // Callback for the button press
   final VoidCallback onTrackOrder; // Callback for the button press
 
   MenuItem({
@@ -23,6 +25,7 @@ class MenuItem extends StatefulWidget {
     required this.orderCode,
     required this.orderAddress,
     required this.orderStatus,
+    required this.chat,
     required this.onTrackOrder,
   });
 
@@ -108,25 +111,47 @@ class _MenuItemState extends State<MenuItem> {
             ),
           ),
 
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: widget.onTrackOrder, // Trigger the callback
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+          Row(
+            // crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: widget.chat, // Trigger the callback
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
                 ),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                child: const Text(
+                  'Chat',
+                  style: TextStyle(fontSize: 16.0),
+                ),
               ),
-              child: const Text(
-                'Accept',
-                style: TextStyle(fontSize: 16.0),
+              SizedBox(width: 5,),
+              ElevatedButton(
+                onPressed: widget.onTrackOrder, // Trigger the callback
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                ),
+                child: const Text(
+                  'Accept',
+                  style: TextStyle(fontSize: 16.0),
+                ),
               ),
-            ),
-          )
+            ],
+          ),
+
+
         ],
       ),
     );
@@ -182,6 +207,17 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     }
   }
 
+  Future<void> openWhatsApp() async {
+    String phoneNumber = "0789298447";
+    final url = 'https://wa.me/$phoneNumber';
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -215,7 +251,9 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
                 orderCode: order['orderCode'],
                 orderStatus: order['orderStatus'],
                 orderAddress: order['deliveryAddress'],
-
+                chat: () async {
+                  openWhatsApp();
+                  },
                 // Pass orderCode
                 onTrackOrder: () async {
                   final prefs = await SharedPreferences.getInstance();
