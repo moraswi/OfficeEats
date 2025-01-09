@@ -26,8 +26,8 @@ class ApiService {
   }
 
   //changePassword
-  Future<dynamic> changePassword(int userId, String currentPassword,
-      String newPassword) async {
+  Future<dynamic> changePassword(
+      int userId, String currentPassword, String newPassword) async {
     final endpoint = 'change-password';
     final data = {
       'userId': userId,
@@ -79,84 +79,93 @@ class ApiService {
     return await httpService.get(endpoint);
   }
 
-  Future<dynamic> placeOrder
-
-  (
-
-  int userId,
-  String deliveryAddress,
-  String paymentMethod,
-  int shopId,
-  String storeName,
-  description,
-  List<Map<String, dynamic>> items, // Pass items as a parameter
+  Future<dynamic> placeOrder(
+    int userId,
+    String deliveryAddress,
+    String paymentMethod,
+    int shopId,
+    String storeName,
+    description,
+    List<Map<String, dynamic>> items, // Pass items as a parameter
   ) async {
-  final endpoint = 'place-order';
-  final data = {
-  'userId': userId,
-  'deliveryAddress': deliveryAddress,
-  'paymentMethod': paymentMethod,
-  'shopId': shopId,
-  'storeName': storeName,
-  'description': description,
-  'items': items, // Add items dynamically
-  };
-  return await httpService.post(endpoint, data);
+    final endpoint = 'place-order';
+    final data = {
+      'userId': userId,
+      'deliveryAddress': deliveryAddress,
+      'paymentMethod': paymentMethod,
+      'shopId': shopId,
+      'storeName': storeName,
+      'description': description,
+      'items': items, // Add items dynamically
+    };
+    return await httpService.post(endpoint, data);
   }
 
   //getUserById
   Future<dynamic> getUserById(int userid) async {
-  final endpoint = 'user/$userid';
-  return await httpService.get(endpoint);
+    final endpoint = 'user/$userid';
+    return await httpService.get(endpoint);
   }
 
   //getStoreMenuCategories
   Future<dynamic> getUserAddress(int userid) async {
-  final endpoint = 'addresses/$userid';
-  return await httpService.get(endpoint);
+    final endpoint = 'addresses/$userid';
+    return await httpService.get(endpoint);
   }
 
   //deleteUserAddress/////
   Future<dynamic> deleteUserAddress(int id) async {
-  final endpoint = 'address/$id';
-  return await httpService.delete(endpoint);
+    final endpoint = 'address/$id';
+    return await httpService.delete(endpoint);
   }
 
   //addAddress
   Future<dynamic> addAddress(
-  String officePack, String officeAddress, int userId) async {
-  final endpoint = 'address';
-  final data = {
-  "officePack": "officePack",
-  "officeAddress": officeAddress,
-  "userId": 0,
-  "active": true
-  };
-  return await httpService.post(endpoint, data);
+      String officePack, String officeAddress, int userId) async {
+    final endpoint = 'address';
+    final data = {
+      "officePack": "officePack",
+      "officeAddress": officeAddress,
+      "userId": 0,
+      "active": true
+    };
+    return await httpService.post(endpoint, data);
   }
 
   //deleteUserAddress
   Future<dynamic> rateApp(
-  int userId, String message, int rating, String improve) async {
-  final endpoint = 'rate';
-  final data = {
-  'userId': userId,
-  'message': message,
-  'improve': improve,
-  'rating': rating,
-  };
-  return await httpService.post(endpoint, data);
+      int userId, String message, int rating, String improve) async {
+    final endpoint = 'rate';
+    final data = {
+      'userId': userId,
+      'message': message,
+      'improve': improve,
+      'rating': rating,
+    };
+    return await httpService.post(endpoint, data);
   }
 
   //getStoreMenuCategories
   Future<dynamic> getOrders(int userid) async {
-  final endpoint = 'order/user/$userid';
-  return await httpService.get(endpoint);
+    final endpoint = 'order/user/$userid';
+    return await httpService.get(endpoint);
   }
 
   //getOrderById
   Future<dynamic> getOrderById(int orderid) async {
-  final endpoint = 'order/$orderid';
-  return await httpService.get(endpoint);
+    final endpoint = 'order/$orderid';
+    return await httpService.get(endpoint);
+  }
+
+  //getOrderDeliveryPartnerId
+  Future<dynamic> getOrderDeliveryPartnerId(int deliveryPartnerId) async {
+    final endpoint = 'order/delivery-partner/$deliveryPartnerId';
+    return await httpService.get(endpoint);
+  }
+
+  //getOrderDeliveryPartner
+  Future<dynamic> getOrderDeliveryPartner(int officeid) async {
+    final endpoint = 'all-order/delivery-partner/$officeid';
+    return await httpService.get(endpoint);
   }
 }

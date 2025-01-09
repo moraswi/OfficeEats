@@ -30,19 +30,31 @@ class AuthApiService {
         var userData = jsonDecode(results.body);
 
         final prefs = await SharedPreferences.getInstance();
-        prefs.setInt('userId', userData['id']);
+        prefs.setInt('userId', userData['userId']);
         prefs.setString('firstName', userData['firstName']);
         prefs.setString('lastName', userData['lastName']);
         prefs.setString('phoneNumber', userData['phoneNumber']);
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
+        prefs.setInt('deliveryPartnerOfficeId', userData['officeId']);
 
         LoadingDialog.hide(context);
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/office',
-          (Route<dynamic> route) => false,
-        );
+        if(userData['role'] == "constomer"){
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/office',
+            (Route<dynamic> route) => false,
+          );
+        }else if(userData['role'] == "deliverypartner"){
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/deliveryorder',
+                (Route<dynamic> route) => false,
+          );
+        }else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ask service provider to give you a role')),
+          );
+        }
         return true;
       } else {
         // Show a failure message if login is not successful

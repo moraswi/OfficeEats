@@ -116,6 +116,41 @@ class StoreApiService {
     }
   }
 
+  //getOrderDeliveryPartnerIdReq
+  Future<List<dynamic>> getOrderDeliveryPartnerIdReq(int deliveryPartnerId) async {
+    try {
+      var results = await apiService.getOrderDeliveryPartnerId(deliveryPartnerId);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body);
+        return data;
+      } else {
+        throw Exception('Failed to fetch stores.');
+      }
+    } catch (e) {
+      print('getOrderDeliveryPartnerIdReq Error: $e');
+      rethrow;
+    }
+  }
+
+  //getOrdersReq
+  Future<List<dynamic>> getOrderDeliveryPartnerReq(int officeid) async {
+    try {
+      var results = await apiService.getOrderDeliveryPartner(officeid);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body);
+        return data;
+      } else {
+        throw Exception('Failed to fetch stores.');
+      }
+    } catch (e) {
+      print('getOrderDeliveryPartnerReq Error: $e');
+      rethrow;
+    }
+  }
+
+
   // getOrderById
   Future<Map<String, dynamic>> getOrderByIdReq(int orderId) async {
     try {
