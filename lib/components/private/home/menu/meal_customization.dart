@@ -30,9 +30,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
 
   // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
-    setState(() {
-    });
-
+    setState(() {});
   }
 
   int quantity = 0;
@@ -63,14 +61,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
         preferredSize: Size.fromHeight(180),
         child: AppBar(
           backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(100),
-                  bottomRight: Radius.circular(0))),
           flexibleSpace: ClipRRect(
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(100),
-                bottomRight: Radius.circular(0)),
             child: Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -102,34 +93,80 @@ class _MenuCustomizationState extends State<MenuCustomization> {
         padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: Column(
           children: [
+            // options
+            Container(
+              child: Column(
+                children: [
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Title Option',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Radio(
+                            value: 'dipName',
+                            groupValue: null,
+                            // Replace with your selected value state
+                            onChanged: (value) {
+                              // Handle selection change
+                            },
+                          ),
+                          const Text(
+                            'Small',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      const Text(
+                        'R 100.13',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
 
-          Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+            Divider(),
+            const SizedBox(
+              height: 10,
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Radio(
-                  value: 'dipName',
-                  groupValue: null, // Replace with your selected value state
-                  onChanged: (value) {
-                    // Handle selection change
-                  },
-                ),
                 Text(
-                  'dipName',
-                  style: TextStyle(fontSize: 16),
+                  'Total',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                 ),
+                Text('R120.02',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18))
               ],
             ),
-            Text(
-              'price',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            const SizedBox(
+              height: 20,
             ),
-          ],
-        ),
-            Align(
+            Container(
+              height: 4,
+              decoration: BoxDecoration(color: AppColors.tertiaryColor),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            // Quantity
+            const Align(
               alignment: Alignment.topLeft,
-              child: Text('Quantity', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),),
+              child: Text(
+                'Quantity',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
             ),
 
             Row(
@@ -148,7 +185,6 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                     child: Icon(Icons.remove, color: Colors.white),
                   ),
                 ),
-
                 Text(
                   '$quantity',
                   style: TextStyle(fontSize: 30),
@@ -161,17 +197,15 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                       color: Colors.red[600],
                       // shape: BoxShape.circle,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-
                     ),
                     padding: EdgeInsets.all(3.0),
-
                     child: Icon(Icons.add, color: Colors.white),
                   ),
                 ),
               ],
             ),
 
-Divider(),
+            Divider(),
             const SizedBox(
               height: 10,
             ),
@@ -194,4 +228,3 @@ Divider(),
     );
   }
 }
-
