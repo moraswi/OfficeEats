@@ -30,13 +30,15 @@ class AuthApiService {
         var userData = jsonDecode(results.body);
 
         final prefs = await SharedPreferences.getInstance();
-        prefs.setInt('userId', userData['userId']);
+        print('userData[userId]');
+        print(userData['id']);
+        prefs.setInt('userId', userData['id']);
         prefs.setString('firstName', userData['firstName']);
         prefs.setString('lastName', userData['lastName']);
         prefs.setString('phoneNumber', userData['phoneNumber']);
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
-        prefs.setInt('deliveryPartnerOfficeId', userData['officeId']);
+        prefs.setInt('deliveryPartnerOfficeId', userData['officeId']??0);
 
         LoadingDialog.hide(context);
 

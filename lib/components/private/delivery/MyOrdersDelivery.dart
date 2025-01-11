@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
-import '../../../shared/date_formatter.dart';
-import '../../../shared/delivery_bottom_navbar.dart';
-import '../../../shared/skeleton_loader.dart';
+import 'package:eats/shared/date_formatter.dart';
+import 'package:eats/shared/delivery_bottom_navbar.dart';
+import 'package:eats/shared/skeleton_loader.dart';
 
 class MenuItem extends StatefulWidget {
   final String imagePath;
@@ -211,11 +211,11 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     String phoneNumber = "0789298447";
     final url = 'https://wa.me/$phoneNumber';
 
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+    // if (await canLaunch(url)) {
+    //   await launch(url);
+    // } else {
+    //   throw 'Could not launch $url';
+    // }
   }
 
   @override

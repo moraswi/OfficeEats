@@ -168,4 +168,40 @@ class ApiService {
     final endpoint = 'all-order/delivery-partner/$officeid';
     return await httpService.get(endpoint);
   }
+
+  // updateOrder
+  Future<dynamic> updateOrder(
+      int id,
+      int userId,
+      double totalAmount,
+      String deliveryAddress,
+      String paymentMethod,
+      String orderStatus,
+      String orderDate,
+      int shopId,
+      String orderCode,
+      String storeName,
+      String description,
+      List<Map<String, dynamic>> items,
+      ) async {
+    final endpoint = 'order';
+
+    final data = {
+    'id': id,
+    'userId': userId,
+    'totalAmount': totalAmount,
+    'deliveryAddress': deliveryAddress,
+    'paymentMethod': paymentMethod,
+    'orderStatus': orderStatus,
+    'orderDate': orderDate,
+    'shopId': shopId,
+    'orderCode': orderCode,
+    'storeName': storeName,
+    'description': description,
+    'items': items,
+    };
+
+    print(data);
+    return await httpService.put(endpoint, data);
+  }
 }

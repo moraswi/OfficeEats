@@ -180,6 +180,56 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     }
   }
 
+  Future<void> updateOrder(BuildContext context, var order) async {
+    try {
+      // Extract and parse the orderDate
+      // Parse the items list
+      final items = (order['items'] as List).cast<Map<String, dynamic>>();
+
+      // Extract the rest of the fields
+      final totalAmount = order['totalAmount'];
+      final deliveryAddress = order['deliveryAddress'];
+      final paymentMethod = order['paymentMethod'];
+      final orderStatus = order['orderStatus'];
+      final shopId = order['shopId'];
+      final orderCode = order['orderCode'];
+      final storeName = order['storeName'];
+      final description = order['description'];
+      final orderDate = order['orderDate'];
+      print(shopId);
+      print(order['id']);
+      print(order['userId']);
+      // final items = order['items'];
+
+      // Call the API to update the order
+      await storeService.updateOrderReq(
+        context,
+        order['id'],
+        order['userId'], // Ensure this is available
+        totalAmount,
+        deliveryAddress,
+        paymentMethod,
+        orderStatus,
+        orderDate,
+        shopId,
+        orderCode,
+        storeName,
+        description,
+        items,
+      );
+
+
+    } catch (e) {
+      print(e);
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Order Failed: $e')),
+      );
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,10 +268,19 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setInt('orderId', order['id']);
                         await prefs.setString('storeName', order['storeName']);
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/trackorder',
-                          (Route<dynamic> route) => true,
-                        );
+                        await prefs.setString('deliveryAddress', order['deliveryAddress']);
+                        await prefs.setString('paymentMethod', order['paymentMethod']);
+                        await prefs.setString('orderStatus', order['orderStatus']);
+                        await prefs.setString('orderDate', order['orderDate']);
+                        await prefs.setInt('shopId', order['shopId']);
+                        await prefs.setString('orderCode', order['orderCode']);
+                        await prefs.setString('storeName', order['storeName']);
+                        await prefs.setString('description', order['description']);
+                        await prefs.setDouble('totalAmount', order['totalAmount']);
+                        await prefs.setStringList('items', order['items'].map<String>((item) => item.toString()).toList());
+
+                        // Call update method to update the order
+                        updateOrder(context, order);
                       },
                     );
                   },

@@ -50,11 +50,14 @@ class HttpService {
 
   Future<dynamic> put(String endpoint, Map<String, dynamic> data) async {
     final url = '$baseUrl$endpoint';
-    final response = await http.put(
-      Uri.parse(url),
-      // headers: {'ApiKey': apiKey},
-      body: data,
-    );
+
+    final response = await http.put(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          // 'ApiKey': apiKey
+        },
+        body: jsonEncode(data));
 
     return response;
   }
