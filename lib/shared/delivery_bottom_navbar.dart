@@ -21,7 +21,7 @@ class _RoundedDeliveryBottomBarState extends State<RoundedDeliveryBottomBar>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 4,
+      length: 3,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );

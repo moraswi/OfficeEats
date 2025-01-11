@@ -214,11 +214,11 @@ class _MenuPageState extends State<MenuPage> {
             CustomButton(
               label: 'My Cart',
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => CartPage()));
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (context) => CartPage()));
                 // Handle button press
-                // Navigator.of(context).pushNamedAndRemoveUntil(
-                //     '/cart', (Route<dynamic> route) => true);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/menucustomization', (Route<dynamic> route) => true);
               },
             ),
           ],

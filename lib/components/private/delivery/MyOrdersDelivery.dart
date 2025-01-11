@@ -8,7 +8,6 @@ import 'package:eats/shared/date_formatter.dart';
 import 'package:eats/shared/delivery_bottom_navbar.dart';
 import 'package:eats/shared/skeleton_loader.dart';
 
-
 class MyOrderDelivery extends StatefulWidget {
   var routeName = '/myordersdelivery';
 
@@ -63,15 +62,14 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     try {
       final items = (order['items'] as List).cast<Map<String, dynamic>>();
 
-      if(order['orderStatus'] == 'Assigned to Delivery') {
+      if (order['orderStatus'] == 'Assigned to Delivery') {
         orderStatus = 'On the Way';
-      }else if(order['orderStatus'] == "On the Way"){
+      } else if (order['orderStatus'] == "On the Way") {
         orderStatus = 'Arrived';
-      }else if(order['orderStatus'] == "Arrived"){
+      } else if (order['orderStatus'] == "Arrived") {
         orderStatus = 'Completed';
       }
 
-      // Call the API to update the order
       await storeService.updateOrderReq(
         context,
         order['id'],
@@ -90,7 +88,17 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
         items,
       );
 
-      // getOrderDeliveryPartnerReq();
+      // Update the order locally
+      setState(() {
+        final index = orderHistory.indexWhere((o) => o['id'] == order['id']);
+        if (index != -1) {
+          orderHistory[index]['orderStatus'] = orderStatus;
+        }
+      });
+
+      if (orderStatus == "Completed") {
+        getOrderDeliveryPartnerIdReq();
+      }
     } catch (e) {
       // Handle errors
       ScaffoldMessenger.of(context).showSnackBar(
@@ -109,6 +117,38 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     // } else {
     //   throw 'Could not launch $url';
     // }
+  }
+
+  void orderDetailsDialog(BuildContext context, order) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Order Details'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(order['storeName']),
+              Text(order['orderCode']),
+              Text('Chat with support for more details.'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Close'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Implement chat functionality
+                Navigator.of(context).pop();
+              },
+              child: Text('Chat'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -141,7 +181,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
                     orderStatus: order['orderStatus'],
                     orderAddress: order['deliveryAddress'],
                     chat: () async {
-                      openWhatsApp();
+                      orderDetailsDialog(context, order);
                     },
                     // Pass orderCode
                     onTrackOrder: () async {
@@ -165,7 +205,6 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     );
   }
 }
-
 
 class MenuItem extends StatefulWidget {
   final String imagePath;
@@ -237,39 +276,39 @@ class _MenuItemState extends State<MenuItem> {
               children: [
                 Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Order Ref ${widget.orderCode}',
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.cyan),
-                        ),
-                        Text(
-                          widget.storeName,
-                          // Access widget properties with 'widget.'
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                        ),
-                        Text(DateFormatter.formatDate(widget.orderDate),
-                            style: TextStyle(fontSize: 16)),
-                      ],
-                    )),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order Ref ${widget.orderCode}',
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.cyan),
+                    ),
+                    Text(
+                      widget.storeName,
+                      // Access widget properties with 'widget.'
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                    ),
+                    Text(DateFormatter.formatDate(widget.orderDate),
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                )),
                 SizedBox(width: 2),
 
                 // Pending
                 Container(
-                  // color: Colors.orange,
+                    // color: Colors.orange,
                     decoration: BoxDecoration(
                       color: Color(0xFFfeddc1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
                       padding:
-                      EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 2),
+                          EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 2),
                       child: Text(
                         widget.orderStatus,
                         style: const TextStyle(
@@ -322,7 +361,7 @@ class _MenuItemState extends State<MenuItem> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 0.0),
                   ),
-                  child:  Text(
+                  child: Text(
                     nextButtonTitle,
                     style: TextStyle(fontSize: 16.0),
                   ),
