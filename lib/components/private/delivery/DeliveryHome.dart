@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../shared/date_formatter.dart';
-import '../../../shared/delivery_bottom_navbar.dart';
-import '../../../shared/skeleton_loader.dart';
-
-import 'package:flutter/material.dart';
+import 'package:eats/shared/date_formatter.dart';
+import 'package:eats/shared/delivery_bottom_navbar.dart';
+import 'package:eats/shared/skeleton_loader.dart';
 
 class MenuItem extends StatefulWidget {
   final String imagePath;
@@ -97,7 +93,7 @@ class _MenuItemState extends State<MenuItem> {
                           EdgeInsets.only(left: 6, right: 6, top: 2, bottom: 2),
                       child: Text(
                         widget.orderStatus,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w900,
                             color: Colors.orange),
@@ -213,7 +209,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         items,
       );
 
-        getOrderDeliveryPartnerReq();
+      getOrderDeliveryPartnerReq();
     } catch (e) {
       // Handle errors
       ScaffoldMessenger.of(context).showSnackBar(

@@ -127,7 +127,7 @@ class StoreApiService {
         final data = jsonDecode(results.body);
         return data;
       } else {
-        throw Exception('Failed to fetch stores.');
+        throw Exception('Failed to fetch orders.');
       }
     } catch (e) {
       print('getOrderDeliveryPartnerIdReq Error: $e');
