@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_colors.dart';
 
@@ -85,16 +86,16 @@ class _RoundedDeliveryBottomBarState extends State<RoundedDeliveryBottomBar>
                   ),
                   text: 'My Orders',
                 ),
-                Tab(
-                  icon: Icon(
-                    Icons.help,
-                    size: 23.0,
-                    color: _tabController.index == 2
-                        ? activeIconColor
-                        : inactiveIconColor,
-                  ),
-                  text: 'Rate App',
-                ),
+                // Tab(
+                //   icon: Icon(
+                //     Icons.help,
+                //     size: 23.0,
+                //     color: _tabController.index == 2
+                //         ? activeIconColor
+                //         : inactiveIconColor,
+                //   ),
+                //   text: 'Rate App',
+                // ),
                 Tab(
                   icon: Icon(
                     Icons.account_circle,
@@ -106,7 +107,7 @@ class _RoundedDeliveryBottomBarState extends State<RoundedDeliveryBottomBar>
                   text: 'Profile',
                 ),
               ],
-              onTap: (index) {
+              onTap: (index) async {
                 setState(() {
                   _tabController.index = index; // Update the selected tab index
                 });
@@ -115,9 +116,13 @@ class _RoundedDeliveryBottomBarState extends State<RoundedDeliveryBottomBar>
                   Navigator.pushNamed(context, '/deliveryorder');
                 } else if (index == 1) {
                   Navigator.pushNamed(context, '/myordersdelivery');
-                } else if (index == 2) {
-                  Navigator.pushNamed(context, '/feedback');
-                } else if (index == 3) {
+                }
+                // else if (index == 2) {
+                //   Navigator.pushNamed(context, '/feedback');
+                // }
+                else if (index == 2) {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.setString("deliveryBottomBar", "active");
                   Navigator.pushNamed(context, '/profilelanding');
                 }
               },

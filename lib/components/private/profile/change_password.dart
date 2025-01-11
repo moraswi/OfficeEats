@@ -6,6 +6,7 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/authApiService.dart';
+import '../../../shared/delivery_bottom_navbar.dart';
 
 class ChangePassword extends StatefulWidget {
   var routeName = '/changepassword';
@@ -24,7 +25,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   bool isPasswordVisible = false;
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
-
+  String deliveryBottomBar = "";
   int? getUserId;
 
   @override
@@ -39,6 +40,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
+      deliveryBottomBar = prefs.getString('role') ?? "";
     });
   }
 
@@ -238,7 +240,11 @@ class _ChangePasswordState extends State<ChangePassword> {
           ],
         ),
       ),
-      bottomNavigationBar: RoundedBottomBar(
+      bottomNavigationBar: deliveryBottomBar == "deliverypartner"
+          ? RoundedDeliveryBottomBar(
+        selectedIndex: 2,
+      )
+          : RoundedBottomBar(
         selectedIndex: 3,
       ),
     );

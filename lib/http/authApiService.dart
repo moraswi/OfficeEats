@@ -39,7 +39,7 @@ class AuthApiService {
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
         prefs.setInt('deliveryPartnerOfficeId', userData['officeId']??0);
-
+print(userData['role']);
         LoadingDialog.hide(context);
 
         if(userData['role'] == "constomer"){

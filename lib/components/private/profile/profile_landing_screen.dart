@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../shared/delivery_bottom_navbar.dart';
+
 class ProfileLandingPage extends StatefulWidget {
   var routeName = '/profilelanding';
 
@@ -12,6 +14,7 @@ class ProfileLandingPage extends StatefulWidget {
 class _ProfileLandingPageState extends State<ProfileLandingPage> {
   String getFirstName = "";
   String getEmail = "";
+  String deliveryBottomBar = "";
 
   @override
   void initState() {
@@ -26,6 +29,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
     setState(() {
       getFirstName = prefs.getString('firstName') ?? '';
       getEmail = prefs.getString('email') ?? '';
+      deliveryBottomBar = prefs.getString('role') ?? "";
     });
   }
 
@@ -77,23 +81,25 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/feedback', (Route<dynamic> route) => true);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        side: BorderSide.none,
-                        shape: StadiumBorder()),
-                    child: const Text(
-                      'Rate App',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+                deliveryBottomBar != "deliverypartner"
+                    ? SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/feedback', (Route<dynamic> route) => true);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              side: BorderSide.none,
+                              shape: StadiumBorder()),
+                          child: const Text(
+                            'Rate App',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -108,7 +114,9 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
           //options
           Column(
             children: [
-              const SizedBox(height: 280),
+              deliveryBottomBar != "deliverypartner"
+                  ? SizedBox(height: 280)
+                  : SizedBox(height: 230),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.fromLTRB(15, 32, 15, 32),
@@ -180,9 +188,13 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
           ),
         ],
       ),
-      bottomNavigationBar: RoundedBottomBar(
-        selectedIndex: 3,
-      ),
+      bottomNavigationBar: deliveryBottomBar == "deliverypartner"
+          ? RoundedDeliveryBottomBar(
+              selectedIndex: 2,
+            )
+          : RoundedBottomBar(
+              selectedIndex: 3,
+            ),
     );
   }
 }

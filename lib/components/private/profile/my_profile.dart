@@ -6,6 +6,7 @@ import 'package:eats/http/authApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/storeApiService.dart';
+import '../../../shared/delivery_bottom_navbar.dart';
 
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
@@ -36,6 +37,7 @@ class _MyProfileState extends State<MyProfile> {
   int addressId = 0;
   String? addSelectedOfficePack;
   int? getUserId;
+  String deliveryBottomBar = "";
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _MyProfileState extends State<MyProfile> {
 
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
+      deliveryBottomBar = prefs.getString('role') ?? "";
     });
 
     getUserAddressReq();
@@ -213,6 +216,7 @@ class _MyProfileState extends State<MyProfile> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () {
+            // Navigator.of(context).pop();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/profilelanding', (Route<dynamic> route) => true);
           },
@@ -294,92 +298,109 @@ class _MyProfileState extends State<MyProfile> {
             ),
             const SizedBox(height: 30),
 
-            if (officeAddressText.isEmpty || officePackText.isEmpty)
-              InkWell(
-                onTap: _showAddAddressDialog,
-                child: const Text("Add Address",
-                    style: TextStyle(
+            deliveryBottomBar != "deliverypartner" &&
+                    (officeAddressText.isEmpty || officePackText.isEmpty)
+                ? InkWell(
+                    onTap: _showAddAddressDialog,
+                    child: const Text(
+                      "Add Address",
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primaryColor)),
-              ),
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  )
+                : Container(),
 
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/officepack.png',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (officePackText.isNotEmpty)
-                          Text(
-                            officePackText,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        if (officeAddressText.isNotEmpty)
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on,
-                                  color: AppColors.primaryColor, size: 20),
-                              Text(officeAddressText,
-                                  style: TextStyle(fontSize: 16)),
-                            ],
-                          ),
-                        if (officeAddressText.isEmpty || officePackText.isEmpty)
-                          Text('Add your office address'),
+
+            deliveryBottomBar != "deliverypartner"
+                ? Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4.0,
+                          offset: Offset(0, 2),
+                        ),
                       ],
                     ),
-                  ),
-                  if (officeAddressText.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        deleteUserAddressReq();
-                      },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/officepack.png',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (officePackText.isNotEmpty)
+                                Text(
+                                  officePackText,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              if (officeAddressText.isNotEmpty)
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on,
+                                        color: AppColors.primaryColor,
+                                        size: 20),
+                                    Text(officeAddressText,
+                                        style: TextStyle(fontSize: 16)),
+                                  ],
+                                ),
+                              if (officeAddressText.isEmpty ||
+                                  officePackText.isEmpty)
+                                Text('Add your office address'),
+                            ],
+                          ),
+                        ),
+                        if (officeAddressText.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              deleteUserAddressReq();
+                            },
+                          ),
+                      ],
                     ),
-                ],
-              ),
-            ),
+                  )
+                : Container(),
+
             const SizedBox(height: 20),
-            CustomButton(
-              label: 'Save',
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/profilelanding', (Route<dynamic> route) => true);
-              },
-            ),
+            deliveryBottomBar != "deliverypartner"
+                ? CustomButton(
+                    label: 'Save',
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/profilelanding', (Route<dynamic> route) => true);
+                    },
+                  )
+                : Container(),
             // Add button to show dialog
           ],
         ),
       ),
-      bottomNavigationBar: RoundedBottomBar(
-        selectedIndex: 3,
-      ),
+      bottomNavigationBar: deliveryBottomBar == "deliverypartner"
+          ? RoundedDeliveryBottomBar(
+              selectedIndex: 2,
+            )
+          : RoundedBottomBar(
+              selectedIndex: 3,
+            ),
     );
   }
 }
