@@ -171,34 +171,38 @@ class ApiService {
 
   // updateOrder
   Future<dynamic> updateOrder(
-      int id,
-      int userId,
-      double totalAmount,
-      String deliveryAddress,
-      String paymentMethod,
-      String orderStatus,
-      String orderDate,
-      int shopId,
-      String orderCode,
-      String storeName,
-      String description,
-      List<Map<String, dynamic>> items,
-      ) async {
+    int id,
+    int userId,
+    double totalAmount,
+    String deliveryAddress,
+    String paymentMethod,
+    String orderStatus,
+    String orderDate,
+    int officeId,
+    int deliveryPartnerId,
+    int shopId,
+    String orderCode,
+    String storeName,
+    String description,
+    List<Map<String, dynamic>> items,
+  ) async {
     final endpoint = 'order';
 
     final data = {
-    'id': id,
-    'userId': userId,
-    'totalAmount': totalAmount,
-    'deliveryAddress': deliveryAddress,
-    'paymentMethod': paymentMethod,
-    'orderStatus': orderStatus,
-    'orderDate': orderDate,
-    'shopId': shopId,
-    'orderCode': orderCode,
-    'storeName': storeName,
-    'description': description,
-    'items': items,
+      'id': id,
+      'userId': userId,
+      'totalAmount': totalAmount,
+      'deliveryAddress': deliveryAddress,
+      'paymentMethod': paymentMethod,
+      'orderStatus': orderStatus,
+      'orderDate': orderDate,
+      'officeId': officeId,
+      'deliveryPartnerId': deliveryPartnerId,
+      'shopId': shopId,
+      'orderCode': orderCode,
+      'storeName': storeName,
+      'description': description,
+      'items': items,
     };
 
     print(data);

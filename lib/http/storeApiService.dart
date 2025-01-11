@@ -117,9 +117,11 @@ class StoreApiService {
   }
 
   //getOrderDeliveryPartnerIdReq
-  Future<List<dynamic>> getOrderDeliveryPartnerIdReq(int deliveryPartnerId) async {
+  Future<List<dynamic>> getOrderDeliveryPartnerIdReq(
+      int deliveryPartnerId) async {
     try {
-      var results = await apiService.getOrderDeliveryPartnerId(deliveryPartnerId);
+      var results =
+          await apiService.getOrderDeliveryPartnerId(deliveryPartnerId);
 
       if (results.statusCode == 200) {
         final data = jsonDecode(results.body);
@@ -233,37 +235,41 @@ class StoreApiService {
 
   //updateOrderReq
   Future<void> updateOrderReq(
-      BuildContext context,
-      int id,
-      int userId,
-      double totalAmount,
-      String deliveryAddress,
-      String paymentMethod,
-      String orderStatus,
-      String orderDate,
-      int shopId,
-      String orderCode,
-      String storeName,
-      String description,
-      List<Map<String, dynamic>> items,
-      ) async {
+    BuildContext context,
+    int id,
+    int userId,
+    double totalAmount,
+    String deliveryAddress,
+    String paymentMethod,
+    String orderStatus,
+    String orderDate,
+    int officeId,
+    int deliveryPartnerId,
+    int shopId,
+    String orderCode,
+    String storeName,
+    String description,
+    List<Map<String, dynamic>> items,
+  ) async {
     try {
       LoadingDialog.show(context);
 
       // Call the updated `placeOrder` function with the items list
       var results = await apiService.updateOrder(
-         id,
-         userId,
-         totalAmount,
-         deliveryAddress,
-         paymentMethod,
-         orderStatus,
-         orderDate,
-         shopId,
-         orderCode,
-         storeName,
-         description,
-         items,
+        id,
+        userId,
+        totalAmount,
+        deliveryAddress,
+        paymentMethod,
+        orderStatus,
+        orderDate,
+        officeId,
+        deliveryPartnerId,
+        shopId,
+        orderCode,
+        storeName,
+        description,
+        items,
       );
 
       if (results.statusCode == 200) {
