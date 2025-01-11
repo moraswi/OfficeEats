@@ -115,7 +115,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Orders Delivery'),
+        title: Text('Manage My Orders'),
       ),
       body: Container(
         child: isLoading
