@@ -223,14 +223,14 @@ class _MenuCustomizationState extends State<MenuCustomization> {
               ],
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
             Container(
               height: 4,
               decoration: BoxDecoration(color: AppColors.tertiaryColor),
             ),
             const SizedBox(
-              height: 30,
+              height: 15,
             ),
             // Quantity
             const Align(
@@ -240,7 +240,9 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
             ),
-
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
