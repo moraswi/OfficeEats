@@ -21,11 +21,15 @@ class _MenuCustomizationState extends State<MenuCustomization> {
 
   final StoreApiService storeService = StoreApiService();
   List<dynamic> menus = [];
+  List<dynamic> titles = [];
+  bool isLoading = true;
+  int quantity = 0;
 
   @override
   void initState() {
     super.initState();
-    getSharedPreferenceData();
+    getQuestionnaireTitleReq();
+    // getSharedPreferenceData();
   }
 
   // getSharedPreferenceData
@@ -33,7 +37,26 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     setState(() {});
   }
 
-  int quantity = 0;
+  // getOrdersReq
+  Future<void> getQuestionnaireTitleReq() async {
+    try {
+      print('response////////////////////////');
+
+      List<dynamic> response = await storeService.getQuestionnaireTitleReq(2);
+      print('response////////////////////////');
+      print(response);
+      print('response////////////////////////');
+
+      setState(() {
+        titles  = response;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   void _increment() async {
     setState(() {
@@ -57,23 +80,12 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(180),
-        child: AppBar(
+      appBar: AppBar(
           backgroundColor: Colors.white,
-          flexibleSpace: ClipRRect(
-            child: Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/burgermeal.png"),
-                      fit: BoxFit.fill)),
-            ),
-          ),
-          title: Text(''),
+
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Handle back action
               Navigator.of(context).pop();
             },
           ),
@@ -87,53 +99,113 @@ class _MenuCustomizationState extends State<MenuCustomization> {
               },
             ),
           ],
-        ),
+
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: Column(
           children: [
-            // options
-            Container(
-              child: Column(
-                children: [
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Title Option',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+
+            ...titles.map((item) {
+              List<dynamic> options = item['options'] ?? [];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(5.0))
+                ),
+                child:Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item['title'] ?? '',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    // ...options.map((option) {
+                    //   return
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Radio(
-                            value: 'dipName',
-                            groupValue: null,
-                            // Replace with your selected value state
-                            onChanged: (value) {
-                              // Handle selection change
-                            },
+                          Row(
+                            children: [
+                              Radio(
+                                // value: option['name'],
+                                value: 'name',
+                                groupValue: null, // Replace with selected value state
+                                onChanged: (value) {
+                                  // Handle selection
+                                },
+                              ),
+                              Text(
+                                // option['name'] ?? 'Option Name',
+                                'Option Name',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
                           ),
-                          const Text(
-                            'Small',
-                            style: TextStyle(fontSize: 16),
+                          Text(
+                            // 'R ${option['price'] ?? 0.0}',
+                            'R 10.0',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
-                      const Text(
-                        'R 100.13',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                    // }).toList(),
+                  ],
+                        ),
+                ),
+              );
+            }).toList(),
+
+            // options
+            // Container(
+            //   child: Column(
+            //     children: [
+            //       const Align(
+            //         alignment: Alignment.topLeft,
+            //         child: Text(
+            //           'Title Option',
+            //           style:
+            //               TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            //         ),
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Row(
+            //             children: [
+            //               Radio(
+            //                 value: 'dipName',
+            //                 groupValue: null,
+            //                 // Replace with your selected value state
+            //                 onChanged: (value) {
+            //                   // Handle selection change
+            //                 },
+            //               ),
+            //               const Text(
+            //                 'Small',
+            //                 style: TextStyle(fontSize: 16),
+            //               ),
+            //             ],
+            //           ),
+            //           const Text(
+            //             'R 100.13',
+            //             style: TextStyle(
+            //                 fontSize: 16, fontWeight: FontWeight.bold),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             Divider(),
             const SizedBox(

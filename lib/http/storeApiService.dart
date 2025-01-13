@@ -169,6 +169,23 @@ class StoreApiService {
     }
   }
 
+  // getOrderById
+  Future<List<dynamic>> getQuestionnaireTitleReq(int storemenuid) async {
+    try {
+      var results = await apiService.getQuestionnaireTitle(storemenuid);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body); // Ensure this is a list
+        return data as List<dynamic>;
+      } else {
+        throw Exception('Failed to fetch titles and option.');
+      }
+    } catch (e) {
+      print('getQuestionnaireTitleReq Error: $e');
+      rethrow;
+    }
+  }
+
   //placeOrderReq
   Future<void> placeOrderReq(
     BuildContext context,

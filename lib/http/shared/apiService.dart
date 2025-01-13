@@ -169,6 +169,12 @@ class ApiService {
     return await httpService.get(endpoint);
   }
 
+  //getQuestionnaireTitle
+  Future<dynamic> getQuestionnaireTitle(int storemenuid) async {
+    final endpoint = 'questionnaire-title/$storemenuid';
+    return await httpService.get(endpoint);
+  }
+
   // updateOrder
   Future<dynamic> updateOrder(
     int id,
@@ -205,7 +211,8 @@ class ApiService {
       'items': items,
     };
 
-    print(data);
     return await httpService.put(endpoint, data);
   }
+
+
 }
