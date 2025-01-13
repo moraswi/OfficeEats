@@ -24,6 +24,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   List<dynamic> titles = [];
   bool isLoading = true;
   int quantity = 0;
+  String? selectedOption;
 
   @override
   void initState() {
@@ -40,12 +41,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   // getOrdersReq
   Future<void> getQuestionnaireTitleReq() async {
     try {
-      print('response////////////////////////');
-
       List<dynamic> response = await storeService.getQuestionnaireTitleReq(2);
-      print('response////////////////////////');
-      print(response);
-      print('response////////////////////////');
 
       setState(() {
         titles = response;
@@ -101,9 +97,18 @@ class _MenuCustomizationState extends State<MenuCustomization> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 8),
+          padding: EdgeInsets.fromLTRB(10, 15, 10, 8),
           child: Column(
             children: [
+              Text(
+                'Lorem Ipsum es simplemente el texto de'
+                ' relleno de las imprentas y archivos'
+                ' de texto. Lorem Ipsum ha sido el texto'
+                ' de relleno estándar de las industrias desde'
+                ' el año 1500, cuando un impresor (N. del T. persona que se dedica',
+                style: TextStyle(fontSize: 15),
+              ),
+
               ...titles.map((item) {
                 List<dynamic> options = item['options'] ?? [];
                 return Container(
@@ -117,7 +122,9 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // titles
-
+                        SizedBox(
+                          height: 5,
+                        ),
                         Container(
                           height: 9,
                           margin: EdgeInsets.only(bottom: 20),
@@ -142,15 +149,18 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                             return Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
-                                        Radio(
+                                        Radio<String>(
                                           value: option['name'],
-                                          groupValue: null, // Replace with selected value state
+                                          groupValue: selectedOption,
                                           onChanged: (value) {
-                                            // Handle selection
+                                            setState(() {
+                                              selectedOption = value;
+                                            });
                                           },
                                         ),
                                         Text(
@@ -168,21 +178,16 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                                     ),
                                   ],
                                 ),
-                                if (index != options.length - 1 ) Divider(),
+                                if (index != options.length - 1) Divider(),
                               ],
                             );
                           }).toList(),
                         )
-
-
-
                       ],
                     ),
                   ),
                 );
               }).toList(),
-
-
 
               Container(
                 height: 7,
@@ -254,14 +259,12 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                 ],
               ),
 
-                const SizedBox(
-                  height: 10,
-                ),
+              const SizedBox(
+                height: 10,
+              ),
               CustomButton(
                 label: 'Add to Cart',
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
             ],
           ),
