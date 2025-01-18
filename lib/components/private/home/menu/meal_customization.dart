@@ -23,25 +23,49 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   List<dynamic> menus = [];
   List<dynamic> titles = [];
   bool isLoading = true;
-  int quantity = 0;
+  int quantity = 1;
+  int foodId = 0;
+  double totalItemsAmount = 0;
+  double unitPrice = 0;
   String? selectedOption;
+  String? menuItemName;
+  Map<int, String> selectedOptions = {};
+  String? description;
 
   @override
   void initState() {
     super.initState();
-    getQuestionnaireTitleReq();
-    // getSharedPreferenceData();
+
+    getSharedPreferenceData();
   }
 
   // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
-    setState(() {});
+    final prefs = await SharedPreferences.getInstance();
+
+    // Perform all async operations before calling setState
+    final fetchedFoodId = prefs.getInt('foodId') ?? 0;
+    final fetchedTotalItemsAmount = prefs.getDouble('menuItemPrice') ?? 0.0;
+    final fetchedMenuItemName = prefs.getString('menuItemName') ?? "";
+    final fetchedDescription = prefs.getString('description') ?? "";
+
+    setState(() {
+      // Update state synchronously
+      foodId = fetchedFoodId;
+      unitPrice = fetchedTotalItemsAmount;
+      totalItemsAmount = unitPrice;
+      menuItemName = fetchedMenuItemName;
+      description = fetchedDescription;
+    });
+
+    getQuestionnaireTitleReq();
   }
 
-  // getOrdersReq
+  // getQuestionnaireTitleReq
   Future<void> getQuestionnaireTitleReq() async {
     try {
-      List<dynamic> response = await storeService.getQuestionnaireTitleReq(2);
+      List<dynamic> response =
+          await storeService.getQuestionnaireTitleReq(foodId);
 
       setState(() {
         titles = response;
@@ -54,23 +78,43 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     }
   }
 
+  // _increment
   void _increment() async {
     setState(() {
       quantity++;
+      totalItemsAmount = unitPrice* quantity;
     });
+
+  }
+
+  void _decrement() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+        totalItemsAmount = unitPrice* quantity;
+      });
+    }
+  }
+
+  // AddToCart
+  void AddToCart() async {
 
     final prefs = await SharedPreferences.getInstance();
     List<String> cartItems = prefs.getStringList('cartItems') ?? [];
 
-    prefs.setStringList('cartItems', cartItems);
-  }
+    // Add the item as a JSON string
+    cartItems.add(json.encode({
+      'foodId': foodId,
+      'foodName': menuItemName,
+      'description': description,
+      'itemPrice': totalItemsAmount,
+      'quantity': quantity,
+    }));
 
-  void _decrement() {
-    if (quantity > 0) {
-      setState(() {
-        quantity--;
-      });
-    }
+    print(cartItems);
+    // Save updated cart
+    prefs.setStringList('cartItems', cartItems);
+    // prefs.setStringList('cartItems', []);
   }
 
   @override
@@ -100,7 +144,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
           padding: EdgeInsets.fromLTRB(10, 15, 10, 8),
           child: Column(
             children: [
-              Text(
+              const Text(
                 'Lorem Ipsum es simplemente el texto de'
                 ' relleno de las imprentas y archivos'
                 ' de texto. Lorem Ipsum ha sido el texto'
@@ -109,101 +153,122 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                 style: TextStyle(fontSize: 15),
               ),
 
-              ...titles.map((item) {
-                List<dynamic> options = item['options'] ?? [];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                      // color: AppColors.tertiaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // titles
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 9,
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: AppColors.tertiaryColor,
+              isLoading
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 5, // Number of skeletons
+                      itemBuilder: (context, index) {
+                        return SkeletonLoader();
+                      },
+                    )
+                  : ListView(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      children: titles.map((item) {
+                        List<dynamic> options =
+                            item['options'];
+                        int titleId = item['id'];
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
                           ),
-                        ),
-
-                        Text(
-                          item['title'] ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-
-                        Column(
-                          children: options.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final option = entry.value;
-
-                            return Column(
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Radio<String>(
-                                          value: option['name'],
-                                          groupValue: selectedOption,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedOption = value;
-                                            });
-                                          },
-                                        ),
-                                        Text(
-                                          option['name'] ?? 'Option Name',
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      'R ${option['price'] ?? 0.0}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                                // Title text
+                                Text(
+                                  item['title'] ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                                if (index != options.length - 1) Divider(),
+
+                                // Options for this title
+                                Column(
+                                  children:
+                                      options.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final option = entry.value;
+                                    int optionId =
+                                        option['id']; // Unique ID for the title
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Radio<String>(
+                                                  value: option['name'],
+                                                  groupValue:
+                                                      selectedOptions[optionId],
+                                                  // Ensure only one active button per title
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      // Update the selected option for this title
+                                                      selectedOptions[
+                                                          optionId] = value!;
+                                                      unitPrice +=
+                                                          option['price'];
+                                                    });
+                                                  },
+                                                ),
+                                                Text(
+                                                  option['name'] ??
+                                                      'Option Name',
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                ),
+                                              ],
+                                            ),
+
+                                            // Price for the option
+                                            Text(
+                                              'R ${option['price'] ?? 0.0}',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Divider between options
+                                        if (index != options.length - 1)
+                                          const Divider(),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
                               ],
-                            );
-                          }).toList(),
-                        )
-                      ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  ),
-                );
-              }).toList(),
 
               Container(
                 height: 7,
                 margin: EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.tertiaryColor,
                 ),
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Total',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                   ),
-                  Text('R120.02',
+                  Text('R $totalItemsAmount',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 18))
                 ],
@@ -264,7 +329,13 @@ class _MenuCustomizationState extends State<MenuCustomization> {
               ),
               CustomButton(
                 label: 'Add to Cart',
-                onTap: () {},
+                onTap: () async {
+                  AddToCart();
+                  // final prefs = await SharedPreferences.getInstance();
+                  // List<String> cartItems = prefs.getStringList('cartItems') ?? [];
+                  //
+                  // prefs.setStringList('cartItems', cartItems);
+                },
               ),
             ],
           ),

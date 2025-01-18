@@ -86,8 +86,11 @@ class _CartPageState extends State<CartPage> {
                         imagePath:
                             item['imagePath'] ?? 'assets/images/burgermeal.png',
                         name: item['foodName'] ?? 'Loading...',
-                        description: item['description'] ?? 0.0,
+                        description: item['description'] ?? '',
                         price: item['itemPrice'] ?? 0.0,
+                        // name: "item['foodName'] ?? 'Loading...'",
+                        // description: "item['description'] ?? 0.0",
+                        // price: 0.0,
                         onDelete: () => _removeItem(index),
                       ),
                       SizedBox(height: 20),
