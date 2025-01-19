@@ -82,25 +82,62 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   void _increment() async {
     setState(() {
       quantity++;
-      totalItemsAmount = unitPrice* quantity;
+      totalItemsAmount = unitPrice * quantity;
     });
-
   }
 
   void _decrement() {
     if (quantity > 1) {
       setState(() {
         quantity--;
-        totalItemsAmount = unitPrice* quantity;
+        totalItemsAmount = unitPrice * quantity;
       });
     }
   }
 
   // AddToCart
   void AddToCart() async {
-
     final prefs = await SharedPreferences.getInstance();
     List<String> cartItems = prefs.getStringList('cartItems') ?? [];
+
+    // Prepare selected customizations
+    List<Map<String, dynamic>> selectedCustomizations = selectedOptions.entries
+        .map((entry) => {
+      'titleId': entry.key,
+      'optionName': entry.value,
+    })
+        .toList();
+    // prefs.setStringList('cartItems', []);
+    // Check for duplicates
+    bool isDuplicate = cartItems.any((item) {
+      Map<String, dynamic> decodedItem = json.decode(item);
+
+      // Check if foodId matches
+      if (decodedItem['foodId'] != foodId) {
+        return false;
+      }
+
+      // Check if all titleIds in customizations match
+      List customizations = decodedItem['customizations'];
+      if (customizations.length != selectedCustomizations.length) {
+        return false;
+      }
+
+      for (var customization in selectedCustomizations) {
+        if (!customizations.any((c) =>
+        c['titleId'] == customization['titleId'] &&
+            c['optionName'] == customization['optionName'])) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    if (isDuplicate) {
+      print("Duplicate item not added to cart");
+      return; // Exit if duplicate found
+    }
 
     // Add the item as a JSON string
     cartItems.add(json.encode({
@@ -109,13 +146,17 @@ class _MenuCustomizationState extends State<MenuCustomization> {
       'description': description,
       'itemPrice': totalItemsAmount,
       'quantity': quantity,
+      'customizations': selectedCustomizations,
     }));
 
     print(cartItems);
     // Save updated cart
     prefs.setStringList('cartItems', cartItems);
-    // prefs.setStringList('cartItems', []);
+
+
+    print("Item added to cart: $cartItems");
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,8 +207,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       children: titles.map((item) {
-                        List<dynamic> options =
-                            item['options'];
+                        List<dynamic> options = item['options'];
                         int titleId = item['id'];
 
                         return Container(
