@@ -99,7 +99,8 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   void AddToCart() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartItems = prefs.getStringList('cartItems') ?? [];
-
+    print('quantity///////////////////');
+    print(quantity);
     // Prepare selected customizations
     List<Map<String, dynamic>> selectedCustomizations = selectedOptions.entries
         .map((entry) => {
@@ -149,12 +150,12 @@ class _MenuCustomizationState extends State<MenuCustomization> {
       'customizations': selectedCustomizations,
     }));
 
-    print(cartItems);
+    // print(cartItems);
     // Save updated cart
     prefs.setStringList('cartItems', cartItems);
 
 
-    print("Item added to cart: $cartItems");
+    // print("Item added to cart: $cartItems");
   }
 
 

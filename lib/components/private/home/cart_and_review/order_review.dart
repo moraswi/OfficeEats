@@ -105,8 +105,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     }
 
     // Consolidate quantities in the order items
-    final List<Map<String, dynamic>> consolidatedItems =
-        consolidateQuantities(orderItems);
+    // final List<Map<String, dynamic>> consolidatedItems =
+    //     consolidateQuantities(orderItems);
 
     try {
       await storeService.placeOrderReq(
@@ -117,7 +117,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
         getStoreId,
         getShopName,
         description,
-        consolidatedItems,
+        orderItems
+        // consolidatedItems,
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
