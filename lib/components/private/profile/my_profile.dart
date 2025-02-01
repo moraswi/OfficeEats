@@ -53,7 +53,7 @@ class _MyProfileState extends State<MyProfile> {
       getUserId = prefs.getInt('userId') ?? 0;
       deliveryBottomBar = prefs.getString('role') ?? "";
     });
-
+print(getUserId);
     getUserAddressReq();
     getUserByIdReq();
   }

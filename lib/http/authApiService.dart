@@ -41,7 +41,7 @@ class AuthApiService {
 
         LoadingDialog.hide(context);
 
-        if(userData['role'] == "constomer"){
+        if(userData['role'] == "customer"){
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
             (Route<dynamic> route) => false,
@@ -188,6 +188,9 @@ class AuthApiService {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Successful')),
         );
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/office', (Route<dynamic> route) => true);
       }
     } catch (e) {
       print('Something went wrong');

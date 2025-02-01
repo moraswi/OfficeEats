@@ -128,7 +128,7 @@ class ApiService {
     final data = {
       "officePack": "officePack",
       "officeAddress": officeAddress,
-      "userId": 0,
+      "userId": userId,
       "active": true
     };
     return await httpService.post(endpoint, data);
