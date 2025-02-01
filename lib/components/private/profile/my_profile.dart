@@ -124,6 +124,42 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
+  // _showDeleteAccountDialog
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Profile'),
+          content: Text('Are you sure you want to delete your profile? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+              },
+              child: Text('Cancel'),
+            ),
+
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+                deleteProfileReq(); // Call the delete function
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+
+          ],
+        );
+      },
+    );
+  }
+
   // getUserAddressReq
   Future<void> getUserAddressReq() async {
     try {
@@ -207,6 +243,14 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  // deleteProfileReq
+  Future<void> deleteProfileReq() async{
+    try{
+      await authService.deleteProfileReq(getUserId!);
+    }catch (e) {
+      print("failed");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -380,7 +424,19 @@ class _MyProfileState extends State<MyProfile> {
                   )
                 : Container(),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
+            InkWell(
+              onTap: _showDeleteAccountDialog,
+              child: const Text(
+                "Delete My Account",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+
             deliveryBottomBar != "deliverypartner"
                 ? CustomButton(
                     label: 'Save',

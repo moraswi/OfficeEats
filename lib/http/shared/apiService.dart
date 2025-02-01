@@ -39,7 +39,7 @@ class ApiService {
 
   //deleteProfile
   Future<dynamic> deleteProfile(int id) async {
-    final endpoint = 'register/$id';
+    final endpoint = 'user/$id';
     return await httpService.delete(endpoint);
   }
 

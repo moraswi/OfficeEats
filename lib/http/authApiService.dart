@@ -30,8 +30,7 @@ class AuthApiService {
         var userData = jsonDecode(results.body);
 
         final prefs = await SharedPreferences.getInstance();
-        print('userData[userId]');
-        print(userData['id']);
+
         prefs.setInt('userId', userData['id']);
         prefs.setString('firstName', userData['firstName']);
         prefs.setString('lastName', userData['lastName']);
@@ -39,7 +38,7 @@ class AuthApiService {
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
         prefs.setInt('deliveryPartnerOfficeId', userData['officeId']??0);
-print(userData['role']);
+
         LoadingDialog.hide(context);
 
         if(userData['role'] == "constomer"){
