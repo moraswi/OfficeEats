@@ -34,6 +34,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   String getOfficeAddress = "";
 
   int getUserId = 0;
+  int getOfficeId = 0;
+
   String paymentMethod = "Cash";
   int getStoreId = 0;
   String getShopName = "N/A";
@@ -62,35 +64,13 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       getSurname = prefs.getString('lastName') ?? "";
       getPhoneNumber = prefs.getString('phoneNumber') ?? "";
 
+      getOfficeId = prefs.getInt('officeId') ?? 0;
       getUserId = prefs.getInt('userId') ?? 0;
       getStoreId = prefs.getInt('storeId') ?? 0;
       getShopName = prefs.getString('shopName') ?? "";
     });
 
     getUserAddressReq();
-  }
-
-  List<Map<String, dynamic>> consolidateQuantities(
-      List<Map<String, dynamic>> items) {
-    final Map<int, Map<String, dynamic>> consolidatedItems = {};
-
-    for (final item in items) {
-      final int foodId = item['foodId'];
-
-      if (consolidatedItems.containsKey(foodId)) {
-        // Increment the quantity for the existing foodId
-        consolidatedItems[foodId]!['quantity'] += 1;
-      } else {
-        // Add the item with an initial quantity of 1
-        consolidatedItems[foodId] = {
-          ...item,
-          'quantity': 1, // Reset quantity to count occurrences
-        };
-      }
-    }
-
-    // Convert the map back to a list
-    return consolidatedItems.values.toList();
   }
 
   Future<void> submitOrder() async {
@@ -100,25 +80,20 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Add your office address')),
       );
-
       return;
     }
 
-    // Consolidate quantities in the order items
-    // final List<Map<String, dynamic>> consolidatedItems =
-    //     consolidateQuantities(orderItems);
-
     try {
       await storeService.placeOrderReq(
-        context,
-        getUserId,
-        getOfficeAddress,
-        paymentMethod,
-        getStoreId,
-        getShopName,
-        description,
-        orderItems
-        // consolidatedItems,
+          context,
+          getUserId,
+          getOfficeAddress,
+          paymentMethod,
+          getStoreId,
+          getShopName,
+          getUserId,
+          description,
+          orderItems
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -131,12 +106,10 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   Future<void> getUserAddressReq() async {
     try {
       Map<String, dynamic> response =
-          await authService.getUserAddressReq(getUserId);
+      await authService.getUserAddressReq(getUserId);
       setState(() {
         getAddress = [response];
         getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';
-
-        print('Address Details: $getOfficeAddress');
       });
     } catch (e) {
       print(getAddress);

@@ -194,6 +194,7 @@ class StoreApiService {
     String paymentMethod,
     int shopId,
     String storeName,
+    int officeId,
     description,
     List<Map<String, dynamic>> items,
   ) async {
@@ -207,6 +208,7 @@ class StoreApiService {
         paymentMethod,
         shopId,
         storeName,
+        officeId,
         description,
         items,
       );

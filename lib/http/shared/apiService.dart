@@ -85,6 +85,7 @@ class ApiService {
     String paymentMethod,
     int shopId,
     String storeName,
+    int officeId,
     description,
     List<Map<String, dynamic>> items, // Pass items as a parameter
   ) async {
@@ -95,6 +96,7 @@ class ApiService {
       'paymentMethod': paymentMethod,
       'shopId': shopId,
       'storeName': storeName,
+      'officeId': officeId,
       'description': description,
       'items': items, // Add items dynamically
     };

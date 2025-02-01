@@ -83,8 +83,8 @@ class _CartPageState extends State<CartPage> {
                   return Column(
                     children: [
                       MenuItem(
-                        imagePath:
-                            item['imagePath'] ?? 'assets/images/burgermeal.png',
+                        // imagePath:
+                        //     item['imagePath'] ?? 'assets/images/burgermeal.png',
                         name: item['foodName'] ?? 'Loading...',
                         description: item['description'] ?? '',
                         price: item['itemPrice'] ?? 0.0,
@@ -124,14 +124,14 @@ class _CartPageState extends State<CartPage> {
 
 // MenuItem
 class MenuItem extends StatelessWidget {
-  final String imagePath;
+  // final String imagePath;
   final String name;
   final String description;
   final double price;
   final VoidCallback onDelete;
 
   MenuItem({
-    required this.imagePath,
+    // required this.imagePath,
     required this.name,
     required this.description,
     required this.price,
@@ -155,13 +155,13 @@ class MenuItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(
-            imagePath,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(width: 12),
+          // Image.asset(
+          //   imagePath,
+          //   width: 80,
+          //   height: 80,
+          //   fit: BoxFit.cover,
+          // ),
+          // SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
