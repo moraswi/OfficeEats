@@ -71,14 +71,16 @@ class _ChangePasswordState extends State<ChangePassword> {
       // Call the password change service
       bool isSuccess = await authService.changePasswordReq(
           context, getUserId!, currentPassword, newPassword);
-
+      print('isSuccess');
+      print(isSuccess);
+      print(getUserId);
       if (isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Password changed successfully')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to change password')),
+          const SnackBar(content: Text('Current password is wrong')),
         );
       }
     } catch (e) {
@@ -130,7 +132,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   TextFormField(
                     controller: currentPasswordController,
                     keyboardType: TextInputType.visiblePassword,
-                    textAlign: TextAlign.center,
+
                     obscureText: !isPasswordVisible,
                     decoration: InputDecoration(
                       hintText: 'Current Password',
@@ -164,7 +166,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   TextFormField(
                     controller: newPasswordController,
                     keyboardType: TextInputType.visiblePassword,
-                    textAlign: TextAlign.center,
+
                     obscureText: !isNewPasswordVisible,
                     decoration: InputDecoration(
                       hintText: 'New Password',
@@ -198,7 +200,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   TextFormField(
                     controller: confirmPasswordController,
                     keyboardType: TextInputType.visiblePassword,
-                    textAlign: TextAlign.center,
+
                     obscureText: !isConfirmPasswordVisible,
                     decoration: InputDecoration(
                       hintText: 'Confirm New Password',

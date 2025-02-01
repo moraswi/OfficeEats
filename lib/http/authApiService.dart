@@ -151,6 +151,8 @@ class AuthApiService {
             '/profilelanding', (Route<dynamic> route) => true);
         return true;
       } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
         print('API Error: ${response.statusCode}, ${response.body}');
         return false;
       }

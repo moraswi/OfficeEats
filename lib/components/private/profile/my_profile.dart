@@ -4,9 +4,8 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/http/authApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../http/storeApiService.dart';
-import '../../../shared/delivery_bottom_navbar.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/delivery_bottom_navbar.dart';
 
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
@@ -43,7 +42,6 @@ class _MyProfileState extends State<MyProfile> {
   void initState() {
     super.initState();
     getSharedPreferenceData();
-
     getOffices();
   }
 
