@@ -56,7 +56,7 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(DateFormatter.formatDate(widget.orderDate),
+                Text(DateFormatter.formatDateTime(widget.orderDate),
                     style: TextStyle(fontSize: 16)),
                 Text(
                   widget.orderCode,
