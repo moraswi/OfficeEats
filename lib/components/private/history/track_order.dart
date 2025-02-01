@@ -40,6 +40,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       getShorpName = prefs.getString('storeName') ?? '';
       getFirstName = prefs.getString('firstName') ?? '';
       getPhoneNumber = prefs.getString('phoneNumber') ?? '';
+      print(getOrderId);
     });
     getOrderByIdReq();
   }
@@ -169,8 +170,11 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 ),
                 Builder(builder: (context) {
                   double totalPrice = 0.0;
-                  for (var item in orderHistory[0]['items']) {
-                    totalPrice += (item['totalPrice'] ?? 0);
+
+                  if (orderHistory.isNotEmpty && orderHistory[0]['items'] != null) {
+                    for (var item in orderHistory[0]['items']) {
+                      totalPrice += (item['totalPrice'] ?? 0);
+                    }
                   }
                   return Container(
                     width: double.infinity,

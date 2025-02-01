@@ -126,6 +126,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
       List<dynamic> response = await storeService.getOrdersReq(getUserId);
       setState(() {
+        response.sort((a, b) => b['id'].compareTo(a['id'])); // Sort by ID descending
         orderHistory = response;
         isLoading = false;
       });
