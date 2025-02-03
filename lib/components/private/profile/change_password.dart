@@ -71,9 +71,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       // Call the password change service
       bool isSuccess = await authService.changePasswordReq(
           context, getUserId!, currentPassword, newPassword);
-      print('isSuccess');
-      print(isSuccess);
-      print(getUserId);
+
       if (isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Password changed successfully')),

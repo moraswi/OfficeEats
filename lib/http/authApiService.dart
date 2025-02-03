@@ -37,21 +37,21 @@ class AuthApiService {
         prefs.setString('phoneNumber', userData['phoneNumber']);
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
-        prefs.setInt('deliveryPartnerOfficeId', userData['officeId']??0);
+        prefs.setInt('deliveryPartnerOfficeId', userData['officeId'] ?? 0);
 
         LoadingDialog.hide(context);
 
-        if(userData['role'] == "customer"){
+        if (userData['role'] == "customer") {
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
             (Route<dynamic> route) => false,
           );
-        }else if(userData['role'] == "deliverypartner"){
+        } else if (userData['role'] == "deliverypartner") {
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/deliveryorder',
-                (Route<dynamic> route) => false,
+            (Route<dynamic> route) => false,
           );
-        }else{
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Ask service provider to give you a role')),
           );
@@ -163,6 +163,31 @@ class AuthApiService {
     }
   }
 
+  // updateProfileReq
+  Future<bool> updateProfileReq(BuildContext context, int id, String firstName,
+      String lastName, String phoneNumber, String email, String role) async {
+    try {
+      LoadingDialog.show(context);
+
+      final response = await apiService.updateProfile(
+          id, firstName, lastName, phoneNumber, email, role);
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
+        return true;
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
+        return false;
+      }
+    } catch (e) {
+      throw Exception('Failed to change password');
+    } finally {
+      // LoadingDialog.hide(context);
+    }
+  }
+
   //deleteProfileReq
   Future<void> deleteProfileReq(int id) async {
     try {
@@ -189,8 +214,8 @@ class AuthApiService {
           SnackBar(content: Text('Successful')),
         );
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/office', (Route<dynamic> route) => true);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/office', (Route<dynamic> route) => true);
       }
     } catch (e) {
       print('Something went wrong');

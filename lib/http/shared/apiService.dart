@@ -37,6 +37,24 @@ class ApiService {
     return await httpService.post(endpoint, data);
   }
 
+  //updateProfile
+  Future<dynamic> updateProfile(int id, String firstName, String lastName,
+      String phoneNumber, String email, String role) async {
+    // final endpoint = 'users/$id';
+    final endpoint = 'users/16';
+    final data = {
+      "id": 16,
+      // "id": id,
+      "firstName": firstName,
+      "lastName": lastName,
+      "phoneNumber": phoneNumber,
+      "email": email,
+      "role": role
+    };
+    print(data);
+    return await httpService.put(endpoint, data);
+  }
+
   //deleteProfile
   Future<dynamic> deleteProfile(int id) async {
     final endpoint = 'user/$id';
@@ -215,6 +233,4 @@ class ApiService {
 
     return await httpService.put(endpoint, data);
   }
-
-
 }

@@ -53,7 +53,7 @@ class _MyProfileState extends State<MyProfile> {
       getUserId = prefs.getInt('userId') ?? 0;
       deliveryBottomBar = prefs.getString('role') ?? "";
     });
-print(getUserId);
+
     getUserAddressReq();
     getUserByIdReq();
   }
@@ -249,6 +249,47 @@ print(getUserId);
       print("failed");
     }
   }
+
+  Future<void> updateProfileReq() async {
+    String firstName = 'firstName';
+    String lastName = 'lastName';
+    String phoneNumber = 'phoneNumber';
+    String email = 'email@email.com';
+    String role = 'role';
+
+    try {
+
+      // if (currentPassword.isEmpty ||
+      //     newPassword.isEmpty ||
+      //     confirmPassword.isEmpty) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('empty field not required')),
+      //   );
+      //   return;
+      // }
+
+      // Call the password change service
+      bool isSuccess = await authService.updateProfileReq(
+          context, getUserId!, firstName, lastName, phoneNumber, email, role);
+      print('isSuccess');
+      print(isSuccess);
+      if (isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Updated successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Something went wrong')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -439,8 +480,9 @@ print(getUserId);
                 ? CustomButton(
                     label: 'Save',
                     onTap: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/profilelanding', (Route<dynamic> route) => true);
+                      updateProfileReq();
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //     '/profilelanding', (Route<dynamic> route) => true);
                     },
                   )
                 : Container(),
