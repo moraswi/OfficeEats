@@ -40,11 +40,10 @@ class ApiService {
   //updateProfile
   Future<dynamic> updateProfile(int id, String firstName, String lastName,
       String phoneNumber, String email, String role) async {
-    // final endpoint = 'users/$id';
-    final endpoint = 'users/16';
+    final endpoint = 'users/$id';
+
     final data = {
-      "id": 16,
-      // "id": id,
+      "id": id,
       "firstName": firstName,
       "lastName": lastName,
       "phoneNumber": phoneNumber,

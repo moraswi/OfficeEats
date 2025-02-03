@@ -129,7 +129,8 @@ class _MyProfileState extends State<MyProfile> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Delete Profile'),
-          content: Text('Are you sure you want to delete your profile? This action cannot be undone.'),
+          content: Text(
+              'Are you sure you want to delete your profile? This action cannot be undone.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -137,7 +138,6 @@ class _MyProfileState extends State<MyProfile> {
               },
               child: Text('Cancel'),
             ),
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -151,7 +151,6 @@ class _MyProfileState extends State<MyProfile> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-
           ],
         );
       },
@@ -161,7 +160,6 @@ class _MyProfileState extends State<MyProfile> {
   // getUserAddressReq
   Future<void> getUserAddressReq() async {
     try {
-      // var userId = 0; // Replace with the actual user ID
       Map<String, dynamic> response =
           await authService.getUserAddressReq(getUserId!);
       setState(() {
@@ -242,37 +240,38 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   // deleteProfileReq
-  Future<void> deleteProfileReq() async{
-    try{
+  Future<void> deleteProfileReq() async {
+    try {
       await authService.deleteProfileReq(getUserId!);
-    }catch (e) {
-      print("failed");
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
     }
   }
 
   Future<void> updateProfileReq() async {
-    String firstName = 'firstName';
-    String lastName = 'lastName';
-    String phoneNumber = 'phoneNumber';
-    String email = 'email@email.com';
-    String role = 'role';
+    String firstName = firstNameController.text;
+    String lastName = surnameController.text;
+    String phoneNumber = phoneNumberController.text;
+    String email = emailController.text;
+    String role = deliveryBottomBar;
 
     try {
-
-      // if (currentPassword.isEmpty ||
-      //     newPassword.isEmpty ||
-      //     confirmPassword.isEmpty) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(content: Text('empty field not required')),
-      //   );
-      //   return;
-      // }
+      if (firstName.isEmpty ||
+          lastName.isEmpty ||
+          phoneNumber.isEmpty ||
+          email.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('empty field not required')),
+        );
+        return;
+      }
 
       // Call the password change service
       bool isSuccess = await authService.updateProfileReq(
           context, getUserId!, firstName, lastName, phoneNumber, email, role);
-      print('isSuccess');
-      print(isSuccess);
+
       if (isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Updated successfully')),
@@ -288,7 +287,6 @@ class _MyProfileState extends State<MyProfile> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
