@@ -33,8 +33,8 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   // Map<int, String?> selectedOptions = {};
   String? description;
 
-  // Define a map to store the selected option ID for each title
-  Map<int, int?> selectedOptions = {};
+  Map<int, int?> selectedOptions = {}; // Stores selected option ID for each title
+  Map<int, double> selectedOptionPrices = {};
 
   @override
   void initState() {
@@ -209,96 +209,100 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                       },
                     )
                   : ListView(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      children: titles.map((item) {
-                        List<dynamic> options = item['options'];
-                        int titleId = item['id'];
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                children: titles.map((item) {
+                  List<dynamic> options = item['options'];
+                  int titleId = item['id'];
 
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Title text
-                                Text(
-                                  item['title'] ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-
-                                // Options for this title
-                                Column(
-                                  children: options.map((option) {
-                                    int optionId = option[
-                                        'id']; // Unique ID for the option
-
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Radio<int>(
-                                                  value: optionId,
-                                                  // Use option ID as the value
-                                                  groupValue:
-                                                      selectedOptions[titleId],
-                                                  // Group by titleId
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      // Update the selected option for this title
-                                                      selectedOptions[titleId] =
-                                                          value;
-                                                      // If you need to update the total price, do it here
-                                                       unitPrice += option['price']; // Adjust as needed
-                                                      print( option['price']);
-                                                    });
-                                                  },
-                                                ),
-                                                Text(
-                                                  option['name'] ??
-                                                      'Option Name',
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                ),
-                                              ],
-                                            ),
-
-                                            // Price for the option
-                                            Text(
-                                              'R ${option['price'] ?? 0.0}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // Divider between options (optional)
-                                        if (options.indexOf(option) !=
-                                            options.length - 1)
-                                          const Divider(),
-                                      ],
-                                    );
-                                  }).toList(),
-                                ),
-                              ],
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Title text
+                          Text(
+                            item['title'] ?? '',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
-                        );
-                      }).toList(),
+
+                          // Options for this title
+                          Column(
+                            children: options.map((option) {
+                              int optionId = option['id']; // Unique ID for the option
+                              int optionPrice = option['price'] ?? 0; // Price of the option
+
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Radio<int>(
+                                            value: optionId,
+                                            groupValue: selectedOptions[titleId],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                // If an option was previously selected, subtract its price
+                                                if (selectedOptions[titleId] != null) {
+                                                  unitPrice -= selectedOptionPrices[titleId] ?? 0.0;
+                                                }
+
+                                                // Update the selected option and its price for this title
+                                                selectedOptions[titleId] = value;
+                                                selectedOptionPrices[titleId] = option['price'].toDouble(); // Ensure price is a double
+
+                                                // Add the new option's price
+                                                unitPrice += option['price'].toDouble(); // Ensure price is a double
+
+                                                // Update the total items amount
+                                                totalItemsAmount = unitPrice * quantity;
+
+                                                // Debugging logs
+                                                print('Selected Option Price: ${option['price']}');
+                                                print('Updated Unit Price: $unitPrice');
+                                              });
+                                            },
+                                          ),
+                                          Text(
+                                            option['name'] ?? 'Option Name',
+                                            style: const TextStyle(fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
+
+                                      // Price for the option
+                                      Text(
+                                        'R ${optionPrice.toStringAsFixed(2)}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // Divider between options (optional)
+                                  if (options.indexOf(option) != options.length - 1)
+                                    const Divider(),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     ),
+                  );
+                }).toList(),
+              ),
 
               // : ListView(
               //     shrinkWrap: true,
