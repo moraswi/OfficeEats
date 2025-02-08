@@ -50,7 +50,7 @@ class ApiService {
       "email": email,
       "role": role
     };
-    print(data);
+
     return await httpService.put(endpoint, data);
   }
 

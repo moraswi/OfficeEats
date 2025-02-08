@@ -277,7 +277,7 @@ class AuthApiService {
         throw Exception("failed to get user");
       }
     } catch (e) {
-      print('deleteProfileReq Error: $e');
+      print('getUserByIdReq Error: $e');
       rethrow;
     } finally {
       // Ensure the loading dialog is hidden in all cases

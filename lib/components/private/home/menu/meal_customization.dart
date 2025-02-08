@@ -29,8 +29,12 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   double unitPrice = 0;
   String? selectedOption;
   String? menuItemName;
-  Map<int, String> selectedOptions = {};
+
+  // Map<int, String?> selectedOptions = {};
   String? description;
+
+  // Define a map to store the selected option ID for each title
+  Map<int, int?> selectedOptions = {};
 
   @override
   void initState() {
@@ -103,9 +107,9 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     // Prepare selected customizations
     List<Map<String, dynamic>> selectedCustomizations = selectedOptions.entries
         .map((entry) => {
-      'titleId': entry.key,
-      'optionName': entry.value,
-    })
+              'titleId': entry.key,
+              'optionName': entry.value,
+            })
         .toList();
     // prefs.setStringList('cartItems', []);
     // Check for duplicates
@@ -125,7 +129,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
 
       for (var customization in selectedCustomizations) {
         if (!customizations.any((c) =>
-        c['titleId'] == customization['titleId'] &&
+            c['titleId'] == customization['titleId'] &&
             c['optionName'] == customization['optionName'])) {
           return false;
         }
@@ -153,12 +157,11 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     // Save updated cart
     prefs.setStringList('cartItems', cartItems);
 
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        '/cart', (Route<dynamic> route) => true);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/cart', (Route<dynamic> route) => true);
 
     // print("Item added to cart: $cartItems");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -234,12 +237,10 @@ class _MenuCustomizationState extends State<MenuCustomization> {
 
                                 // Options for this title
                                 Column(
-                                  children:
-                                      options.asMap().entries.map((entry) {
-                                    final index = entry.key;
-                                    final option = entry.value;
-                                    int optionId =
-                                        option['id']; // Unique ID for the title
+                                  children: options.map((option) {
+                                    int optionId = option[
+                                        'id']; // Unique ID for the option
+
                                     return Column(
                                       children: [
                                         Row(
@@ -248,18 +249,20 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                                           children: [
                                             Row(
                                               children: [
-                                                Radio<String>(
-                                                  value: option['name'],
+                                                Radio<int>(
+                                                  value: optionId,
+                                                  // Use option ID as the value
                                                   groupValue:
-                                                      selectedOptions[optionId],
-                                                  // Ensure only one active button per title
+                                                      selectedOptions[titleId],
+                                                  // Group by titleId
                                                   onChanged: (value) {
                                                     setState(() {
                                                       // Update the selected option for this title
-                                                      selectedOptions[
-                                                          optionId] = value!;
-                                                      unitPrice +=
-                                                          option['price'];
+                                                      selectedOptions[titleId] =
+                                                          value;
+                                                      // If you need to update the total price, do it here
+                                                       unitPrice += option['price']; // Adjust as needed
+                                                      print( option['price']);
                                                     });
                                                   },
                                                 ),
@@ -282,8 +285,9 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                                             ),
                                           ],
                                         ),
-                                        // Divider between options
-                                        if (index != options.length - 1)
+                                        // Divider between options (optional)
+                                        if (options.indexOf(option) !=
+                                            options.length - 1)
                                           const Divider(),
                                       ],
                                     );
@@ -295,6 +299,97 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                         );
                       }).toList(),
                     ),
+
+              // : ListView(
+              //     shrinkWrap: true,
+              //     physics: const ClampingScrollPhysics(),
+              //     children: titles.map((item) {
+              //       List<dynamic> options = item['options'];
+              //       int titleId = item['id'];
+              //
+              //       return Container(
+              //         margin: const EdgeInsets.only(bottom: 10),
+              //         decoration: const BoxDecoration(
+              //           borderRadius:
+              //               BorderRadius.all(Radius.circular(5.0)),
+              //         ),
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(6.0),
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               // Title text
+              //               Text(
+              //                 item['title'] ?? '',
+              //                 style: const TextStyle(
+              //                   fontSize: 15,
+              //                   fontWeight: FontWeight.w900,
+              //                 ),
+              //               ),
+              //
+              //               // Options for this title
+              //               Column(
+              //                 children:
+              //                     options.asMap().entries.map((entry) {
+              //                   final index = entry.key;
+              //                   final option = entry.value;
+              //                   int optionId =
+              //                       option['id']; // Unique ID for the title
+              //                   return Column(
+              //                     children: [
+              //                       Row(
+              //                         mainAxisAlignment:
+              //                             MainAxisAlignment.spaceBetween,
+              //                         children: [
+              //                           Row(
+              //                             children: [
+              //                               Radio<String>(
+              //                                 value: option['name'],
+              //                                 groupValue:
+              //                                     selectedOptions[optionId],
+              //                                 // Ensure only one active button per title
+              //                                 onChanged: (value) {
+              //                                   setState(() {
+              //                                     // Update the selected option for this title
+              //                                     selectedOptions[
+              //                                         optionId] = value!;
+              //                                     unitPrice +=
+              //                                         option['price'];
+              //                                   });
+              //                                 },
+              //                               ),
+              //                               Text(
+              //                                 option['name'] ??
+              //                                     'Option Name',
+              //                                 style: const TextStyle(
+              //                                     fontSize: 18),
+              //                               ),
+              //                             ],
+              //                           ),
+              //
+              //                           // Price for the option
+              //                           Text(
+              //                             'R ${option['price'] ?? 0.0}',
+              //                             style: const TextStyle(
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.bold,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                       // Divider between options
+              //                       if (index != options.length - 1)
+              //                         const Divider(),
+              //                     ],
+              //                   );
+              //                 }).toList(),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       );
+              //     }).toList(),
+              //   ),
 
               Container(
                 height: 7,
