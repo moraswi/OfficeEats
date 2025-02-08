@@ -238,7 +238,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                           Column(
                             children: options.map((option) {
                               int optionId = option['id']; // Unique ID for the option
-                              int optionPrice = option['price'] ?? 0; // Price of the option
+                              double optionPrice = option['price'] ?? 0; // Price of the option
 
                               return Column(
                                 children: [
@@ -252,24 +252,18 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                                             groupValue: selectedOptions[titleId],
                                             onChanged: (value) {
                                               setState(() {
-                                                // If an option was previously selected, subtract its price
                                                 if (selectedOptions[titleId] != null) {
                                                   unitPrice -= selectedOptionPrices[titleId] ?? 0.0;
                                                 }
 
-                                                // Update the selected option and its price for this title
                                                 selectedOptions[titleId] = value;
-                                                selectedOptionPrices[titleId] = option['price'].toDouble(); // Ensure price is a double
+                                                selectedOptionPrices[titleId] = option['price'].toDouble();
 
                                                 // Add the new option's price
-                                                unitPrice += option['price'].toDouble(); // Ensure price is a double
+                                                unitPrice += option['price'].toDouble();
 
-                                                // Update the total items amount
                                                 totalItemsAmount = unitPrice * quantity;
 
-                                                // Debugging logs
-                                                print('Selected Option Price: ${option['price']}');
-                                                print('Updated Unit Price: $unitPrice');
                                               });
                                             },
                                           ),
@@ -303,97 +297,6 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                   );
                 }).toList(),
               ),
-
-              // : ListView(
-              //     shrinkWrap: true,
-              //     physics: const ClampingScrollPhysics(),
-              //     children: titles.map((item) {
-              //       List<dynamic> options = item['options'];
-              //       int titleId = item['id'];
-              //
-              //       return Container(
-              //         margin: const EdgeInsets.only(bottom: 10),
-              //         decoration: const BoxDecoration(
-              //           borderRadius:
-              //               BorderRadius.all(Radius.circular(5.0)),
-              //         ),
-              //         child: Padding(
-              //           padding: const EdgeInsets.all(6.0),
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               // Title text
-              //               Text(
-              //                 item['title'] ?? '',
-              //                 style: const TextStyle(
-              //                   fontSize: 15,
-              //                   fontWeight: FontWeight.w900,
-              //                 ),
-              //               ),
-              //
-              //               // Options for this title
-              //               Column(
-              //                 children:
-              //                     options.asMap().entries.map((entry) {
-              //                   final index = entry.key;
-              //                   final option = entry.value;
-              //                   int optionId =
-              //                       option['id']; // Unique ID for the title
-              //                   return Column(
-              //                     children: [
-              //                       Row(
-              //                         mainAxisAlignment:
-              //                             MainAxisAlignment.spaceBetween,
-              //                         children: [
-              //                           Row(
-              //                             children: [
-              //                               Radio<String>(
-              //                                 value: option['name'],
-              //                                 groupValue:
-              //                                     selectedOptions[optionId],
-              //                                 // Ensure only one active button per title
-              //                                 onChanged: (value) {
-              //                                   setState(() {
-              //                                     // Update the selected option for this title
-              //                                     selectedOptions[
-              //                                         optionId] = value!;
-              //                                     unitPrice +=
-              //                                         option['price'];
-              //                                   });
-              //                                 },
-              //                               ),
-              //                               Text(
-              //                                 option['name'] ??
-              //                                     'Option Name',
-              //                                 style: const TextStyle(
-              //                                     fontSize: 18),
-              //                               ),
-              //                             ],
-              //                           ),
-              //
-              //                           // Price for the option
-              //                           Text(
-              //                             'R ${option['price'] ?? 0.0}',
-              //                             style: const TextStyle(
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.bold,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                       // Divider between options
-              //                       if (index != options.length - 1)
-              //                         const Divider(),
-              //                     ],
-              //                   );
-              //                 }).toList(),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       );
-              //     }).toList(),
-              //   ),
 
               Container(
                 height: 7,
@@ -430,7 +333,6 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                 height: 10,
               ),
               Row(
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
