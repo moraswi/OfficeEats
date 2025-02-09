@@ -24,6 +24,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   TextEditingController orderInstructionController = TextEditingController();
 
   List<Map<String, dynamic>> orderItems = [];
+  List<Map<String, dynamic>> orderCustomerzation = [];
 
   var getAddress;
   String getOfficeName = "";
@@ -57,6 +58,12 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           .map((item) => json.decode(item))
           .toList()
           .cast<Map<String, dynamic>>();
+
+      print(orderItems);
+      // orderCustomerzation = orderItems
+      //     .expand((item) => item['orderCustomizations'] ?? [])
+      //     .toList()
+      //     .cast<Map<String, dynamic>>();
 
       getOfficeName = prefs.getString('officeName') ?? "";
       getOfficeLocation = prefs.getString('officeLocation') ?? "";
@@ -93,8 +100,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           getShopName,
           getUserId,
           description,
-          orderItems
-      );
+          orderItems);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Order Failed: $e')),
@@ -106,7 +112,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   Future<void> getUserAddressReq() async {
     try {
       Map<String, dynamic> response =
-      await authService.getUserAddressReq(getUserId);
+          await authService.getUserAddressReq(getUserId);
       setState(() {
         getAddress = [response];
         getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';

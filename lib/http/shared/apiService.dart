@@ -104,7 +104,7 @@ class ApiService {
     String storeName,
     int officeId,
     description,
-    List<Map<String, dynamic>> items, // Pass items as a parameter
+    List<Map<String, dynamic>> items,
   ) async {
     final endpoint = 'place-order';
     final data = {
@@ -115,8 +115,21 @@ class ApiService {
       'storeName': storeName,
       'officeId': officeId,
       'description': description,
-      'items': items, // Add items dynamically
+      'items': items.map((item) {
+        return {
+          // 'id': item['id'],
+          'foodId': item['foodId'],
+          'quantity': item['quantity'],
+          'totalPrice': 1,
+          'orderId': 1,
+          'foodName': item['foodName'],
+          'orderCustomizations': item['customizations'] ?? [],
+        };
+      }).toList(),
     };
+
+    print('data');
+    print(data);
     return await httpService.post(endpoint, data);
   }
 

@@ -29,10 +29,10 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   double unitPrice = 0;
   String? selectedOption;
   String? menuItemName;
-
   // Map<int, String?> selectedOptions = {};
   String? description;
 
+  String selectedOptionName = '';
   Map<int, int?> selectedOptions = {}; // Stores selected option ID for each title
   Map<int, double> selectedOptionPrices = {};
 
@@ -108,7 +108,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     List<Map<String, dynamic>> selectedCustomizations = selectedOptions.entries
         .map((entry) => {
               'titleId': entry.key,
-              'optionName': entry.value,
+              'optionName': selectedOptionName,
             })
         .toList();
     // prefs.setStringList('cartItems', []);
@@ -153,7 +153,10 @@ class _MenuCustomizationState extends State<MenuCustomization> {
       'customizations': selectedCustomizations,
     }));
 
-    // print(cartItems);
+    print('cartItems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    print(cartItems);
+    print('cartItems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+
     // Save updated cart
     prefs.setStringList('cartItems', cartItems);
 
@@ -237,7 +240,8 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                           // Options for this title
                           Column(
                             children: options.map((option) {
-                              int optionId = option['id']; // Unique ID for the option
+                              int optionId = option['id'];
+                              selectedOptionName = option['name'];
                               double optionPrice = option['price'] ?? 0; // Price of the option
 
                               return Column(
@@ -268,7 +272,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
                                             },
                                           ),
                                           Text(
-                                            option['name'] ?? 'Option Name',
+                                            option['name'] ?? 'loading...',
                                             style: const TextStyle(fontSize: 18),
                                           ),
                                         ],

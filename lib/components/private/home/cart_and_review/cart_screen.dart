@@ -19,11 +19,11 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    _loadCartItems();
+    loadCartItems();
   }
 
-  // _loadCartItems
-  Future<void> _loadCartItems() async {
+  // loadCartItems
+  Future<void> loadCartItems() async {
     final prefs = await SharedPreferences.getInstance();
 
     // cartItemsData
@@ -52,7 +52,6 @@ class _CartPageState extends State<CartPage> {
       cartItems.removeAt(index);
     });
 
-    // _saveCartItems
     _saveCartItems();
   }
 
