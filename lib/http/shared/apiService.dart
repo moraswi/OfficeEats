@@ -106,6 +106,9 @@ class ApiService {
     description,
     List<Map<String, dynamic>> items,
   ) async {
+
+    print(items);
+
     final endpoint = 'place-order';
     final data = {
       'userId': userId,
@@ -117,11 +120,9 @@ class ApiService {
       'description': description,
       'items': items.map((item) {
         return {
-          // 'id': item['id'],
           'foodId': item['foodId'],
           'quantity': item['quantity'],
-          'totalPrice': 1,
-          'orderId': 1,
+          'itemPrice': item['itemPrice'],
           'foodName': item['foodName'],
           'orderCustomizations': item['customizations'] ?? [],
         };
