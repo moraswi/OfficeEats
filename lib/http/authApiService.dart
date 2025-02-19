@@ -30,19 +30,32 @@ class AuthApiService {
         var userData = jsonDecode(results.body);
 
         final prefs = await SharedPreferences.getInstance();
+
         prefs.setInt('userId', userData['id']);
         prefs.setString('firstName', userData['firstName']);
         prefs.setString('lastName', userData['lastName']);
         prefs.setString('phoneNumber', userData['phoneNumber']);
         prefs.setString('email', userData['email']);
         prefs.setString('role', userData['role']);
+        prefs.setInt('deliveryPartnerOfficeId', userData['officeId'] ?? 0);
 
         LoadingDialog.hide(context);
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/office',
-          (Route<dynamic> route) => false,
-        );
+        if (userData['role'] == "customer") {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/office',
+            (Route<dynamic> route) => false,
+          );
+        } else if (userData['role'] == "deliverypartner") {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/deliveryorder',
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ask service provider to give you a role')),
+          );
+        }
         return true;
       } else {
         // Show a failure message if login is not successful
@@ -138,7 +151,34 @@ class AuthApiService {
             '/profilelanding', (Route<dynamic> route) => true);
         return true;
       } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
         print('API Error: ${response.statusCode}, ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      throw Exception('Failed to change password');
+    } finally {
+      // LoadingDialog.hide(context);
+    }
+  }
+
+  // updateProfileReq
+  Future<bool> updateProfileReq(BuildContext context, int id, String firstName,
+      String lastName, String phoneNumber, String email, String role) async {
+    try {
+      LoadingDialog.show(context);
+
+      final response = await apiService.updateProfile(
+          id, firstName, lastName, phoneNumber, email, role);
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
+        return true;
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/profilelanding', (Route<dynamic> route) => true);
         return false;
       }
     } catch (e) {
@@ -173,6 +213,9 @@ class AuthApiService {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Successful')),
         );
+
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/office', (Route<dynamic> route) => true);
       }
     } catch (e) {
       print('Something went wrong');
@@ -234,7 +277,7 @@ class AuthApiService {
         throw Exception("failed to get user");
       }
     } catch (e) {
-      print('deleteProfileReq Error: $e');
+      print('getUserByIdReq Error: $e');
       rethrow;
     } finally {
       // Ensure the loading dialog is hidden in all cases

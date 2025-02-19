@@ -17,7 +17,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  int _totalQuantity = 0;
 
   final StoreApiService storeService = StoreApiService();
   List<dynamic> menus = [];
@@ -74,12 +73,6 @@ class _MenuPageState extends State<MenuPage> {
       isLoading = true;
     });
     getStoreMenuByCategoryIdReq();
-  }
-
-  void _updateTotalQuantity(int quantity) {
-    setState(() {
-      _totalQuantity += quantity;
-    });
   }
 
   @override
@@ -200,7 +193,18 @@ class _MenuPageState extends State<MenuPage> {
                               name: menu['name'],
                               description: menu['description'],
                               price: menu['price'],
-                              onQuantityChanged: _updateTotalQuantity,
+                              onTap: () async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setInt('foodId', menu['id']);
+                                prefs.setDouble('menuItemPrice', menu['price']);
+                                prefs.setString('menuItemName', menu['name']);
+                                prefs.setString(
+                                    'description', menu['description']);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/menucustomization',
+                                    (Route<dynamic> route) => true);
+                              },
                             );
                           }),
 
@@ -211,16 +215,14 @@ class _MenuPageState extends State<MenuPage> {
             const SizedBox(
               height: 10,
             ),
-            CustomButton(
-              label: 'My Cart',
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => CartPage()));
-                // Handle button press
-                // Navigator.of(context).pushNamedAndRemoveUntil(
-                //     '/cart', (Route<dynamic> route) => true);
-              },
-            ),
+            // CustomButton(
+            //   label: 'My Cart',
+            //   onTap: () {
+            //     Navigator.of(context)
+            //         .push(MaterialPageRoute(builder: (context) => CartPage()));
+            //     // Handle button press
+            //   },
+            // ),
           ],
         ),
       ),
@@ -238,7 +240,7 @@ class MenuItem extends StatefulWidget {
   final String name;
   final String description;
   final double price;
-  final Function(int) onQuantityChanged; // Callback to notify parent
+  final VoidCallback onTap;
 
   MenuItem({
     required this.id,
@@ -246,7 +248,7 @@ class MenuItem extends StatefulWidget {
     required this.name,
     required this.description,
     required this.price,
-    required this.onQuantityChanged,
+    required this.onTap,
   });
 
   @override
@@ -254,139 +256,65 @@ class MenuItem extends StatefulWidget {
 }
 
 class _MenuItemState extends State<MenuItem> {
-  int quantity = 0;
-
-  void _increment() async {
-    setState(() {
-      quantity++;
-    });
-    widget.onQuantityChanged(quantity);
-
-    final prefs = await SharedPreferences.getInstance();
-    List<String> cartItems = prefs.getStringList('cartItems') ?? [];
-
-    // Add the item as a JSON string
-    cartItems.add(json.encode({
-      'foodId': widget.id,
-      'foodName': widget.name,
-      'description': widget.description,
-      'itemPrice': widget.price,
-      'quantity': quantity,
-    }));
-
-    print(cartItems);
-    // Save updated cart
-    prefs.setStringList('cartItems', cartItems);
-    // prefs.setStringList('cartItems', []);
-  }
-
-  void _decrement() {
-    if (quantity > 0) {
-      setState(() {
-        quantity--;
-      });
-      widget.onQuantityChanged(quantity); // Notify parent
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            widget.imagePath,
-            width: 80,
-            height: 80,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Name Of Food
-              Text(
-                widget.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
+    return GestureDetector(
+        onTap: widget.onTap,
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 8.0),
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4.0,
+                offset: Offset(0, 2),
               ),
-
-              // description
-              Text('${widget.description}', style: TextStyle(fontSize: 13)),
-
-              // button and amount
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '\R${widget.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.secondaryColor),
-                  ),
-                  SizedBox(
-                    width: 130,
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(50),
-                        onTap: _decrement,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.red[600],
-                            shape: BoxShape.circle,
-                          ),
-                          padding: EdgeInsets.all(0.0),
-                          child: Icon(Icons.remove, color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                        '$quantity',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(50),
-                        onTap: _increment,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.red[600],
-                            shape: BoxShape.circle,
-                          ),
-                          padding: EdgeInsets.all(0.0),
-                          child: Icon(Icons.add, color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
             ],
           ),
-        ],
-      ),
-    );
+          child: Row(
+            children: [
+              Image.asset(
+                widget.imagePath,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name Of Food
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+
+                  // description
+                  Text('${widget.description}', style: TextStyle(fontSize: 13)),
+
+                  // button and amount
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\R${widget.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.secondaryColor),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }

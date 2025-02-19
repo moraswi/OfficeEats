@@ -4,8 +4,8 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
 import 'package:eats/http/authApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../http/storeApiService.dart';
+import 'package:eats/http/storeApiService.dart';
+import 'package:eats/shared/delivery_bottom_navbar.dart';
 
 class MyProfile extends StatefulWidget {
   var routeName = '/myprofile';
@@ -36,12 +36,12 @@ class _MyProfileState extends State<MyProfile> {
   int addressId = 0;
   String? addSelectedOfficePack;
   int? getUserId;
+  String deliveryBottomBar = "";
 
   @override
   void initState() {
     super.initState();
     getSharedPreferenceData();
-
     getOffices();
   }
 
@@ -51,6 +51,7 @@ class _MyProfileState extends State<MyProfile> {
 
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
+      deliveryBottomBar = prefs.getString('role') ?? "";
     });
 
     getUserAddressReq();
@@ -121,10 +122,44 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
+  // _showDeleteAccountDialog
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Profile'),
+          content: Text(
+              'Are you sure you want to delete your profile? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+                deleteProfileReq(); // Call the delete function
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // getUserAddressReq
   Future<void> getUserAddressReq() async {
     try {
-      // var userId = 0; // Replace with the actual user ID
       Map<String, dynamic> response =
           await authService.getUserAddressReq(getUserId!);
       setState(() {
@@ -204,6 +239,55 @@ class _MyProfileState extends State<MyProfile> {
     }
   }
 
+  // deleteProfileReq
+  Future<void> deleteProfileReq() async {
+    try {
+      await authService.deleteProfileReq(getUserId!);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  Future<void> updateProfileReq() async {
+    String firstName = firstNameController.text;
+    String lastName = surnameController.text;
+    String phoneNumber = phoneNumberController.text;
+    String email = emailController.text;
+    String role = deliveryBottomBar;
+
+    try {
+      if (firstName.isEmpty ||
+          lastName.isEmpty ||
+          phoneNumber.isEmpty ||
+          email.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('empty field not required')),
+        );
+        return;
+      }
+
+      // Call the password change service
+      bool isSuccess = await authService.updateProfileReq(
+          context, getUserId!, firstName, lastName, phoneNumber, email, role);
+
+      if (isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Updated successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Something went wrong')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,6 +297,7 @@ class _MyProfileState extends State<MyProfile> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () {
+            // Navigator.of(context).pop();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/profilelanding', (Route<dynamic> route) => true);
           },
@@ -294,92 +379,122 @@ class _MyProfileState extends State<MyProfile> {
             ),
             const SizedBox(height: 30),
 
-            if (officeAddressText.isEmpty || officePackText.isEmpty)
-              InkWell(
-                onTap: _showAddAddressDialog,
-                child: const Text("Add Address",
-                    style: TextStyle(
+            deliveryBottomBar != "deliverypartner" &&
+                    (officeAddressText.isEmpty || officePackText.isEmpty)
+                ? InkWell(
+                    onTap: _showAddAddressDialog,
+                    child: const Text(
+                      "Add Address",
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primaryColor)),
-              ),
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  )
+                : Container(),
 
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/officepack.png',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (officePackText.isNotEmpty)
-                          Text(
-                            officePackText,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        if (officeAddressText.isNotEmpty)
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on,
-                                  color: AppColors.primaryColor, size: 20),
-                              Text(officeAddressText,
-                                  style: TextStyle(fontSize: 16)),
-                            ],
-                          ),
-                        if (officeAddressText.isEmpty || officePackText.isEmpty)
-                          Text('Add your office address'),
+
+            deliveryBottomBar != "deliverypartner"
+                ? Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4.0,
+                          offset: Offset(0, 2),
+                        ),
                       ],
                     ),
-                  ),
-                  if (officeAddressText.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        deleteUserAddressReq();
-                      },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/officepack.png',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (officePackText.isNotEmpty)
+                                Text(
+                                  officePackText,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              if (officeAddressText.isNotEmpty)
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on,
+                                        color: AppColors.primaryColor,
+                                        size: 20),
+                                    Text(officeAddressText,
+                                        style: TextStyle(fontSize: 16)),
+                                  ],
+                                ),
+                              if (officeAddressText.isEmpty ||
+                                  officePackText.isEmpty)
+                                Text('Add your office address'),
+                            ],
+                          ),
+                        ),
+                        if (officeAddressText.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              deleteUserAddressReq();
+                            },
+                          ),
+                      ],
                     ),
-                ],
+                  )
+                : Container(),
+
+            const SizedBox(height: 15),
+            InkWell(
+              onTap: _showDeleteAccountDialog,
+              child: const Text(
+                "Delete My Account",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColor,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            CustomButton(
-              label: 'Save',
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/profilelanding', (Route<dynamic> route) => true);
-              },
-            ),
+            const SizedBox(height: 15),
+
+            deliveryBottomBar != "deliverypartner"
+                ? CustomButton(
+                    label: 'Save',
+                    onTap: () {
+                      updateProfileReq();
+                      // Navigator.of(context).pushNamedAndRemoveUntil(
+                      //     '/profilelanding', (Route<dynamic> route) => true);
+                    },
+                  )
+                : Container(),
             // Add button to show dialog
           ],
         ),
       ),
-      bottomNavigationBar: RoundedBottomBar(
-        selectedIndex: 3,
-      ),
+      bottomNavigationBar: deliveryBottomBar == "deliverypartner"
+          ? RoundedDeliveryBottomBar(
+              selectedIndex: 2,
+            )
+          : RoundedBottomBar(
+              selectedIndex: 3,
+            ),
     );
   }
 }

@@ -116,6 +116,42 @@ class StoreApiService {
     }
   }
 
+  //getOrderDeliveryPartnerIdReq
+  Future<List<dynamic>> getOrderDeliveryPartnerIdReq(
+      int deliveryPartnerId) async {
+    try {
+      var results =
+          await apiService.getOrderDeliveryPartnerId(deliveryPartnerId);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body);
+        return data;
+      } else {
+        throw Exception('Failed to fetch orders.');
+      }
+    } catch (e) {
+      print('getOrderDeliveryPartnerIdReq Error: $e');
+      rethrow;
+    }
+  }
+
+  //getOrdersReq
+  Future<List<dynamic>> getOrderDeliveryPartnerReq(int officeid) async {
+    try {
+      var results = await apiService.getOrderDeliveryPartner(officeid);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body);
+        return data;
+      } else {
+        throw Exception('Failed to fetch stores.');
+      }
+    } catch (e) {
+      print('getOrderDeliveryPartnerReq Error: $e');
+      rethrow;
+    }
+  }
+
   // getOrderById
   Future<Map<String, dynamic>> getOrderByIdReq(int orderId) async {
     try {
@@ -133,6 +169,23 @@ class StoreApiService {
     }
   }
 
+  // getOrderById
+  Future<List<dynamic>> getQuestionnaireTitleReq(int storemenuid) async {
+    try {
+      var results = await apiService.getQuestionnaireTitle(storemenuid);
+
+      if (results.statusCode == 200) {
+        final data = jsonDecode(results.body); // Ensure this is a list
+        return data as List<dynamic>;
+      } else {
+        throw Exception('Failed to fetch titles and option.');
+      }
+    } catch (e) {
+      print('getQuestionnaireTitleReq Error: $e');
+      rethrow;
+    }
+  }
+
   //placeOrderReq
   Future<void> placeOrderReq(
     BuildContext context,
@@ -141,6 +194,7 @@ class StoreApiService {
     String paymentMethod,
     int shopId,
     String storeName,
+    int officeId,
     description,
     List<Map<String, dynamic>> items,
   ) async {
@@ -154,6 +208,7 @@ class StoreApiService {
         paymentMethod,
         shopId,
         storeName,
+        officeId,
         description,
         items,
       );
@@ -194,6 +249,58 @@ class StoreApiService {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  //updateOrderReq
+  Future<void> updateOrderReq(
+    BuildContext context,
+    int id,
+    int userId,
+    double totalAmount,
+    String deliveryAddress,
+    String paymentMethod,
+    String orderStatus,
+    String orderDate,
+    int officeId,
+    int deliveryPartnerId,
+    int shopId,
+    String orderCode,
+    String storeName,
+    String description,
+    List<Map<String, dynamic>> items,
+  ) async {
+    try {
+      LoadingDialog.show(context);
+
+      // Call the updated `placeOrder` function with the items list
+      var results = await apiService.updateOrder(
+        id,
+        userId,
+        totalAmount,
+        deliveryAddress,
+        paymentMethod,
+        orderStatus,
+        orderDate,
+        officeId,
+        deliveryPartnerId,
+        shopId,
+        orderCode,
+        storeName,
+        description,
+        items,
+      );
+
+      if (results.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Succesful')),
+        );
+      }
+    } catch (e) {
+      LoadingDialog.hide(context);
+      rethrow;
+    } finally {
+      LoadingDialog.hide(context);
     }
   }
 }

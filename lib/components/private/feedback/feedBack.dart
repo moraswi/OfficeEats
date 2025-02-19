@@ -21,6 +21,7 @@ class _FeedBackState extends State<FeedBack> {
 
   bool overallService = false;
   bool SpeedEfficiency = false;
+  bool deliveryService = false;
   bool customerSupport = false;
   bool otherChecked = false;
 
@@ -34,12 +35,15 @@ class _FeedBackState extends State<FeedBack> {
     if (overallService) {
       result += 'Overall service\n';
     }
+
+    if (deliveryService) {
+      result += 'Selivery Service\n';
+    }
+
     if (SpeedEfficiency) {
       result += 'Speed and efficiency\n';
     }
-    // if (customerSupport) {
-    //   result += 'Customer support\n';
-    // }
+
     if (otherChecked) {
       result += 'Other\n';
     }
@@ -72,21 +76,22 @@ class _FeedBackState extends State<FeedBack> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Select options')),
         );
+        return;
       }
 
       if (message.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Write a comment')),
         );
-
         return;
       }
 
       await storeService.rateAppReq(
           context, getUserId, message, rate, improveResult);
+
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Feedback Failed')),
+        SnackBar(content: Text('Something went wrong')),
       );
     }
   }
@@ -135,7 +140,7 @@ class _FeedBackState extends State<FeedBack> {
                 const Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Are you satisfied with our app?',
+                    'How satisfied are you with our app?',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
                 ),
@@ -236,6 +241,35 @@ class _FeedBackState extends State<FeedBack> {
                       ),
 
                       //Switching to another insurer
+                      Row(
+                        children: <Widget>[
+                          Transform.scale(
+                            scale: 1.1,
+                            // Increase the size by adjusting the scale factor
+                            child: Checkbox(
+                              value: deliveryService,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  deliveryService = value!;
+                                  if (deliveryService) {
+                                    improve = "Delivery Service";
+                                    print('Checked: $improve');
+                                  }
+                                });
+                              },
+                              activeColor: Colors.red,
+                            ),
+                          ),
+                          const Text(
+                            'Delivery Service',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Color(0xFF434344)),
+                          ),
+                        ],
+                      ),
+
                       Row(
                         children: <Widget>[
                           Transform.scale(

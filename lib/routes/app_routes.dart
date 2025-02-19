@@ -21,8 +21,10 @@ import 'package:eats/components/private/feedback/feedback.dart';
 import 'package:eats/components/private/feedback/feedback_confirmed.dart';
 import 'package:eats/components/private/profile/change_password.dart';
 import 'package:eats/components/private/profile/my_profile.dart';
-
 import 'package:eats/components/private/home/cart_and_review/order_confirmed.dart';
+import 'package:eats/components/private/delivery/DeliveryHome.dart';
+import 'package:eats/components/private/delivery/MyOrdersDelivery.dart';
+import 'package:eats/components/private/home/menu/meal_customization.dart';
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
@@ -48,6 +50,12 @@ Map<String, WidgetBuilder> getRoutes() {
     ChangePassword().routeName: (context) => ChangePassword(),
     MyProfile().routeName: (context) => MyProfile(),
     OrderConfirmed().routeName: (context) => OrderConfirmed(),
+    MenuCustomization().routeName: (context) => MenuCustomization(),
+
+    //   delivery
+    DeliveryOrderPage().routeName: (context) => DeliveryOrderPage(),
+    MyOrderDelivery().routeName: (context) => MyOrderDelivery(),
+
   };
 }
 

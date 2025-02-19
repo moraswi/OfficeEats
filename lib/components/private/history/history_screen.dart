@@ -35,14 +35,12 @@ class _MenuItemState extends State<MenuItem> {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey, // Set the grey color for the border
+            width: 1.0, // Set the thickness of the border
           ),
-        ],
+        ),
       ),
       child: Row(
         children: [
@@ -58,7 +56,7 @@ class _MenuItemState extends State<MenuItem> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(DateFormatter.formatDate(widget.orderDate),
+                Text(DateFormatter.formatDateTime(widget.orderDate),
                     style: TextStyle(fontSize: 16)),
                 Text(
                   widget.orderCode,
@@ -125,10 +123,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future<void> getOrdersReq() async {
     try {
-      print('getUserId');
-      print(getUserId);
+
       List<dynamic> response = await storeService.getOrdersReq(getUserId);
       setState(() {
+        response.sort((a, b) => b['id'].compareTo(a['id'])); // Sort by ID descending
         orderHistory = response;
         isLoading = false;
       });
@@ -151,18 +149,8 @@ class _HistoryPageState extends State<HistoryPage> {
           },
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16.0, right: 16.0, bottom: 106.0),
+      body: Container(
+
                   child: isLoading
                       ? ListView.builder(
                           shrinkWrap: true,
@@ -197,12 +185,9 @@ class _HistoryPageState extends State<HistoryPage> {
                             );
                           },
                         ),
-                ),
+
               ),
-            ),
-          ],
-        ),
-      ),
+
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 1,
       ),
