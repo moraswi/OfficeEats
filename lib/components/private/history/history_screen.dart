@@ -123,10 +123,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future<void> getOrdersReq() async {
     try {
-
       List<dynamic> response = await storeService.getOrdersReq(getUserId);
       setState(() {
-        response.sort((a, b) => b['id'].compareTo(a['id'])); // Sort by ID descending
+        response.sort(
+            (a, b) => b['id'].compareTo(a['id'])); // Sort by ID descending
         orderHistory = response;
         isLoading = false;
       });
@@ -150,44 +150,40 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
       body: Container(
+        child: isLoading
+            ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 5, // Number of skeletons
+                itemBuilder: (context, index) {
+                  return SkeletonLoader();
+                },
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                itemCount: orderHistory.length,
+                itemBuilder: (context, index) {
+                  var order = orderHistory[index];
 
-                  child: isLoading
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 5, // Number of skeletons
-                          itemBuilder: (context, index) {
-                            return SkeletonLoader();
-                          },
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: orderHistory.length,
-                          itemBuilder: (context, index) {
-                            var order = orderHistory[index];
-
-                            return MenuItem(
-                              imagePath: 'assets/images/image1.webp',
-                              name: order['storeName'],
-                              orderDate: order['orderDate'],
-                              orderCode: order['orderCode'],
-                              // Pass orderCode
-                              onTrackOrder: () async {
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setInt('orderId', order['id']);
-                                await prefs.setString('storeName', order['storeName']);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/trackorder',
-                                  (Route<dynamic> route) => true,
-                                );
-                              },
-                            );
-                          },
-                        ),
-
+                  return MenuItem(
+                    imagePath: 'assets/images/image1.webp',
+                    name: order['storeName'],
+                    orderDate: order['orderDate'],
+                    orderCode: order['orderCode'],
+                    // Pass orderCode
+                    onTrackOrder: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setInt('orderId', order['id']);
+                      await prefs.setString('storeName', order['storeName']);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/trackorder',
+                        (Route<dynamic> route) => true,
+                      );
+                    },
+                  );
+                },
               ),
-
+      ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 1,
       ),

@@ -5,6 +5,7 @@ import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../http/storeApiService.dart';
+import '../../../shared/date_formatter.dart';
 
 class TrackOrderPage extends StatefulWidget {
   var routeName = '/trackorder';
@@ -171,7 +172,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 Builder(builder: (context) {
                   double totalPrice = 0.0;
 
-                  if (orderHistory.isNotEmpty && orderHistory[0]['items'] != null) {
+                  if (orderHistory.isNotEmpty &&
+                      orderHistory[0]['items'] != null) {
                     for (var item in orderHistory[0]['items']) {
                       totalPrice += (item['totalPrice'] ?? 0);
                     }
@@ -263,14 +265,51 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         thickness: 1.0,
                         height: 16.0,
                       ),
-                      Text(
-                        orderHistory.isNotEmpty
-                            ? orderHistory[0]['orderStatus'] ?? ''
-                            : 'Loading...',
-                        style: const TextStyle(
-                          fontSize: 16,
+                      if (orderHistory.isNotEmpty &&
+                          orderHistory[0]['orderStatusHistory'] != null)
+                        ...List.generate(
+                          (orderHistory[0]['orderStatusHistory'] as List)
+                              .length,
+                          (index) {
+                            final statusItem =
+                                orderHistory[0]['orderStatusHistory'][index];
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          statusItem['status'],
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          DateFormatter.formatTime(
+                                              statusItem['updatedAt']),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ));
+                          },
+                        )
+                      else
+                        const Text(
+                          'No items available.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -319,7 +358,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),

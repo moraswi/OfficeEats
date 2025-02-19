@@ -16,4 +16,9 @@ class DateFormatter {
     final DateTime parsedDate = DateTime.parse(date);
     return DateFormat('yyyy-MM-dd HH:mm').format(parsedDate); // Example: 2024-08-27 14:30
   }
+
+  static String formatTime(String date) {
+    final DateTime parsedDate = DateTime.parse(date);
+    return DateFormat('HH:mm').format(parsedDate); // Example: 2024-08-27 14:30
+  }
 }
