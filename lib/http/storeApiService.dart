@@ -232,6 +232,31 @@ class StoreApiService {
     }
   }
 
+  Future<void> addStatusReq(BuildContext context, int orderId,
+      String orderStatus, int updatedBy) async {
+    try {
+      LoadingDialog.show(context);
+
+      final response =
+          await apiService.addStatus(orderId, orderStatus, updatedBy);
+
+      if (response.statusCode == 200) {
+        // Navigator.of(context).pushNamedAndRemoveUntil(
+        //     '/profilelanding', (Route<dynamic> route) => true);
+
+      } else {
+        // Navigator.of(context).pushNamedAndRemoveUntil(
+        //     '/profilelanding', (Route<dynamic> route) => true);
+        print('API Error: ${response.statusCode}, ${response.body}');
+
+      }
+    } catch (e) {
+      throw Exception('Failed to add status');
+    } finally {
+      // LoadingDialog.hide(context);
+    }
+  }
+
   //placeOrderReq
   Future<void> rateAppReq(BuildContext context, int userId, String message,
       int rating, String improve) async {

@@ -151,6 +151,41 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     );
   }
 
+  Future<void> addStatusReq(BuildContext context, var order) async {
+    try {
+
+      if (order['orderStatus'] == 'Assigned to Delivery') {
+        orderStatus = 'On the Way';
+      } else if (order['orderStatus'] == "On the Way") {
+        orderStatus = 'Arrived';
+      } else if (order['orderStatus'] == "Arrived") {
+        orderStatus = 'Completed';
+      }
+
+      int orderId = 1;
+      int updatedBy = 1;
+
+      await storeService.addStatusReq(context, orderId, orderStatus, updatedBy);
+
+      // Update the order locally
+      setState(() {
+        final index = orderHistory.indexWhere((o) => o['id'] == order['id']);
+        if (index != -1) {
+          orderHistory[index]['orderStatus'] = orderStatus;
+        }
+      });
+
+      if (orderStatus == "Completed") {
+        getOrderDeliveryPartnerIdReq();
+      }
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Status Failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,7 +228,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
                               .toList());
 
                       // Call update method to update the order
-                      updateOrder(context, order);
+                      addStatusReq(context, order);
                     },
                   );
                 },

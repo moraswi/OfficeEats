@@ -129,8 +129,19 @@ class ApiService {
       }).toList(),
     };
 
-    print('data');
-    print(data);
+    return await httpService.post(endpoint, data);
+  }
+
+  //addStatus
+  Future<dynamic> addStatus(
+      int orderId, String orderStatus, int updatedBy) async {
+    final endpoint = 'status';
+    final data = {
+      "orderId": orderId,
+      "status": orderStatus,
+      "updatedBy": updatedBy,
+    };
+
     return await httpService.post(endpoint, data);
   }
 
