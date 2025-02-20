@@ -253,7 +253,7 @@ class StoreApiService {
     } catch (e) {
       throw Exception('Failed to add status');
     } finally {
-      // LoadingDialog.hide(context);
+      LoadingDialog.hide(context);
     }
   }
 

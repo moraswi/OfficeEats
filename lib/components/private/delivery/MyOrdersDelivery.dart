@@ -34,6 +34,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
       getDeliveryPartnerOfficeId = prefs.getInt('deliveryPartnerOfficeId') ?? 0;
     });
 
@@ -153,31 +154,49 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
 
   Future<void> addStatusReq(BuildContext context, var order) async {
     try {
-
-      if (order['orderStatus'] == 'Assigned to Delivery') {
-        orderStatus = 'On the Way';
-      } else if (order['orderStatus'] == "On the Way") {
-        orderStatus = 'Arrived';
-      } else if (order['orderStatus'] == "Arrived") {
-        orderStatus = 'Completed';
+      if (order['orderStatusHistory'] == null ||
+          order['orderStatusHistory'].isEmpty) {
+        throw Exception("No order status history available");
       }
 
-      int orderId = 1;
-      int updatedBy = 1;
+      var latestStatusEntry = order['orderStatusHistory'].first;
+      String latestStatus = latestStatusEntry['status'];
 
-      await storeService.addStatusReq(context, orderId, orderStatus, updatedBy);
+      print(latestStatus);
+
+      if (latestStatus == 'Ready For Pickup') {
+        orderStatus = 'Out For Delivery';
+      } else if (latestStatus == "Out For Delivery") {
+        orderStatus = 'Arrived';
+      } else if (latestStatus == "Arrived") {
+        orderStatus = 'Completed';
+      } else {
+        throw Exception("Invalid status transition");
+      }
+
+      int orderId = order['id'];
+
+      await storeService.addStatusReq(context, orderId, orderStatus, getUserId);
 
       // Update the order locally
-      setState(() {
-        final index = orderHistory.indexWhere((o) => o['id'] == order['id']);
-        if (index != -1) {
-          orderHistory[index]['orderStatus'] = orderStatus;
-        }
-      });
+      // setState(() {
+      //   final index = orderHistory.indexWhere((o) => o['id'] == order['id']);
+      //   if (index != -1) {
+      //     orderHistory[index]['orderStatus'] = orderStatus;
+      //
+      //     orderHistory[index]['orderStatusHistory'].add({
+      //       'id': DateTime.now().millisecondsSinceEpoch, // Generate a unique ID
+      //       'orderId': orderId,
+      //       'status': orderStatus,
+      //       'updatedBy': getUserId, // Assuming this is your user ID
+      //       'updatedAt': DateTime.now().toIso8601String(),
+      //     });
+      //   }
+      // });
 
-      if (orderStatus == "Completed") {
+      // if (orderStatus == "Completed") {
         getOrderDeliveryPartnerIdReq();
-      }
+      // }
     } catch (e) {
       // Handle errors
       ScaffoldMessenger.of(context).showSnackBar(
@@ -208,12 +227,16 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
                 itemBuilder: (context, index) {
                   var order = orderHistory[index];
 
+                  String latestStatus = order['orderStatusHistory'].isNotEmpty
+                      ? order['orderStatusHistory'].first['status']
+                      : "No Status";
+
                   return MenuItem(
                     imagePath: 'assets/images/image1.webp',
                     storeName: order['storeName'],
                     orderDate: order['orderDate'],
                     orderCode: order['orderCode'],
-                    orderStatus: order['orderStatus'],
+                    orderStatus: latestStatus,
                     orderAddress: order['deliveryAddress'],
                     chat: () async {
                       orderDetailsDialog(context, order);
@@ -269,9 +292,9 @@ class MenuItem extends StatefulWidget {
 class _MenuItemState extends State<MenuItem> {
   String getOrderButtonTitle(String orderStatus) {
     switch (orderStatus) {
-      case 'Assigned to Delivery':
+      case 'Assigned':
         return 'Pick Up';
-      case 'On the Way':
+      case 'Out For Delivery':
         return 'Arrived';
       case 'Arrived':
         return 'Complete';

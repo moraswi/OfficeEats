@@ -146,7 +146,6 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   final StoreApiService storeService = StoreApiService();
   List<dynamic> orderHistory = [];
   bool isLoading = true;
-  late int getUserId;
   late int getDeliveryPartnerOfficeId;
 
   @override
