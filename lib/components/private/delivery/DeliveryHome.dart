@@ -147,6 +147,8 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   List<dynamic> orderHistory = [];
   bool isLoading = true;
   late int getDeliveryPartnerOfficeId;
+  String orderStatus = "";
+  late int getUserId;
 
   @override
   void initState() {
@@ -159,6 +161,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
       getDeliveryPartnerOfficeId = prefs.getInt('deliveryPartnerOfficeId') ?? 0;
     });
 
