@@ -58,56 +58,6 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     }
   }
 
-  // updateOrder
-  Future<void> updateOrder(BuildContext context, var order) async {
-    try {
-      final items = (order['items'] as List).cast<Map<String, dynamic>>();
-
-      if (order['orderStatus'] == 'Assigned to Delivery') {
-        orderStatus = 'On the Way';
-      } else if (order['orderStatus'] == "On the Way") {
-        orderStatus = 'Arrived';
-      } else if (order['orderStatus'] == "Arrived") {
-        orderStatus = 'Completed';
-      }
-
-      await storeService.updateOrderReq(
-        context,
-        order['id'],
-        order['userId'],
-        order['totalAmount'],
-        order['deliveryAddress'],
-        order['paymentMethod'],
-        orderStatus,
-        order['orderDate'],
-        order['officeId'],
-        getDeliveryPartnerOfficeId,
-        order['shopId'],
-        order['orderCode'],
-        order['storeName'],
-        order['description'],
-        items,
-      );
-
-      // Update the order locally
-      setState(() {
-        final index = orderHistory.indexWhere((o) => o['id'] == order['id']);
-        if (index != -1) {
-          orderHistory[index]['orderStatus'] = orderStatus;
-        }
-      });
-
-      if (orderStatus == "Completed") {
-        getOrderDeliveryPartnerIdReq();
-      }
-    } catch (e) {
-      // Handle errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order Failed: $e')),
-      );
-    }
-  }
-
   // openWhatsApp
   Future<void> openWhatsApp() async {
     String phoneNumber = "0789298447";
@@ -120,6 +70,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     // }
   }
 
+  // orderDetailsDialog
   void orderDetailsDialog(BuildContext context, order) {
     showDialog(
       context: context,
@@ -152,6 +103,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
     );
   }
 
+  // addStatusReq
   Future<void> addStatusReq(BuildContext context, var order) async {
     try {
       if (order['orderStatusHistory'] == null ||

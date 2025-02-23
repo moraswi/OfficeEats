@@ -281,19 +281,7 @@ class StoreApiService {
   Future<void> updateOrderReq(
     BuildContext context,
     int id,
-    int userId,
-    double totalAmount,
-    String deliveryAddress,
-    String paymentMethod,
-    String orderStatus,
-    String orderDate,
-    int officeId,
     int deliveryPartnerId,
-    int shopId,
-    String orderCode,
-    String storeName,
-    String description,
-    List<Map<String, dynamic>> items,
   ) async {
     try {
       LoadingDialog.show(context);
@@ -301,19 +289,7 @@ class StoreApiService {
       // Call the updated `placeOrder` function with the items list
       var results = await apiService.updateOrder(
         id,
-        userId,
-        totalAmount,
-        deliveryAddress,
-        paymentMethod,
-        orderStatus,
-        orderDate,
-        officeId,
         deliveryPartnerId,
-        shopId,
-        orderCode,
-        storeName,
-        description,
-        items,
       );
 
       if (results.statusCode == 200) {

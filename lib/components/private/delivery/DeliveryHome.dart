@@ -149,6 +149,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   late int getDeliveryPartnerOfficeId;
   String orderStatus = "";
   late int getUserId;
+  late int orderId;
 
   @override
   void initState() {
@@ -188,34 +189,35 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   // updateOrder
   Future<void> updateOrder(BuildContext context, var order) async {
     try {
-      final items = (order['items'] as List).cast<Map<String, dynamic>>();
 
-      final orderStatus = 'Assigned to Delivery';
+      orderId = order['id'];
 
       // Call the API to update the order
       await storeService.updateOrderReq(
         context,
-        order['id'],
-        order['userId'],
-        order['totalAmount'],
-        order['deliveryAddress'],
-        order['paymentMethod'],
-        orderStatus,
-        order['orderDate'],
-        order['officeId'],
+        orderId,
         getDeliveryPartnerOfficeId,
-        order['shopId'],
-        order['orderCode'],
-        order['storeName'],
-        order['description'],
-        items,
       );
 
-      getOrderDeliveryPartnerReq();
+      addStatusReq(context, orderId);
     } catch (e) {
       // Handle errors
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Order Failed: $e')),
+      );
+    }
+  }
+
+  // addStatusReq
+  Future<void> addStatusReq(BuildContext context, int orderId) async {
+    try {
+      orderStatus = 'Assigned';
+      await storeService.addStatusReq(context, orderId, orderStatus, getUserId);
+      getOrderDeliveryPartnerReq();
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Status Failed: $e')),
       );
     }
   }
@@ -242,12 +244,16 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                 itemBuilder: (context, index) {
                   var order = orderHistory[index];
 
+                  String latestStatus = order['orderStatusHistory'].isNotEmpty
+                      ? order['orderStatusHistory'].first['status']
+                      : "No Status";
+
                   return MenuItem(
                     imagePath: 'assets/images/image1.webp',
                     storeName: order['storeName'],
                     orderDate: order['orderDate'],
                     orderCode: order['orderCode'],
-                    orderStatus: order['orderStatus'],
+                    orderStatus: latestStatus,
                     orderAddress: order['deliveryAddress'],
 
                     // Pass orderCode
