@@ -147,7 +147,7 @@ class _MyOrderDeliveryState extends State<MyOrderDelivery> {
       // });
 
       // if (orderStatus == "Completed") {
-        getOrderDeliveryPartnerIdReq();
+      getOrderDeliveryPartnerIdReq();
       // }
     } catch (e) {
       // Handle errors
@@ -223,8 +223,8 @@ class MenuItem extends StatefulWidget {
   final String orderCode;
   final String orderAddress;
   final String orderStatus;
-  final VoidCallback chat; // Callback for the button press
-  final VoidCallback onTrackOrder; // Callback for the button press
+  final VoidCallback chat;
+  final VoidCallback onTrackOrder;
 
   MenuItem({
     required this.imagePath,
