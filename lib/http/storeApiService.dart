@@ -201,7 +201,6 @@ class StoreApiService {
     try {
       LoadingDialog.show(context);
 
-      // Call the updated `placeOrder` function with the items list
       var results = await apiService.placeOrder(
         userId,
         deliveryAddress,
@@ -221,7 +220,7 @@ class StoreApiService {
 
         Navigator.of(context).pushNamedAndRemoveUntil(
           '/orderconfirmed',
-          (Route<dynamic> route) => false, // Clears all previous routes
+          (Route<dynamic> route) => false,
         );
       }
     } catch (e) {

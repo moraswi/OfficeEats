@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -8,16 +9,37 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   var newScreen;
+  String role = "";
 
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.of(context).pushNamedAndRemoveUntil(
-              '/landingPage',
-              (Route<dynamic> route) => false,
-            ));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getSharedPreferenceData();
+    });
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? storedRole = prefs.getString('role');
+
+    if (storedRole != null && storedRole.isNotEmpty) {
+      role = storedRole;
+    } else {
+      role = "";
+    }
+
+    // Delayed navigation based on role
+    Future.delayed(Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          role == "deliverypartner" ? '/deliveryorder' : '/office',
+          (Route<dynamic> route) => false,
+        );
+      }
+    });
   }
 
   @override
@@ -31,15 +53,15 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset(
               'assets/images/motorbike2.png',
-
               height: 150,
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             const Text(
               'Office Eats',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
             )
-
           ],
         ),
       ),

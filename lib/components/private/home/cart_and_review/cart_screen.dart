@@ -14,12 +14,26 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+
   List<Map<String, dynamic>> cartItems = [];
+
+  int getUserId = 0;
 
   @override
   void initState() {
     super.initState();
+
+    getSharedPreferenceData();
     loadCartItems();
+  }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
+
   }
 
   // loadCartItems
@@ -107,8 +121,18 @@ class _CartPageState extends State<CartPage> {
                   ));
                   return;
                 }
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/orderreview', (Route<dynamic> route) => false);
+
+                if(getUserId > 0) {
+
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/orderreview', (Route<dynamic> route) => false);
+                }else{
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/logIn',
+                        (Route<dynamic> route) => false,
+                  );
+                }
+
               },
             ),
           ],
