@@ -26,6 +26,8 @@ import 'package:eats/components/private/delivery/DeliveryHome.dart';
 import 'package:eats/components/private/delivery/MyOrdersDelivery.dart';
 import 'package:eats/components/private/home/menu/meal_customization.dart';
 
+import 'package:eats/components/private/town_shop/town_shop.dart';
+
 Map<String, WidgetBuilder> getRoutes() {
   return {
     // public
@@ -55,6 +57,10 @@ Map<String, WidgetBuilder> getRoutes() {
     //   delivery
     DeliveryOrderPage().routeName: (context) => DeliveryOrderPage(),
     MyOrderDelivery().routeName: (context) => MyOrderDelivery(),
+
+
+    // townshop
+    TownShop().routeName: (context) => TownShop(),
 
   };
 }

@@ -73,7 +73,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                         ? activeIconColor
                         : inactiveIconColor,
                   ),
-                  text: 'Office',
+                  text: 'Town Shop',
                 ),
                 Tab(
                   icon: Icon(
@@ -112,7 +112,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                 });
 
                 if (index == 0) {
-                  Navigator.pushNamed(context, '/office');
+                  Navigator.pushNamed(context, '/townshop');
                 } else if (index == 1) {
                   Navigator.pushNamed(context, '/history');
                 } else if (index == 2) {

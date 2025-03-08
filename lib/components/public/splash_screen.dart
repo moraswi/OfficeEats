@@ -35,7 +35,9 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-          role == "deliverypartner" ? '/deliveryorder' : '/office',
+
+          // role == "deliverypartner" ? '/deliveryorder' : '/office',
+          role == "deliverypartner" ? '/deliveryorder' : '/townshop',
           (Route<dynamic> route) => false,
         );
       }
