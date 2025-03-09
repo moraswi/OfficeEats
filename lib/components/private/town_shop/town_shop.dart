@@ -271,11 +271,11 @@ class _TownShopState extends State<TownShop> {
                         scrollDirection: Axis.horizontal,
                         // Ensures horizontal scrolling
                         children: [
-                          _buildCard(Colors.black, 'Card 1',
-                              'assets/images/food3.jpeg'),
-                          _buildCard(Colors.black, 'Card 2',
+                          _buildCard(
+                              'assets/images/officeEatsBanner.png'),
+                          _buildCard(
                               'assets/images/food5.jpeg'),
-                          _buildCard(Colors.black, 'Card 3',
+                          _buildCard(
                               'assets/images/food6.jpeg'),
                         ],
                       ),
@@ -351,7 +351,7 @@ class _TownShopState extends State<TownShop> {
   }
 
   // advert card
-  Widget _buildCard(Color color, String text, String imagePath) {
+  Widget _buildCard( String imagePath) {
     return Card(
       margin: EdgeInsets.all(8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -371,18 +371,18 @@ class _TownShopState extends State<TownShop> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.black.withOpacity(
-                  0.3), // Optional: adds overlay for better readability
+              // color: Colors.black.withOpacity(
+              //     0.3), // Optional: adds overlay for better readability
             ),
-            child: Center(
-              child: Text(
-                text,
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
+            // child: Center(
+            //   child: Text(
+            //     text,
+            //     style: TextStyle(
+            //         fontSize: 24,
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.bold),
+            //   ),
+            // ),
           ),
         ],
       ),
