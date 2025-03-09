@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -93,22 +94,45 @@ class _TownShopState extends State<TownShop> {
   bool isLoading = true;
 
   final TextEditingController searchController = TextEditingController();
+  final PageController _pageController = PageController(viewportFraction: 0.8);
 
   late int getOfficeId;
   String getOfficeName = "";
+
+  // final PageController _pageController = PageController();
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     // getSharedPreferenceData();
+    _startAutoScroll();
     getStoresReq();
     searchController.addListener(_filterStores);
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     searchController.dispose();
     super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      if (_pageController.page == 2) {
+        _pageController.animateToPage(
+          0,
+          duration: Duration(milliseconds: 700),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _pageController.nextPage(
+          duration: Duration(milliseconds: 700),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 
   // getSharedPreferenceData
@@ -136,7 +160,7 @@ class _TownShopState extends State<TownShop> {
   // getStoresReq
   Future<void> getStoresReq() async {
     try {
-      List<dynamic> response = await storeService.getStoresReq(2);
+      List<dynamic> response = await storeService.getStoresReq(0);
       setState(() {
         stores = response;
         print(stores);
@@ -179,10 +203,12 @@ class _TownShopState extends State<TownShop> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
         child: Column(
           children: [
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
+
+            /// Office Eats Button
             InkWell(
               child: Container(
                 width: double.infinity,
@@ -192,9 +218,9 @@ class _TownShopState extends State<TownShop> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
-                child: Text(
+                child: const Text(
                   "Office Eats",
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
@@ -204,11 +230,14 @@ class _TownShopState extends State<TownShop> {
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   '/myprofile',
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
+
             const SizedBox(height: 15),
+
+            /// Search Bar
             TextFormField(
               controller: searchController,
               decoration: InputDecoration(
@@ -222,66 +251,141 @@ class _TownShopState extends State<TownShop> {
                 contentPadding: const EdgeInsets.all(8),
               ),
             ),
-            const SizedBox(height: 5),
+
+            const SizedBox(height: 15),
+
+
+            /// ListView for Store Items
             Expanded(
-              child: isLoading
-                  ? ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return StoreSkeletonLoader();
-                },
-              )
-                  : ListView.builder(
-                itemCount: filteredStores.length,
-                itemBuilder: (context, index) {
-                  var store = filteredStores[index];
-                  var storeImages = store['storeImages'];
-                  var base64Image =
-                  storeImages != null ? storeImages['base64'] : null;
+              child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                // Keeps vertical scrolling smooth
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // PageView remains horizontally scrollable
+                    SizedBox(
+                      height: 150,
+                      child: PageView(
+                        controller: _pageController,
+                        scrollDirection: Axis.horizontal,
+                        // Ensures horizontal scrolling
+                        children: [
+                          _buildCard(Colors.black, 'Card 1',
+                              'assets/images/food3.jpeg'),
+                          _buildCard(Colors.black, 'Card 2',
+                              'assets/images/food5.jpeg'),
+                          _buildCard(Colors.black, 'Card 3',
+                              'assets/images/food6.jpeg'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5),
 
-                  // Use Image.memory for base64 or fallback to Image.asset
-                  Widget imageWidget =
-                  base64Image != null && base64Image.isNotEmpty
-                      ? Image.memory(
-                    base64Decode(base64Image),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  )
-                      : Image.asset(
-                    'assets/images/noimage.png',
-                    //fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  );
+                    // List of Stores
+                    isLoading
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            // Prevents nested scroll conflicts
+                            itemCount: 5,
+                            itemBuilder: (context, index) =>
+                                StoreSkeletonLoader(),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: filteredStores.length,
+                            itemBuilder: (context, index) {
+                              var store = filteredStores[index];
+                              var storeImages = store['storeImages'];
+                              var base64Image = storeImages != null
+                                  ? storeImages['base64']
+                                  : null;
 
-                  return GestureDetector(
-                      onTap: () async {
-                        final prefs =
-                        await SharedPreferences.getInstance();
-                        await prefs.setInt('storeId', store['id']);
-                        await prefs.setString(
-                            'shopName', store['shopName']);
+                              Widget imageWidget =
+                                  base64Image != null && base64Image.isNotEmpty
+                                      ? Image.memory(
+                                          base64Decode(base64Image),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        )
+                                      : Image.asset(
+                                          'assets/images/noimage.png',
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        );
 
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/storemenu',
-                              (Route<dynamic> route) => true,
-                        );
-                      },
-                      child: StoreCard(
-                        imagePath: imageWidget,
-                        storeName: store['shopName'] ?? 'Unknown Store',
-                        rating: 5,
-                      ));
-                },
+                              return GestureDetector(
+                                onTap: () async {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.setInt('storeId', store['id']);
+                                  await prefs.setString(
+                                      'shopName', store['shopName']);
+
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/storemenu',
+                                    (Route<dynamic> route) => true,
+                                  );
+                                },
+                                child: StoreCard(
+                                  imagePath: imageWidget,
+                                  storeName:
+                                      store['shopName'] ?? 'Unknown Store',
+                                  rating: 5,
+                                ),
+                              );
+                            },
+                          ),
+                  ],
+                ),
               ),
             )
           ],
         ),
       ),
       bottomNavigationBar: RoundedBottomBar(selectedIndex: 0),
+    );
+  }
+
+  // advert card
+  Widget _buildCard(Color color, String text, String imagePath) {
+    return Card(
+      margin: EdgeInsets.all(8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover, // Ensures the image covers the card
+              ),
+            ),
+          ),
+          // Text overlay
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black.withOpacity(
+                  0.3), // Optional: adds overlay for better readability
+            ),
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
