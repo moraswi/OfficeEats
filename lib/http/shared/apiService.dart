@@ -176,7 +176,7 @@ class ApiService {
     return await httpService.post(endpoint, data);
   }
 
-  //deleteUserAddress
+  //rateApp
   Future<dynamic> rateApp(
       int userId, String message, int rating, String improve) async {
     final endpoint = 'rate';
@@ -216,6 +216,25 @@ class ApiService {
   //getQuestionnaireTitle
   Future<dynamic> getQuestionnaireTitle(int storemenuid) async {
     final endpoint = 'questionnaire-title/$storemenuid';
+    return await httpService.get(endpoint);
+  }
+
+  //addChatbotMessage
+  Future<dynamic> addChatbotMessage(
+      int userId, String message, int orderId, int storeId) async {
+    final endpoint = 'message';
+    final data = {
+      'userId': userId,
+      'message': message,
+      'storeId': storeId,
+      'orderId': orderId,
+    };
+    return await httpService.post(endpoint, data);
+  }
+
+  //getChatbotMessages
+  Future<dynamic> getChatbotMessages(int orderid) async {
+    final endpoint = 'message/$orderid';
     return await httpService.get(endpoint);
   }
 

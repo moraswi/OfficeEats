@@ -41,7 +41,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       getShorpName = prefs.getString('storeName') ?? '';
       getFirstName = prefs.getString('firstName') ?? '';
       getPhoneNumber = prefs.getString('phoneNumber') ?? '';
-      print(getOrderId);
     });
     getOrderByIdReq();
   }

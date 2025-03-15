@@ -242,12 +242,10 @@ class StoreApiService {
       if (response.statusCode == 200) {
         // Navigator.of(context).pushNamedAndRemoveUntil(
         //     '/profilelanding', (Route<dynamic> route) => true);
-
       } else {
         // Navigator.of(context).pushNamedAndRemoveUntil(
         //     '/profilelanding', (Route<dynamic> route) => true);
         print('API Error: ${response.statusCode}, ${response.body}');
-
       }
     } catch (e) {
       throw Exception('Failed to add status');
@@ -276,7 +274,46 @@ class StoreApiService {
     }
   }
 
-  //updateOrderReq
+// addChatbotMessage
+  Future<dynamic> addChatbotMessageReq(
+    int userId,
+    String message,
+    int orderId,
+    int storeId,
+  ) async {
+    try {
+      // Call the API service
+      await apiService.addChatbotMessage(
+        userId,
+        message,
+        storeId,
+        orderId,
+      );
+
+      // getChatbotMessages
+      getChatbotMessages(orderId);
+    } catch (e) {
+      // Handle errors properly
+      rethrow;
+    }
+  }
+
+  // addChatbotMessage
+  Future<dynamic> getChatbotMessages(
+    int orderId,
+  ) async {
+    try {
+      // Call the API service
+      await apiService.getChatbotMessages(
+        orderId,
+      );
+    } catch (e) {
+      // Handle errors properly
+      rethrow;
+    }
+  }
+
+//updateOrderReq
   Future<void> updateOrderReq(
     BuildContext context,
     int id,

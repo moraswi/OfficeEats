@@ -115,7 +115,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
-      // print(getUserId);
     });
 
     getOrdersReq();
@@ -175,6 +174,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setInt('orderId', order['id']);
                       await prefs.setString('storeName', order['storeName']);
+                      await prefs.setInt('storeId', order['shopId']);
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         '/trackorder',
                         (Route<dynamic> route) => true,
