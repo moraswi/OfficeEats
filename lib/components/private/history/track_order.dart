@@ -418,6 +418,18 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 1,
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the chatboard page
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/chatbot',
+                (Route<dynamic> route) => false,
+          );
+        },
+        child: Icon(Icons.chat_bubble_outline), // Chat bubble icon
+        tooltip: 'Go to Chatboard',
+      ),
     );
   }
 }

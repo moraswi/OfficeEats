@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-
 class ChatBot extends StatefulWidget {
   var routeName = '/chatbot';
 
@@ -21,28 +20,12 @@ class _ChatBotState extends State<ChatBot> {
     // _connectSocket();
   }
 
-  void _connectSocket() {
-    socket = IO.io('http://yourserver.com', IO.OptionBuilder()
-        .setTransports(['websocket'])
-        .disableAutoConnect()
-        .build());
-
-    socket.connect();
-
-    socket.on('message', (data) {
-      setState(() {
-        messages.add({"sender": "bot", "message": data});
-      });
-    });
-  }
-
   void _sendMessage() {
     if (messageController.text.isNotEmpty) {
       String message = messageController.text.trim();
       setState(() {
         messages.add({"sender": "user", "message": message});
       });
-      // socket.emit('message', message);
       messageController.clear();
     }
   }
@@ -68,9 +51,25 @@ class _ChatBotState extends State<ChatBot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('ChatBot')),
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text('ChatBot', style: TextStyle(color: Colors.white),),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            // Navigator.of(context).pop();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/trackorder',
+                  (Route<dynamic> route) => false,
+            );
+          },
+        ),
+      ),
       body: Column(
         children: [
+          SizedBox(height: 10),
+
+          Text('Hello! Our store manager will assist you shortly.', style: TextStyle(color: Colors.grey),),
           SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
@@ -88,17 +87,28 @@ class _ChatBotState extends State<ChatBot> {
             color: Colors.grey.shade200,
             child: Row(
               children: [
+
                 Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                      border: InputBorder.none,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxHeight: 100, // Set the max height you want for the TextField
+                    ),
+                    child: SingleChildScrollView(
+                      child: TextField(
+                        controller: messageController,
+                        maxLines: null, // Allows the text to wrap into multiple lines
+                        decoration: InputDecoration(
+                          hintText: 'Type your message...',
+                          border: InputBorder.none,
+                        ),
+                        keyboardType: TextInputType.multiline, // Ensures the keyboard is suited for multiple lines
+                      ),
                     ),
                   ),
                 ),
+
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.blue),
+                  icon: Icon(Icons.send, color: Colors.red),
                   onPressed: _sendMessage,
                 )
               ],

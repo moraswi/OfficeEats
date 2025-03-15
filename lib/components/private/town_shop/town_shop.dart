@@ -229,7 +229,7 @@ class _TownShopState extends State<TownShop> {
               ),
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/chatbot',
+                  '/myprofile',
                   (Route<dynamic> route) => false,
                 );
               },
