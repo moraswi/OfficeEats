@@ -28,6 +28,8 @@ import 'package:eats/components/private/home/menu/meal_customization.dart';
 
 import 'package:eats/components/private/town_shop/town_shop.dart';
 
+import '../components/private/chat/chatbot.dart';
+
 Map<String, WidgetBuilder> getRoutes() {
   return {
     // public
@@ -53,6 +55,7 @@ Map<String, WidgetBuilder> getRoutes() {
     MyProfile().routeName: (context) => MyProfile(),
     OrderConfirmed().routeName: (context) => OrderConfirmed(),
     MenuCustomization().routeName: (context) => MenuCustomization(),
+    ChatBot().routeName: (context) => ChatBot(),
 
     //   delivery
     DeliveryOrderPage().routeName: (context) => DeliveryOrderPage(),

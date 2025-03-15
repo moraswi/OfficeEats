@@ -1,0 +1,2 @@
+C:/Users/Administrator/Documents/Projects/OfficeEats/android/app/.cxx/Debug/u3r1i4f1/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Administrator/Documents/Projects/OfficeEats/android/app/.cxx/Debug/u3r1i4f1/x86_64/CMakeFiles/rebuild_cache.dir
