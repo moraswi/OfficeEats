@@ -182,13 +182,8 @@ class _TownShopState extends State<TownShop> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Explore Our Stores'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/office', (Route<dynamic> route) => true);
-          },
-        ),
+
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(
@@ -230,7 +225,7 @@ class _TownShopState extends State<TownShop> {
               onTap: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   '/myprofile',
-                  (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => true,
                 );
               },
             ),
@@ -320,10 +315,9 @@ class _TownShopState extends State<TownShop> {
                                   await prefs.setInt('storeId', store['id']);
                                   await prefs.setString(
                                       'shopName', store['shopName']);
-                                  // await prefs.setString(
-                                  //     'shopAddress', store['address']);
-                                  print("store['Address']");
-                                  print(store['address']);
+                                  await prefs.setString(
+                                      'shopAddress', store['address']);
+
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/storemenu',
                                     (Route<dynamic> route) => true,

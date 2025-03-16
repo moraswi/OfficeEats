@@ -44,13 +44,8 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back action
-            Navigator.of(context).pop();
-          },
-        ),
+        automaticallyImplyLeading: false,
+
       ),
       body: Stack(
         children: [

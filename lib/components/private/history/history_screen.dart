@@ -141,12 +141,8 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Orders'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        automaticallyImplyLeading: false,
+
       ),
       body: Container(
         child: isLoading

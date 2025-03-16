@@ -134,9 +134,7 @@ class _MenuPageState extends State<MenuPage> {
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                     ),
-                    Text("${getOfficeName} Office Pack"),
-                    Text(getShopAddress ),
-
+                    Text(getShopAddress.isEmpty ? "${getOfficeName} Office Pack" : getShopAddress),
                   ],
                 ),
               ),

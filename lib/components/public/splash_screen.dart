@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
           // role == "deliverypartner" ? '/deliveryorder' : '/office',
           role == "deliverypartner" ? '/deliveryorder' : '/townshop',
-          (Route<dynamic> route) => false,
+          (Route<dynamic> route) => true,
         );
       }
     });

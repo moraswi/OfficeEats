@@ -41,6 +41,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   int getStoreId = 0;
   String getShopName = "N/A";
 
+  String _selectedOption = 'delivery';
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +51,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
 
   // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
+
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
@@ -58,12 +61,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           .map((item) => json.decode(item))
           .toList()
           .cast<Map<String, dynamic>>();
-
-      print(orderItems);
-      // orderCustomerzation = orderItems
-      //     .expand((item) => item['orderCustomizations'] ?? [])
-      //     .toList()
-      //     .cast<Map<String, dynamic>>();
 
       getOfficeName = prefs.getString('officeName') ?? "";
       getOfficeLocation = prefs.getString('officeLocation') ?? "";
@@ -117,6 +114,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
         getAddress = [response];
         getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';
       });
+
     } catch (e) {
       print(getAddress);
     }
@@ -151,14 +149,14 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Office Address',
+                    'Delivery Address',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   Text(
-                    '$getOfficeName, $getOfficeLocation',
+                    '$getOfficeAddress',
                     style: const TextStyle(
                       fontSize: 15,
                     ),
@@ -177,7 +175,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   TextFormField(
@@ -222,10 +220,40 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+
+            ListTile(
+              title: Text('Delivery: R75.00'),
+              leading: Radio<String>(
+                value: 'delivery',
+                groupValue: _selectedOption,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedOption = value!;
+                  });
+                },
+              ),
+            ),
+            ListTile(
+              title: Text('Collection R0.00'),
+              leading: Radio<String>(
+                value: 'collection',
+                groupValue: _selectedOption,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedOption = value!;
+                  });
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Selected option: ${_selectedOption == 'delivery' ? 'Delivery (R75.00)' : 'Collection (R0.00)'}',
+              style: TextStyle(fontSize: 16),
+            ),
 
             const Text(
-              'Collect your food when the order status is complete',
+              'To pay for this order, send cash to our store. Find our bank details under History > Track Order.',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),

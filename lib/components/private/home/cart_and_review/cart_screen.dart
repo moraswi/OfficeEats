@@ -74,12 +74,8 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cart'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        automaticallyImplyLeading: false,
+
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -124,12 +120,13 @@ class _CartPageState extends State<CartPage> {
 
                 if(getUserId > 0) {
 
+
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/orderreview', (Route<dynamic> route) => false);
+                      '/orderreview', (Route<dynamic> route) => true);
                 }else{
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     '/logIn',
-                        (Route<dynamic> route) => false,
+                        (Route<dynamic> route) => true,
                   );
                 }
 

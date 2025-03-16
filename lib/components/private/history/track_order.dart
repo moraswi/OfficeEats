@@ -454,7 +454,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
           // Navigate to the chatboard page
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/chatbot',
-            (Route<dynamic> route) => false,
+            (Route<dynamic> route) => true,
           );
         },
         child: Icon(Icons.chat_bubble_outline), // Chat bubble icon

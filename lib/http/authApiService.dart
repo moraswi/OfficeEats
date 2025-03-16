@@ -44,12 +44,12 @@ class AuthApiService {
         if (userData['role'] == "customer") {
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/office',
-            (Route<dynamic> route) => false,
+            (Route<dynamic> route) => true,
           );
         } else if (userData['role'] == "deliverypartner") {
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/deliveryorder',
-            (Route<dynamic> route) => false,
+            (Route<dynamic> route) => true,
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
