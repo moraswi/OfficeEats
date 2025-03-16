@@ -283,30 +283,32 @@ class StoreApiService {
   ) async {
     try {
       // Call the API service
-      await apiService.addChatbotMessage(
+      var results = await apiService.addChatbotMessage(
         userId,
         message,
-        storeId,
         orderId,
+        storeId,
       );
 
       // getChatbotMessages
-      getChatbotMessages(orderId);
+      // getChatbotMessagesReq(orderId);
     } catch (e) {
       // Handle errors properly
       rethrow;
     }
   }
 
-  // addChatbotMessage
-  Future<dynamic> getChatbotMessages(
+  // getChatbotMessagesReq
+  Future<dynamic> getChatbotMessagesReq(
     int orderId,
   ) async {
     try {
       // Call the API service
-      await apiService.getChatbotMessages(
+      var results =await apiService.getChatbotMessages(
         orderId,
       );
+
+      return results;
     } catch (e) {
       // Handle errors properly
       rethrow;
