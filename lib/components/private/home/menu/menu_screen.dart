@@ -24,6 +24,7 @@ class _MenuPageState extends State<MenuPage> {
   late int getCategoryId;
   String getShopName = "";
   String getOfficeName = "";
+  String getShopAddress = "";
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _MenuPageState extends State<MenuPage> {
       getCategoryId = categoryId;
       getShopName = prefs.getString('shopName') ?? "";
       getOfficeName = prefs.getString('officeName') ?? '';
+      getShopAddress = prefs.getString('shopAddress') ?? '';
     });
 
     if (getCategoryId != null) {
@@ -133,6 +135,8 @@ class _MenuPageState extends State<MenuPage> {
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                     ),
                     Text("${getOfficeName} Office Pack"),
+                    Text(getShopAddress ),
+
                   ],
                 ),
               ),

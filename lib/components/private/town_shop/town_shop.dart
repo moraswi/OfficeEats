@@ -219,7 +219,7 @@ class _TownShopState extends State<TownShop> {
                 ),
                 alignment: Alignment.center,
                 child: const Text(
-                  "Office Eats",
+                  "Town Shops Office Eats",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -254,7 +254,6 @@ class _TownShopState extends State<TownShop> {
 
             const SizedBox(height: 15),
 
-
             /// ListView for Store Items
             Expanded(
               child: SingleChildScrollView(
@@ -271,12 +270,9 @@ class _TownShopState extends State<TownShop> {
                         scrollDirection: Axis.horizontal,
                         // Ensures horizontal scrolling
                         children: [
-                          _buildCard(
-                              'assets/images/officeEatsBanner.png'),
-                          _buildCard(
-                              'assets/images/food5.jpeg'),
-                          _buildCard(
-                              'assets/images/food6.jpeg'),
+                          _buildCard('assets/images/officeEatsBanner.png'),
+                          _buildCard('assets/images/food5.jpeg'),
+                          _buildCard('assets/images/food6.jpeg'),
                         ],
                       ),
                     ),
@@ -324,7 +320,10 @@ class _TownShopState extends State<TownShop> {
                                   await prefs.setInt('storeId', store['id']);
                                   await prefs.setString(
                                       'shopName', store['shopName']);
-
+                                  // await prefs.setString(
+                                  //     'shopAddress', store['address']);
+                                  print("store['Address']");
+                                  print(store['address']);
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                     '/storemenu',
                                     (Route<dynamic> route) => true,
@@ -351,7 +350,7 @@ class _TownShopState extends State<TownShop> {
   }
 
   // advert card
-  Widget _buildCard( String imagePath) {
+  Widget _buildCard(String imagePath) {
     return Card(
       margin: EdgeInsets.all(8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -371,18 +370,7 @@ class _TownShopState extends State<TownShop> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              // color: Colors.black.withOpacity(
-              //     0.3), // Optional: adds overlay for better readability
             ),
-            // child: Center(
-            //   child: Text(
-            //     text,
-            //     style: TextStyle(
-            //         fontSize: 24,
-            //         color: Colors.white,
-            //         fontWeight: FontWeight.bold),
-            //   ),
-            // ),
           ),
         ],
       ),
