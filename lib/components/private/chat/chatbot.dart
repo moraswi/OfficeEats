@@ -156,6 +156,10 @@ class _ChatBotState extends State<ChatBot> {
             'Hello! Our store manager will assist you shortly.',
             style: TextStyle(color: Colors.grey),
           ),
+          const Text(
+            "Please don't share personal details.",
+            style: TextStyle(color: Colors.grey),
+          ),
           SizedBox(height: 20),
 
           Expanded(

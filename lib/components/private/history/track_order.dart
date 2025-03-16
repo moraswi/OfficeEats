@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:eats/shared/app_colors.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../http/storeApiService.dart';
 import '../../../shared/date_formatter.dart';
 
@@ -76,25 +73,60 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 const SizedBox(
                   height: 5,
                 ),
+
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    getShorpName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 30,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns all text left
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          getShorpName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Capitec",
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Account Number: 0124587888",
+                          style: TextStyle(color: Colors.red, fontSize: 15),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          'Ref: Moloto P',
+                          style: TextStyle(color: Colors.red, fontSize: 15),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Order: ${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+
+                const SizedBox(
+                  height: 15,
                 ),
+
                 const SizedBox(
                   height: 15,
                 ),
@@ -417,13 +449,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 1,
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the chatboard page
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/chatbot',
-                (Route<dynamic> route) => false,
+            (Route<dynamic> route) => false,
           );
         },
         child: Icon(Icons.chat_bubble_outline), // Chat bubble icon
