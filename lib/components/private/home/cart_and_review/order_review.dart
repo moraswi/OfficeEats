@@ -41,7 +41,9 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   int getStoreId = 0;
   String getShopName = "N/A";
 
-  String _selectedOption = 'delivery';
+  // String _selectedOption = 'delivery';
+  double? deliveryFee = 0.0;
+  String? _selectedOption;
 
   @override
   void initState() {
@@ -77,6 +79,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
     getUserAddressReq();
   }
 
+  // submitOrder
   Future<void> submitOrder() async {
     String description = orderInstructionController.text;
 
@@ -85,6 +88,12 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
         SnackBar(content: Text('Add your office address')),
       );
       return;
+    }
+
+    // Update deliveryFee in each order item
+    for (var item in orderItems) {
+    //  item['deliveryFee'] = deliveryFee ?? 0.0; // Use selected fee, default to 0.0
+      item['deliveryFee'] =  11.0; // Use selected fee, default to 0.0
     }
 
     try {
@@ -97,6 +106,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           getShopName,
           getUserId,
           description,
+          deliveryFee,
           orderItems);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -225,27 +235,30 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             ListTile(
               title: Text('Delivery: R75.00'),
               leading: Radio<String>(
-                value: 'delivery',
+                value: '75.00',
                 groupValue: _selectedOption,
                 onChanged: (String? value) {
                   setState(() {
                     _selectedOption = value!;
+                    deliveryFee = double.parse(value); // Set delivery fee
                   });
                 },
               ),
             ),
             ListTile(
-              title: Text('Collection R0.00'),
+              title: Text('Collection: R0.00'),
               leading: Radio<String>(
-                value: 'collection',
+                value: '0.00',
                 groupValue: _selectedOption,
                 onChanged: (String? value) {
                   setState(() {
                     _selectedOption = value!;
+                    deliveryFee = double.parse(value); // Set delivery fee
                   });
                 },
               ),
             ),
+
             SizedBox(height: 20),
             Text(
               'Selected option: ${_selectedOption == 'delivery' ? 'Delivery (R75.00)' : 'Collection (R0.00)'}',

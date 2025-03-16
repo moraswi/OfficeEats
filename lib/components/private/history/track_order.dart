@@ -22,6 +22,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   String getFirstName = "";
   String getShorpName = "";
   double totalPrice = 0.0;
+  double deliveryFee = 0.0;
+  double subtotalPrice = 0.0;
 
   @override
   void initState() {
@@ -50,7 +52,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       setState(() {
         orderHistory = [response];
         isLoading = false;
+        subtotalPrice = orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] : 0.0;
+        deliveryFee = orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
+        totalPrice = subtotalPrice + deliveryFee;
       });
+      print("orderHistory>>>>>>>>>>>>>>>>>>");
+      print(orderHistory);
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -201,14 +208,16 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                   height: 15,
                 ),
                 Builder(builder: (context) {
-                  double totalPrice = 0.0;
+                  // double totalPrice = 0.0;
+                  // double deliveryFee = 0.0;
 
-                  if (orderHistory.isNotEmpty &&
-                      orderHistory[0]['items'] != null) {
-                    for (var item in orderHistory[0]['items']) {
-                      totalPrice += (item['totalPrice'] ?? 0);
-                    }
-                  }
+                  // if (orderHistory.isNotEmpty &&
+                  //     orderHistory[0]['items'] != null) {
+                  //   for (var item in orderHistory[0]['items']) {
+                  //     totalPrice += (item['totalPrice'] ?? 0);
+                  //   }
+                  //   // totalPrice += deliveryFee;
+                  // }
                   return Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -229,13 +238,13 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Subtotal: R${totalPrice.toStringAsFixed(2)}',
+                          'Subtotal: R$subtotalPrice',
                           style: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                        const Text(
-                          'Delivery Fee: R0.00',
+                         Text(
+                          'Delivery Fee:  R$deliveryFee',
                           style: TextStyle(
                             fontSize: 16,
                           ),

@@ -104,6 +104,7 @@ class ApiService {
     String storeName,
     int officeId,
     description,
+    deliveryFee,
     List<Map<String, dynamic>> items,
   ) async {
 
@@ -118,6 +119,7 @@ class ApiService {
       'storeName': storeName,
       'officeId': officeId,
       'description': description,
+      'deliveryFee': deliveryFee,
       'items': items.map((item) {
         return {
           'foodId': item['foodId'],

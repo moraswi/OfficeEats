@@ -196,6 +196,7 @@ class StoreApiService {
     String storeName,
     int officeId,
     description,
+    deliveryFee,
     List<Map<String, dynamic>> items,
   ) async {
     try {
@@ -209,6 +210,7 @@ class StoreApiService {
         storeName,
         officeId,
         description,
+        deliveryFee,
         items,
       );
 
