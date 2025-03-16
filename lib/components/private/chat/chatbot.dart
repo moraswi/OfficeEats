@@ -44,11 +44,19 @@ class _ChatBotState extends State<ChatBot> {
     getChatBotMessage();
   }
 
-  // _sendMessage
-  Future<void> _sendMessage() async {
+  // sendMessage
+  Future<void> sendMessage() async {
     try {
       if (messageController.text.isNotEmpty) {
         getMessage = messageController.text.trim();
+
+        // Check if the message contains contact details
+        if (containsContactInfo(getMessage)) {
+          print("Message contains restricted information.");
+          _showWarning("You cannot share personal contact details.");
+
+          return;
+        }
 
         await storeService.addChatbotMessageReq(
             getUserId, getMessage, getOrderId, getStoreId);
@@ -58,7 +66,6 @@ class _ChatBotState extends State<ChatBot> {
         });
         messageController.clear();
 
-        // getChatBotMessage
         getChatBotMessage();
       }
     } catch (e) {
@@ -66,6 +73,23 @@ class _ChatBotState extends State<ChatBot> {
     }
   }
 
+  // Function to check for contact details
+  bool containsContactInfo(String message) {
+    final phoneRegex = RegExp(r'\b(\+?\d{1,3}[-.\s]?)?(\d{2,4}[-.\s]?){2,4}\d\b');
+    final emailRegex = RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b');
+
+    return phoneRegex.hasMatch(message) || emailRegex.hasMatch(message);
+  }
+// Function to show warning message
+  void _showWarning(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
   // getChatBotMessage
   Future<void> getChatBotMessage() async {
     try {
@@ -87,23 +111,23 @@ class _ChatBotState extends State<ChatBot> {
     }
   }
 
-  Widget _buildMessageBubble(String message, bool isUser) {
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: isUser ? Colors.blue : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          message,
-          style: TextStyle(color: isUser ? Colors.white : Colors.black),
-        ),
-      ),
-    );
-  }
+  // Widget _buildMessageBubble(String message, bool isUser) {
+  //   return Align(
+  //     alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+  //     child: Container(
+  //       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  //       padding: EdgeInsets.all(10),
+  //       decoration: BoxDecoration(
+  //         color: isUser ? Colors.blue : Colors.grey.shade300,
+  //         borderRadius: BorderRadius.circular(10),
+  //       ),
+  //       child: Text(
+  //         message,
+  //         style: TextStyle(color: isUser ? Colors.white : Colors.black),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +152,7 @@ class _ChatBotState extends State<ChatBot> {
       body: Column(
         children: [
           SizedBox(height: 10),
-          Text(
+          const Text(
             'Hello! Our store manager will assist you shortly.',
             style: TextStyle(color: Colors.grey),
           ),
@@ -159,18 +183,6 @@ class _ChatBotState extends State<ChatBot> {
             ),
           ),
 
-
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: messages.length,
-          //     itemBuilder: (context, index) {
-          //       return _buildMessageBubble(
-          //         messages[index]['message']!,
-          //         messages[index]['sender'] == 'user',
-          //       );
-          //     },
-          //   ),
-          // ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Colors.grey.shade200,
@@ -199,7 +211,7 @@ class _ChatBotState extends State<ChatBot> {
                 ),
                 IconButton(
                   icon: Icon(Icons.send, color: Colors.red),
-                  onPressed: _sendMessage,
+                  onPressed: sendMessage,
                 )
               ],
             ),
