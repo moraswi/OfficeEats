@@ -31,7 +31,8 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   String? menuItemName;
   // Map<int, String?> selectedOptions = {};
   String? description;
-
+  int getStoreId = 0;
+  String? getShopName;
   String selectedOptionName = '';
   Map<int, int?> selectedOptions = {}; // Stores selected option ID for each title
   Map<int, double> selectedOptionPrices = {};
@@ -52,6 +53,8 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     final fetchedTotalItemsAmount = prefs.getDouble('menuItemPrice') ?? 0.0;
     final fetchedMenuItemName = prefs.getString('menuItemName') ?? "";
     final fetchedDescription = prefs.getString('description') ?? "";
+    getStoreId = prefs.getInt('storeId') ?? 0;
+    getShopName = prefs.getString('shopName') ?? "";
 
     setState(() {
       // Update state synchronously
@@ -151,11 +154,9 @@ class _MenuCustomizationState extends State<MenuCustomization> {
       'itemPrice': totalItemsAmount,
       'quantity': quantity,
       'customizations': selectedCustomizations,
+      'storeId':getStoreId,
+      'storeName':getShopName,
     }));
-
-    print('cartItems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    print(cartItems);
-    print('cartItems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 
     // Save updated cart
     prefs.setStringList('cartItems', cartItems);
@@ -163,7 +164,6 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/cart', (Route<dynamic> route) => true);
 
-    // print("Item added to cart: $cartItems");
   }
 
   @override

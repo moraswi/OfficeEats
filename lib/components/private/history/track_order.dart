@@ -56,8 +56,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
         deliveryFee = orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
         totalPrice = subtotalPrice + deliveryFee;
       });
-      print("orderHistory>>>>>>>>>>>>>>>>>>");
-      print(orderHistory);
+
     } catch (e) {
       setState(() {
         isLoading = false;

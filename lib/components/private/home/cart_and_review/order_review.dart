@@ -260,10 +260,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             ),
 
             SizedBox(height: 20),
-            Text(
-              'Selected option: ${_selectedOption == 'delivery' ? 'Delivery (R75.00)' : 'Collection (R0.00)'}',
-              style: TextStyle(fontSize: 16),
-            ),
+
 
             const Text(
               'To pay for this order, send cash to our store. Find our bank details under History > Track Order.',

@@ -14,7 +14,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
   List<Map<String, dynamic>> cartItems = [];
 
   int getUserId = 0;
@@ -33,7 +32,6 @@ class _CartPageState extends State<CartPage> {
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
     });
-
   }
 
   // loadCartItems
@@ -49,6 +47,7 @@ class _CartPageState extends State<CartPage> {
           .toList()
           .cast<Map<String, dynamic>>();
     });
+
   }
 
   // _saveCartItems
@@ -75,7 +74,6 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: Text('Cart'),
         automaticallyImplyLeading: false,
-
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -97,7 +95,7 @@ class _CartPageState extends State<CartPage> {
                         name: item['foodName'] ?? 'Loading...',
                         description: item['description'] ?? '',
                         price: item['itemPrice'] ?? 0.0,
-                        // name: "item['foodName'] ?? 'Loading...'",
+                        storeName: item['storeName'] ?? 'Loading...',
                         // description: "item['description'] ?? 0.0",
                         // price: 0.0,
                         onDelete: () => _removeItem(index),
@@ -118,18 +116,24 @@ class _CartPageState extends State<CartPage> {
                   return;
                 }
 
-                if(getUserId > 0) {
-
-
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/orderreview', (Route<dynamic> route) => true);
-                }else{
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/logIn',
-                        (Route<dynamic> route) => true,
-                  );
+                // Ensure all items come from the same store
+                final uniqueStoreIds = cartItems.map((item) => item['storeId']).toSet();
+                if (uniqueStoreIds.length > 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('You can only purchase from a single shop at a time!'),
+                  ));
+                  return;
                 }
 
+                if (getUserId > 0) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/orderreview', (Route<dynamic> route) => true);
+                } else {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/logIn',
+                    (Route<dynamic> route) => true,
+                  );
+                }
               },
             ),
           ],
@@ -148,6 +152,7 @@ class MenuItem extends StatelessWidget {
   final String name;
   final String description;
   final double price;
+  final String storeName;
   final VoidCallback onDelete;
 
   MenuItem({
@@ -155,6 +160,7 @@ class MenuItem extends StatelessWidget {
     required this.name,
     required this.description,
     required this.price,
+    required this.storeName,
     required this.onDelete,
   });
 
@@ -201,6 +207,15 @@ class MenuItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                Text(
+                  storeName,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey
+                  ),
+                ),
+
               ],
             ),
           ),
