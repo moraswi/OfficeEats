@@ -84,24 +84,25 @@ class _MenuPageState extends State<MenuPage> {
         preferredSize: Size.fromHeight(180),
         child: AppBar(
           backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(100),
-                  bottomRight: Radius.circular(0))),
+          // shape: const RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.only(
+          //         bottomLeft: Radius.circular(100),
+          //         bottomRight: Radius.circular(0))
+          // ),
           flexibleSpace: ClipRRect(
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(100),
-                bottomRight: Radius.circular(0)),
+            // borderRadius: const BorderRadius.only(
+            //     bottomLeft: Radius.circular(100),
+            //     bottomRight: Radius.circular(0)),
             child: Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/images/burgermeal.png"),
+                      image: AssetImage("assets/images/menuBg.webp"),
                       fit: BoxFit.fill)),
             ),
           ),
           title: Text(''),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back , color: Colors.white,),
             onPressed: () {
               // Handle back action
               Navigator.of(context).pop();
@@ -110,7 +111,7 @@ class _MenuPageState extends State<MenuPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.shopping_cart_sharp,
-                  size: 28, color: AppColors.primaryColor),
+                  size: 28, color: Colors.white),
               onPressed: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/cart', (Route<dynamic> route) => true);
