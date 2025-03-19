@@ -20,7 +20,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   List<dynamic> orderHistory = [];
   bool isLoading = true;
   int getOrderId = 0;
-  int getStoreId = 1;
+  int getStoreId = 0;
   String getPhoneNumber = "";
   String getFirstName = "";
   String getShorpName = "";
@@ -48,9 +48,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       getFirstName = prefs.getString('firstName') ?? '';
       getPhoneNumber = prefs.getString('phoneNumber') ?? '';
     });
-    getOrderByIdReq();
-    getStoreBankingDetailsReq();
-
+    await getOrderByIdReq();
   }
 
   // getOrdersReq
@@ -66,7 +64,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
         deliveryFee =
             orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
         totalPrice = subtotalPrice + deliveryFee;
+
+        getStoreId = orderHistory.isNotEmpty ? orderHistory[0]['shopId'] : 0.0;
       });
+
+      await getStoreBankingDetailsReq();
+
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -75,36 +78,22 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   }
 
   // getStoreBankingDetailsReq
+  // getStoreBankingDetailsReq
   Future<void> getStoreBankingDetailsReq() async {
     try {
-      var jsonResponse = await storeService.getStoreBankingDetailsReq(getStoreId);
+      var response = await storeService.getStoreBankingDetailsReq(getStoreId);
 
-      // Decode the JSON string into a Map
-      var response = jsonDecode(jsonResponse);
-      // print(response);
-      // print(response['accountNumber']);
+      // Assuming response is a JSON object
+      var data = jsonDecode(response.body);
 
       setState(() {
-        getAccountNo = response['accountNumber'];
-        getAccountRef = response['reference'];
-        getAccountName = response['accountName'];
-
-        print('fsdds');
-        print(response['accountNumber']);
-        print('dfd');
-        print(getAccountNo);
-        print(getAccountName);
+        getAccountNo = data['accountNumber'] ?? '';
+        getAccountRef = data['reference'] ?? '';
+        getAccountName = data['accountName'] ?? '';
       });
 
-
-
-      //  getAccountNo = response.a;
-      // String getAccountRef = "";
-      // String getAccountName = "";
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+    } catch (error) {
+      print('Error fetching banking details: $error');
     }
   }
 
@@ -151,23 +140,24 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           getAccountName,
-                          style: TextStyle(color: Colors.red, fontSize: 14),
+                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Account Number: $getAccountNo",
-                          style: TextStyle(color: Colors.red, fontSize: 15),
+                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Ref: $getAccountRef',
-                          style: TextStyle(color: Colors.red, fontSize: 15),
+                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
+                      Text('Please use order number (${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}) as your reference')
                     ],
                   ),
                 ),
