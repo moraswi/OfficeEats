@@ -163,8 +163,6 @@ class _MyProfileState extends State<MyProfile> {
       Map<String, dynamic> response =
           await authService.getUserAddressReq(getUserId!);
 
-      print(response);
-      print(response);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
         officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
@@ -443,7 +441,7 @@ class _MyProfileState extends State<MyProfile> {
                                 ),
                               if (officeAddressText.isEmpty ||
                                   officePackText.isEmpty)
-                                Text('Add your office address'),
+                                Text('Add your address'),
                             ],
                           ),
                         ),
@@ -463,6 +461,8 @@ class _MyProfileState extends State<MyProfile> {
                 : Container(),
 
             const SizedBox(height: 15),
+
+            if(getUserId != 0)
             InkWell(
               onTap: _showDeleteAccountDialog,
               child: const Text(

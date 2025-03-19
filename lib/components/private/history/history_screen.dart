@@ -73,21 +73,23 @@ class _MenuItemState extends State<MenuItem> {
             onPressed: widget.onTrackOrder, // Trigger the callback
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor: Colors.white, // Keep the background white
-              elevation: 0, // Remove the shadow
+              backgroundColor: Colors.white,
+              // Keep the background white
+              elevation: 0,
+              // Remove the shadow
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
             ),
             child: const Icon(
-              Icons.arrow_forward_ios_outlined, // Use the arrow icon or any other icon you prefer
+              Icons.arrow_forward_ios_outlined,
+              // Use the arrow icon or any other icon you prefer
               color: Colors.black,
               size: 20.0, // Adjust the size of the icon
             ),
           ),
-
-
         ],
       ),
     );
@@ -145,7 +147,6 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         title: Text('My Orders'),
         automaticallyImplyLeading: false,
-
       ),
       body: Container(
         child: isLoading
@@ -157,31 +158,63 @@ class _HistoryPageState extends State<HistoryPage> {
                   return SkeletonLoader();
                 },
               )
-            : ListView.builder(
-                shrinkWrap: true,
-                itemCount: orderHistory.length,
-                itemBuilder: (context, index) {
-                  var order = orderHistory[index];
+            : orderHistory.isEmpty
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.history_outlined,
+                            size: 100,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'No orders yet!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          // CustomButton(
+                          //   label: 'Start Shopping',
+                          //   onTap: () {
+                          //     // Navigate to the shopping page
+                          //     Navigator.of(context).pushNamed('/shop');
+                          //   },
+                          // ),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: orderHistory.length,
+                    itemBuilder: (context, index) {
+                      var order = orderHistory[index];
 
-                  return MenuItem(
-                    imagePath: 'assets/images/image1.webp',
-                    name: order['storeName'],
-                    orderDate: order['orderDate'],
-                    orderCode: order['orderCode'],
-                    // Pass orderCode
-                    onTrackOrder: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setInt('orderId', order['id']);
-                      await prefs.setString('storeName', order['storeName']);
-                      await prefs.setInt('storeId', order['shopId']);
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/trackorder',
-                        (Route<dynamic> route) => true,
+                      return MenuItem(
+                        imagePath: 'assets/images/image1.webp',
+                        name: order['storeName'],
+                        orderDate: order['orderDate'],
+                        orderCode: order['orderCode'],
+                        // Pass orderCode
+                        onTrackOrder: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setInt('orderId', order['id']);
+                          await prefs.setString(
+                              'storeName', order['storeName']);
+                          await prefs.setInt('storeId', order['shopId']);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/trackorder',
+                            (Route<dynamic> route) => true,
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
+                  ),
       ),
       bottomNavigationBar: RoundedBottomBar(
         selectedIndex: 1,

@@ -46,8 +46,8 @@ class _CartPageState extends State<CartPage> {
           .map((item) => json.decode(item))
           .toList()
           .cast<Map<String, dynamic>>();
-    });
 
+    });
   }
 
   // _saveCartItems
@@ -82,45 +82,74 @@ class _CartPageState extends State<CartPage> {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
+
+            cartItems.isEmpty
+                ? Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.shopping_cart_outlined,
+                      size: 100,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Your cart is empty!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            : Expanded(
               child: ListView.builder(
                 itemCount: cartItems.length,
                 itemBuilder: (context, index) {
                   final item = cartItems[index];
                   return Column(
                     children: [
-                      MenuItem(
-                        // imagePath:
-                        //     item['imagePath'] ?? 'assets/images/burgermeal.png',
-                        name: item['foodName'] ?? 'Loading...',
-                        description: item['description'] ?? '',
-                        price: item['itemPrice'] ?? 0.0,
-                        storeName: item['storeName'] ?? 'Loading...',
-                        // description: "item['description'] ?? 0.0",
-                        // price: 0.0,
-                        onDelete: () => _removeItem(index),
-                      ),
+
+                           MenuItem(
+                              // imagePath:
+                              //     item['imagePath'] ?? 'assets/images/burgermeal.png',
+                              name: item['foodName'] ?? 'Loading...',
+                              description: item['description'] ?? '',
+                              price: item['itemPrice'] ?? 0.0,
+                              storeName: item['storeName'] ?? 'Loading...',
+                              // description: "item['description'] ?? 0.0",
+                              // price: 0.0,
+                              onDelete: () => _removeItem(index),
+                            ),
                       SizedBox(height: 20),
                     ],
                   );
                 },
               ),
             ),
+
+            if (cartItems.isNotEmpty)
             CustomButton(
               label: 'Check Out',
               onTap: () {
-                if (cartItems.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Your cart is empty!'),
-                  ));
-                  return;
-                }
+                // if (cartItems.isEmpty) {
+                //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                //     content: Text('Your cart is empty!'),
+                //   ));
+                //   return;
+                // }
 
                 // Ensure all items come from the same store
-                final uniqueStoreIds = cartItems.map((item) => item['storeId']).toSet();
+                final uniqueStoreIds =
+                    cartItems.map((item) => item['storeId']).toSet();
                 if (uniqueStoreIds.length > 1) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('You can only purchase from a single shop at a time!'),
+                    content: Text(
+                        'You can only purchase from a single shop at a time!'),
                   ));
                   return;
                 }
@@ -181,13 +210,6 @@ class MenuItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Image.asset(
-          //   imagePath,
-          //   width: 80,
-          //   height: 80,
-          //   fit: BoxFit.cover,
-          // ),
-          // SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,12 +232,10 @@ class MenuItem extends StatelessWidget {
                 Text(
                   storeName,
                   style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey
-                  ),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
                 ),
-
               ],
             ),
           ),
