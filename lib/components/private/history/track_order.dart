@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,17 +20,22 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   List<dynamic> orderHistory = [];
   bool isLoading = true;
   int getOrderId = 0;
+  int getStoreId = 1;
   String getPhoneNumber = "";
   String getFirstName = "";
   String getShorpName = "";
   double totalPrice = 0.0;
   double deliveryFee = 0.0;
   double subtotalPrice = 0.0;
+  String getAccountNo = "";
+  String getAccountRef = "";
+  String getAccountName = "";
 
   @override
   void initState() {
     super.initState();
     getSharedPreferenceData();
+
   }
 
   // getSharedPreferenceData
@@ -42,6 +49,8 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       getPhoneNumber = prefs.getString('phoneNumber') ?? '';
     });
     getOrderByIdReq();
+    getStoreBankingDetailsReq();
+
   }
 
   // getOrdersReq
@@ -52,11 +61,46 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       setState(() {
         orderHistory = [response];
         isLoading = false;
-        subtotalPrice = orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] : 0.0;
-        deliveryFee = orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
+        subtotalPrice =
+            orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] : 0.0;
+        deliveryFee =
+            orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
         totalPrice = subtotalPrice + deliveryFee;
       });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
+  // getStoreBankingDetailsReq
+  Future<void> getStoreBankingDetailsReq() async {
+    try {
+      var jsonResponse = await storeService.getStoreBankingDetailsReq(getStoreId);
+
+      // Decode the JSON string into a Map
+      var response = jsonDecode(jsonResponse);
+      // print(response);
+      // print(response['accountNumber']);
+
+      setState(() {
+        getAccountNo = response['accountNumber'];
+        getAccountRef = response['reference'];
+        getAccountName = response['accountName'];
+
+        print('fsdds');
+        print(response['accountNumber']);
+        print('dfd');
+        print(getAccountNo);
+        print(getAccountName);
+      });
+
+
+
+      //  getAccountNo = response.a;
+      // String getAccountRef = "";
+      // String getAccountName = "";
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -79,11 +123,11 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                 const SizedBox(
                   height: 5,
                 ),
-
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns all text left
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // Aligns all text left
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
@@ -103,36 +147,33 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
-                          "Capitec",
+                        child: Text(
+                          getAccountName,
                           style: TextStyle(color: Colors.red, fontSize: 14),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
-                          "Account Number: 0124587888",
+                        child: Text(
+                          "Account Number: $getAccountNo",
                           style: TextStyle(color: Colors.red, fontSize: 15),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
-                          'Ref: Moloto P',
+                        child: Text(
+                          'Ref: $getAccountRef',
                           style: TextStyle(color: Colors.red, fontSize: 15),
                         ),
                       ),
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
@@ -242,7 +283,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                             fontSize: 16,
                           ),
                         ),
-                         Text(
+                        Text(
                           'Delivery Fee:  R$deliveryFee',
                           style: TextStyle(
                             fontSize: 16,

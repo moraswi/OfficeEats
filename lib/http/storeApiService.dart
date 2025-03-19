@@ -306,8 +306,25 @@ class StoreApiService {
   ) async {
     try {
       // Call the API service
-      var results =await apiService.getChatbotMessages(
+      var results = await apiService.getChatbotMessages(
         orderId,
+      );
+
+      return results;
+    } catch (e) {
+      // Handle errors properly
+      rethrow;
+    }
+  }
+
+  // getStoreBankingDetailsReq
+  Future<dynamic> getStoreBankingDetailsReq(
+    int storeId,
+  ) async {
+    try {
+      // Call the API service
+      var results = await apiService.getStoreBankingDetails(
+        storeId,
       );
 
       return results;

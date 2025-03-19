@@ -108,8 +108,6 @@ class ApiService {
     List<Map<String, dynamic>> items,
   ) async {
 
-    print(items);
-
     final endpoint = 'place-order';
     final data = {
       'userId': userId,
@@ -159,7 +157,7 @@ class ApiService {
     return await httpService.get(endpoint);
   }
 
-  //deleteUserAddress/////
+  //deleteUserAddress//
   Future<dynamic> deleteUserAddress(int id) async {
     final endpoint = 'address/$id';
     return await httpService.delete(endpoint);
@@ -238,6 +236,12 @@ class ApiService {
   //getChatbotMessages
   Future<dynamic> getChatbotMessages(int orderid) async {
     final endpoint = 'message/$orderid';
+    return await httpService.get(endpoint);
+  }
+
+  //getStoreBankingDetails
+  Future<dynamic> getStoreBankingDetails(int storeId) async {
+    final endpoint = 'store-banking-details/$storeId';
     return await httpService.get(endpoint);
   }
 
