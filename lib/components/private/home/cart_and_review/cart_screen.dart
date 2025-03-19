@@ -72,7 +72,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart'),
+        title: Text('My Shopping Cart'),
         automaticallyImplyLeading: false,
       ),
       body: Padding(

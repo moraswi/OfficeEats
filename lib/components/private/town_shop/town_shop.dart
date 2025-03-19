@@ -24,13 +24,12 @@ class StoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20.0),
+      borderRadius: BorderRadius.circular(10.0),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
         height: 200,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 6,
@@ -47,7 +46,7 @@ class StoreCard extends StatelessWidget {
               right: 0,
               child: Container(
                 color: Colors.black54,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 5, 10, 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -99,13 +98,11 @@ class _TownShopState extends State<TownShop> {
   late int getOfficeId;
   String getOfficeName = "";
 
-  // final PageController _pageController = PageController();
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    // getSharedPreferenceData();
     _startAutoScroll();
     getStoresReq();
     searchController.addListener(_filterStores);
@@ -172,7 +169,7 @@ class _TownShopState extends State<TownShop> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get offices failed: $e')),
+        SnackBar(content: Text('something went wrong')),
       );
     }
   }
@@ -182,7 +179,6 @@ class _TownShopState extends State<TownShop> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Explore Our Stores'),
-
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
@@ -265,14 +261,15 @@ class _TownShopState extends State<TownShop> {
                         scrollDirection: Axis.horizontal,
                         // Ensures horizontal scrolling
                         children: [
-                          _buildCard('assets/images/officeEatsBanner.png'),
-                          _buildCard('assets/images/food5.jpeg'),
-                          _buildCard('assets/images/food6.jpeg'),
+                          _buildCard('assets/images/AdvertBG1.jpg'),
+                          _buildCard('assets/images/AdvertBG2.jpg'),
+                          _buildCard('assets/images/AdvertBG3.jpg'),
                         ],
                       ),
                     ),
                     const SizedBox(height: 5),
-
+                    Text(
+                        'Enjoy effortless, delicious meals ready for quick and easy pickup or delivery', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),),
                     // List of Stores
                     isLoading
                         ? ListView.builder(
@@ -323,11 +320,15 @@ class _TownShopState extends State<TownShop> {
                                     (Route<dynamic> route) => true,
                                   );
                                 },
-                                child: StoreCard(
-                                  imagePath: imageWidget,
-                                  storeName:
-                                      store['shopName'] ?? 'Unknown Store',
-                                  rating: 5,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                                  child: StoreCard(
+                                    imagePath: imageWidget,
+                                    storeName:
+                                        store['shopName'] ?? 'Unknown Store',
+                                    rating: 5,
+                                  ),
                                 ),
                               );
                             },

@@ -162,6 +162,9 @@ class _MyProfileState extends State<MyProfile> {
     try {
       Map<String, dynamic> response =
           await authService.getUserAddressReq(getUserId!);
+
+      print(response);
+      print(response);
       setState(() {
         getAddress = [response]; // Wrap the response in a list
         officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
@@ -186,9 +189,7 @@ class _MyProfileState extends State<MyProfile> {
         phoneNumberController.text = userData['phoneNumber'];
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Get order failed: $e')),
-      );
+      print('Get order failed: $e');
     }
   }
 
@@ -222,7 +223,7 @@ class _MyProfileState extends State<MyProfile> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete address')),
+        SnackBar(content: Text('Failed to add address')),
       );
     }
   }

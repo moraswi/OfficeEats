@@ -40,6 +40,33 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
     'Log out'
   ]; // List of item names
 
+  Future<bool> logoutReq(BuildContext context) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+print('test1');
+      // Remove all the stored data
+      await prefs.clear();
+
+      // Optionally, show a message or redirect the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('You have logged out successfully!')),
+      );
+
+      // You can also redirect the user to a login screen if needed
+      // Navigator.pushReplacementNamed(context, '/login');
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/logIn', (Route<dynamic> route) => true);
+
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to log out! Please try again.')),
+      );
+      return false;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,8 +162,7 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
                             //       '/home', (Route<dynamic> route) => true);
                             // }
                             else if (index == 2) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/logIn', (Route<dynamic> route) => true);
+                              logoutReq(context);
                             }
                           },
                           child: Container(

@@ -73,18 +73,21 @@ class _MenuItemState extends State<MenuItem> {
             onPressed: widget.onTrackOrder, // Trigger the callback
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.white, // Keep the background white
+              elevation: 0, // Remove the shadow
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
             ),
-            child: const Text(
-              'Track Order',
-              style: TextStyle(fontSize: 16.0),
+            child: const Icon(
+              Icons.arrow_forward_ios_outlined, // Use the arrow icon or any other icon you prefer
+              color: Colors.black,
+              size: 20.0, // Adjust the size of the icon
             ),
           ),
+
+
         ],
       ),
     );
