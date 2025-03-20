@@ -160,7 +160,7 @@ class _TownShopState extends State<TownShop> {
       List<dynamic> response = await storeService.getStoresReq(0);
       setState(() {
         stores = response;
-        print(stores);
+
         filteredStores = stores;
         isLoading = false;
       });

@@ -48,6 +48,9 @@ class _CartPageState extends State<CartPage> {
           .cast<Map<String, dynamic>>();
 
     });
+
+    print('cartItems/////////////////');
+    print(cartItems);
   }
 
   // _saveCartItems

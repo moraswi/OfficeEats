@@ -42,14 +42,15 @@ class AuthApiService {
         LoadingDialog.hide(context);
 
         if (userData['role'] == "customer") {
+
           Navigator.of(context).pushNamedAndRemoveUntil(
-            '/office',
-            (Route<dynamic> route) => true,
+            '/townshop',
+            (Route<dynamic> route) => false,
           );
         } else if (userData['role'] == "deliverypartner") {
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/deliveryorder',
-            (Route<dynamic> route) => true,
+            (Route<dynamic> route) => false,
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -215,7 +216,7 @@ class AuthApiService {
         );
 
         Navigator.of(context)
-            .pushNamedAndRemoveUntil('/office', (Route<dynamic> route) => true);
+            .pushNamedAndRemoveUntil('/office', (Route<dynamic> route) => false);
       }
     } catch (e) {
       print('Something went wrong');

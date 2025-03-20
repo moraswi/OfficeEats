@@ -72,8 +72,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
 
       getOfficeId = prefs.getInt('officeId') ?? 0;
       getUserId = prefs.getInt('userId') ?? 0;
-      getStoreId = prefs.getInt('storeId') ?? 0;
-      getShopName = prefs.getString('shopName') ?? "";
+      getStoreId = orderItems[0]['storeId'] ?? 0;
+      getShopName = orderItems[0]['storeName'] ?? "";
     });
 
     getUserAddressReq();
