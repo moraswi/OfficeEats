@@ -30,12 +30,12 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
   String getAccountNo = "";
   String getAccountRef = "";
   String getAccountName = "";
+  String getAddress = "";
 
   @override
   void initState() {
     super.initState();
     getSharedPreferenceData();
-
   }
 
   // getSharedPreferenceData
@@ -59,17 +59,47 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
       setState(() {
         orderHistory = [response];
         isLoading = false;
-        subtotalPrice =
-            orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] : 0.0;
-        deliveryFee =
-            orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
+
+        if (orderHistory.isNotEmpty) {
+          var order = orderHistory[0];
+          subtotalPrice = order['totalAmount'];
+          deliveryFee = order['deliveryFee'];
+          getStoreId = order['shopId'];
+          getAddress = '${order['recipientName']}, ${order['recipientMobileNumber']}, ${order['suburb']}, ${order['apartment']}, ${order['streetAddress']}';
+        } else {
+          subtotalPrice = 0.0;
+          deliveryFee = 0.0;
+          totalPrice = 0.0;
+          getStoreId = 0;
+          getAddress = '';
+        }
+
         totalPrice = subtotalPrice + deliveryFee;
 
-        getStoreId = orderHistory.isNotEmpty ? orderHistory[0]['shopId'] : 0.0;
+        
+        // subtotalPrice =
+        //     orderHistory.isNotEmpty ? orderHistory[0]['totalAmount'] : 0.0;
+        // deliveryFee =
+        //     orderHistory.isNotEmpty ? orderHistory[0]['deliveryFee'] : 0.0;
+        // totalPrice = subtotalPrice + deliveryFee;
+        //
+        // getStoreId = orderHistory.isNotEmpty ? orderHistory[0]['shopId'] : 0.0;
+        //
+        //
+        // getAddress = orderHistory.isNotEmpty
+        //     ? orderHistory[0]['recipientName'] +
+        //         ", " +
+        //         orderHistory[0]['recipientMobileNumber'] +
+        //         ", " +
+        //         orderHistory[0]['suburb'] +
+        //         ", " +
+        //         orderHistory[0]['apartment'] +
+        //         ", " +
+        //         orderHistory[0]['streetAddress']
+        //     : "";
       });
 
       await getStoreBankingDetailsReq();
-
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -91,7 +121,6 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
         getAccountRef = data['reference'] ?? '';
         getAccountName = data['accountName'] ?? '';
       });
-
     } catch (error) {
       print('Error fetching banking details: $error');
     }
@@ -140,24 +169,28 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           getAccountName,
-                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Account Number: $getAccountNo",
-                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Ref: $getAccountRef',
-                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w900),
                         ),
                       ),
-                      Text('Please use order number (${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}) as your reference')
+                      Text(
+                          'Please use order number (${orderHistory.isNotEmpty ? orderHistory[0]['orderCode'] ?? '' : ''}) as your reference')
                     ],
                   ),
                 ),
@@ -418,9 +451,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                         height: 16.0,
                       ),
                       Text(
-                        orderHistory.isNotEmpty
-                            ? orderHistory[0]['deliveryAddress'] ?? ''
-                            : '',
+                        orderHistory.isNotEmpty ? getAddress ?? '' : '',
                         style: const TextStyle(
                           fontSize: 16,
                         ),

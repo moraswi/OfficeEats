@@ -33,6 +33,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   String getSurname = "";
   String getPhoneNumber = "";
   String getOfficeAddress = "";
+  String getRecipientAddress = "";
 
   int getUserId = 0;
   int getOfficeId = 0;
@@ -62,7 +63,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
 
   // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
-
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
@@ -123,8 +123,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           suburb,
           city,
           postalCode,
-          province
-      );
+          province);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Order Failed: $e')),
@@ -140,16 +139,24 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       setState(() {
         getAddress = [response];
         getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';
-        recipientName = getAddress[0]['recipientName']  ?? 'N/A';
-        recipientPhoneNumber = getAddress[0]['recipientPhoneNumber']  ?? 'N/A';
-        streetAddress = getAddress[0]['streetAddress']  ?? 'N/A';
-        building = getAddress[0]['building']  ?? 'N/A';
-        suburb = getAddress[0]['suburb']  ?? 'N/A';
-        city = getAddress[0]['city']  ?? 'N/A';
-        postalCode = getAddress[0]['postalCode']  ?? 'N/A';
-        province = getAddress[0]['province']  ?? 'N/A';
+        recipientName = getAddress[0]['recipientName'] ?? 'N/A';
+        recipientPhoneNumber = getAddress[0]['recipientMobileNumber'] ?? 'N/A';
+        streetAddress = getAddress[0]['streetAddress'] ?? 'N/A';
+        building = getAddress[0]['apartment'] ?? 'N/A';
+        suburb = getAddress[0]['suburb'] ?? 'N/A';
+        city = getAddress[0]['city'] ?? 'N/A';
+        postalCode = getAddress[0]['postalCode'] ?? 'N/A';
+        province = getAddress[0]['province'] ?? 'N/A';
+        getRecipientAddress = recipientName +
+            ", " +
+            recipientPhoneNumber +
+            ", " +
+            suburb +
+            ", " +
+            building +
+            ", " +
+            streetAddress;
       });
-
     } catch (e) {
       print(getAddress);
     }
@@ -191,7 +198,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
                     ),
                   ),
                   Text(
-                    '$getOfficeAddress',
+                    '$getRecipientAddress',
                     style: const TextStyle(
                       fontSize: 15,
                     ),
@@ -285,7 +292,6 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             ),
 
             SizedBox(height: 20),
-
 
             const Text(
               'To pay for this order, send cash to our store. Find our bank details under History > Track Order.',
