@@ -21,22 +21,46 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController officeAddressController = TextEditingController();
 
+  //address
+  TextEditingController recipientNameController = TextEditingController();
+  TextEditingController recipientPhoneNumberController =
+      TextEditingController();
+  TextEditingController streetAddressController = TextEditingController();
+  TextEditingController buildingController = TextEditingController();
+  TextEditingController suburbController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController postalCodeController = TextEditingController();
+  TextEditingController provinceController = TextEditingController();
+
   final AuthApiService authService = AuthApiService();
   final StoreApiService storeService = StoreApiService();
-
-  bool isPasswordVisible = false;
-  bool isNewPasswordVisible = false;
-  bool isConfirmPasswordVisible = false;
 
   var getAddress;
   var getOfficePacks;
   var userData;
-  String officePackText = '';
-  String officeAddressText = '';
+
+  String Recipient = "";
+  String RecipientPhoneNumber = "";
+  String RecipientAddress = "";
   int addressId = 0;
   String? addSelectedOfficePack;
   int? getUserId;
   String deliveryBottomBar = "";
+
+  final List<String> provinces = [
+    'Gauteng',
+    'Limpopo',
+    'Mpumalanga',
+    'Kwazulu-Natal',
+    'Eastern Cape',
+    'Free State',
+    'Western Cape',
+    'Northern Cape',
+    'North West'
+  ];
+
+  // The selected province
+  String? selectedProvince;
 
   @override
   void initState() {
@@ -68,42 +92,123 @@ class _MyProfileState extends State<MyProfile> {
           content: SingleChildScrollView(
             child: Column(
               children: [
+                //Recipient Name
                 TextField(
-                  controller: officeAddressController,
+                  controller: recipientNameController,
                   decoration: InputDecoration(
-                      labelText: 'Address',
-                      hintText: 'e.g Company name, Unit 8, 1st Floor'),
+                    labelText: 'Recipient Name',
+                  ),
                 ),
-                SizedBox(height: 20),
-                DropdownButton<String>(
-                  hint: Text('Select Office Pack'),
-                  value: addSelectedOfficePack,
-                  onChanged: (String? newValue) {
+
+                // Recipient Phone Number
+                TextField(
+                  controller: recipientPhoneNumberController,
+                  decoration: InputDecoration(
+                    labelText: 'Recipient Phone Number',
+                  ),
+                ),
+
+                // Street Address
+                TextField(
+                  controller: streetAddressController,
+                  decoration: InputDecoration(
+                    labelText: 'Street Address',
+                  ),
+                ),
+
+                // Company/Building(Optional)
+                TextField(
+                  controller: buildingController,
+                  decoration: InputDecoration(
+                    labelText: 'Company/Building',
+                  ),
+                ),
+
+                // Company/Building(Optional)
+                TextField(
+                  controller: suburbController,
+                  decoration: InputDecoration(
+                    labelText: 'Suburb',
+                  ),
+                ),
+                // Company/Building(Optional)
+                TextField(
+                  controller: cityController,
+                  decoration: InputDecoration(
+                    labelText: 'City/Town',
+                  ),
+                ),
+
+                DropdownButtonFormField<String>(
+                  value: selectedProvince,
+                  onChanged: (newValue) {
                     setState(() {
-                      addSelectedOfficePack = newValue;
+                      selectedProvince = newValue;
                     });
                   },
-                  items: getOfficePacks.map<DropdownMenuItem<String>>((office) {
+                  decoration: InputDecoration(
+                    labelText: 'Province',
+                  ),
+                  items: provinces.map((province) {
                     return DropdownMenuItem<String>(
-                      value: office['officeName'],
-                      child: Text(office['officeName']),
+                      value: province,
+                      child: Text(province),
                     );
                   }).toList(),
                 ),
+
+                //Postal Code
+                TextField(
+                  controller: postalCodeController,
+                  decoration: InputDecoration(
+                    labelText: 'Postal Code (Optional)',
+                  ),
+                ),
+                SizedBox(height: 20),
+                // DropdownButton<String>(
+                //   hint: Text('Select Office Pack'),
+                //   value: addSelectedOfficePack,
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       addSelectedOfficePack = newValue;
+                //     });
+                //   },
+                //   items: getOfficePacks.map<DropdownMenuItem<String>>((office) {
+                //     return DropdownMenuItem<String>(
+                //       value: office['officeName'],
+                //       child: Text(office['officeName']),
+                //     );
+                //   }).toList(),
+                // ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
                   onPressed: () {
+                    String recipientName = recipientNameController.text;
+                    String recipientPhoneNumber =
+                        recipientPhoneNumberController.text;
+                    String streetAddress = streetAddressController.text;
+                    String building = buildingController.text;
+                    String suburb = suburbController.text;
+                    String city = cityController.text;
+                    String province = provinceController.text;
+
                     // Save the address
-                    if (officeAddressController.text.isNotEmpty &&
-                        addSelectedOfficePack != null) {
+                    if (recipientName.isNotEmpty &&
+                        recipientPhoneNumber.isNotEmpty &&
+                        streetAddress.isNotEmpty &&
+                        building.isNotEmpty &&
+                        suburb.isNotEmpty &&
+                        city.isNotEmpty &&
+                        selectedProvince != null) {
                       Navigator.pop(context);
                     } else {
                       // Handle validation
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please fill in all fields')),
+                        SnackBar(
+                            content: Text('Please fill in required fields')),
                       );
                     }
 
@@ -143,7 +248,7 @@ class _MyProfileState extends State<MyProfile> {
                 backgroundColor: Colors.red,
               ),
               onPressed: () {
-                Navigator.pop(context); // Close dialog
+                // Close dialog
                 deleteProfileReq(); // Call the delete function
               },
               child: Text(
@@ -164,11 +269,16 @@ class _MyProfileState extends State<MyProfile> {
           await authService.getUserAddressReq(getUserId!);
 
       setState(() {
-        getAddress = [response]; // Wrap the response in a list
-        officePackText = 'Office: ${getAddress[0]['officePack'] ?? 'N/A'}';
-        officeAddressText = getAddress[0]['officeAddress'] ?? 'N/A';
+        getAddress = [response];
+
+        Recipient = getAddress[0]['recipientName'];
+        RecipientPhoneNumber = getAddress[0]['recipientMobileNumber'];
+        RecipientAddress = getAddress[0]['apartment'] +
+            "; " +
+            getAddress[0]['suburb'] +
+            "; " +
+            getAddress[0]['streetAddress'];
         addressId = getAddress[0]['id'] ?? 0;
-        print('Address Details: $getAddress');
       });
     } catch (e) {
       print(getAddress);
@@ -197,9 +307,12 @@ class _MyProfileState extends State<MyProfile> {
       await authService.deleteUserAddressReq(context, addressId);
 
       setState(() {
-        officePackText = '';
-        officeAddressText = '';
+        RecipientAddress = "";
+        Recipient = "";
+        RecipientPhoneNumber = "";
       });
+
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete address')),
@@ -210,15 +323,32 @@ class _MyProfileState extends State<MyProfile> {
   // addAddressReq
   Future<void> addAddressReq() async {
     try {
-      String? officePack = addSelectedOfficePack;
-      String officeAddress = officeAddressController.text;
+      String recipientName = recipientNameController.text;
+      String recipientPhoneNumber = recipientPhoneNumberController.text;
+      String streetAddress = streetAddressController.text;
+      String building = buildingController.text;
+      String suburb = suburbController.text;
+      String city = cityController.text;
+      String postalCode = postalCodeController.text;
+      String province = selectedProvince.toString();
 
       await authService.addAddressReq(
-          context, officePack, officeAddress, getUserId!);
+          context,
+          getUserId!,
+          recipientName,
+          recipientPhoneNumber,
+          streetAddress,
+          building,
+          suburb,
+          city,
+          postalCode,
+          province);
 
       setState(() {
         getUserAddressReq();
       });
+
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to add address')),
@@ -378,8 +508,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
             const SizedBox(height: 30),
 
-            deliveryBottomBar != "deliverypartner" &&
-                    (officeAddressText.isEmpty || officePackText.isEmpty)
+            deliveryBottomBar != "deliverypartner" && (RecipientAddress.isEmpty)
                 ? InkWell(
                     onTap: _showAddAddressDialog,
                     child: const Text(
@@ -421,31 +550,40 @@ class _MyProfileState extends State<MyProfile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (officePackText.isNotEmpty)
+                              if (Recipient.isNotEmpty)
                                 Text(
-                                  officePackText,
+                                  Recipient,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              if (officeAddressText.isNotEmpty)
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        color: AppColors.primaryColor,
-                                        size: 20),
-                                    Text(officeAddressText,
-                                        style: TextStyle(fontSize: 16)),
-                                  ],
+
+                              Text(
+                                RecipientPhoneNumber,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              if (officeAddressText.isEmpty ||
-                                  officePackText.isEmpty)
-                                Text('Add your address'),
+                              ),
+
+                              if (RecipientAddress.isNotEmpty)
+                                Text(RecipientAddress,
+                                    style: TextStyle(fontSize: 14)),
+
+                              // Row(
+                              //   children: [
+                              //     const Icon(Icons.location_on,
+                              //         color: AppColors.primaryColor,
+                              //         size: 20),
+                              //     Text(RecipientAddress,
+                              //         style: TextStyle(fontSize: 16)),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),
-                        if (officeAddressText.isNotEmpty)
+                        if (RecipientAddress.isNotEmpty)
                           IconButton(
                             icon: const Icon(
                               Icons.delete,
@@ -462,17 +600,17 @@ class _MyProfileState extends State<MyProfile> {
 
             const SizedBox(height: 15),
 
-            if(getUserId != 0)
-            InkWell(
-              onTap: _showDeleteAccountDialog,
-              child: const Text(
-                "Delete My Account",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primaryColor,
+            if (getUserId != 0)
+              InkWell(
+                onTap: _showDeleteAccountDialog,
+                child: const Text(
+                  "Delete My Account",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 15),
 
             deliveryBottomBar != "deliverypartner"

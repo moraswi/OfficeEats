@@ -107,7 +107,6 @@ class ApiService {
     deliveryFee,
     List<Map<String, dynamic>> items,
   ) async {
-
     final endpoint = 'place-order';
     final data = {
       'userId': userId,
@@ -165,14 +164,33 @@ class ApiService {
 
   //addAddress
   Future<dynamic> addAddress(
-      String officePack, String officeAddress, int userId) async {
+      // String officePack,
+      // String officeAddress,
+      int userId,
+      String recipientName,
+      String recipientPhoneNumber,
+      String streetAddress,
+      String building,
+      String suburb,
+      String city,
+      String postalCode,
+      String province) async {
     final endpoint = 'address';
     final data = {
-      "officePack": "officePack",
-      "officeAddress": officeAddress,
+      "officePack": "",
+      "officeAddress": "",
       "userId": userId,
-      "active": true
+      "active": true,
+      "town": city,
+      "province": province,
+      "apartment": building,
+      "streetAddress": streetAddress,
+      "postalCode": postalCode,
+      "recipientName": recipientName,
+      "recipientMobileNumber": recipientPhoneNumber,
+      "suburb": suburb
     };
+
     return await httpService.post(endpoint, data);
   }
 
@@ -228,7 +246,6 @@ class ApiService {
       'message': message,
       'orderId': orderId,
       'storeId': storeId,
-
     };
     return await httpService.post(endpoint, data);
   }
@@ -249,7 +266,6 @@ class ApiService {
   Future<dynamic> updateOrder(
     int id,
     int deliveryPartnerId,
-
   ) async {
     final endpoint = 'order';
 

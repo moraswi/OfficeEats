@@ -42,7 +42,6 @@ class AuthApiService {
         LoadingDialog.hide(context);
 
         if (userData['role'] == "customer") {
-
           Navigator.of(context).pushNamedAndRemoveUntil(
             '/townshop',
             (Route<dynamic> route) => false,
@@ -215,8 +214,8 @@ class AuthApiService {
           SnackBar(content: Text('Successful')),
         );
 
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/office', (Route<dynamic> route) => false);
+        // Navigator.of(context).pushNamedAndRemoveUntil(
+        //     '/office', (Route<dynamic> route) => false);
       }
     } catch (e) {
       print('Something went wrong');
@@ -227,13 +226,30 @@ class AuthApiService {
   }
 
   // addAddressReq
-  Future<void> addAddressReq(BuildContext context, officePack,
-      String officeAddress, int userId) async {
+  Future<void> addAddressReq(
+      BuildContext context,
+      int userId,
+      String recipientName,
+      String recipientPhoneNumber,
+      String streetAddress,
+      String building,
+      String suburb,
+      String city,
+      String postalCode,
+      String province) async {
     try {
       LoadingDialog.show(context);
 
-      var results =
-          await apiService.addAddress(officePack, officeAddress, userId);
+      var results = await apiService.addAddress(
+          userId,
+          recipientName,
+          recipientPhoneNumber,
+          streetAddress,
+          building,
+          suburb,
+          city,
+          postalCode,
+          province);
 
       if (results.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -241,7 +257,7 @@ class AuthApiService {
         );
       }
     } catch (e) {
-      print('Something went wrong');
+      print('Something went wrong $e');
       rethrow;
     } finally {
       LoadingDialog.hide(context);
