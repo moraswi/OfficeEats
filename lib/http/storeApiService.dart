@@ -188,31 +188,45 @@ class StoreApiService {
 
   //placeOrderReq
   Future<void> placeOrderReq(
-    BuildContext context,
-    int userId,
-    String deliveryAddress,
-    String paymentMethod,
-    int shopId,
-    String storeName,
-    int officeId,
-    description,
-    deliveryFee,
-    List<Map<String, dynamic>> items,
-  ) async {
+      BuildContext context,
+      int userId,
+      String deliveryAddress,
+      String paymentMethod,
+      int shopId,
+      String storeName,
+      int officeId,
+      description,
+      deliveryFee,
+      List<Map<String, dynamic>> items,
+      recipientName,
+      recipientPhoneNumber,
+      streetAddress,
+      building,
+      suburb,
+      city,
+      postalCode,
+      province) async {
     try {
       LoadingDialog.show(context);
 
       var results = await apiService.placeOrder(
-        userId,
-        deliveryAddress,
-        paymentMethod,
-        shopId,
-        storeName,
-        officeId,
-        description,
-        deliveryFee,
-        items,
-      );
+          userId,
+          deliveryAddress,
+          paymentMethod,
+          shopId,
+          storeName,
+          officeId,
+          description,
+          deliveryFee,
+          items,
+          recipientName,
+          recipientPhoneNumber,
+          streetAddress,
+          building,
+          suburb,
+          city,
+          postalCode,
+          province);
 
       if (results.statusCode == 200) {
         // LoadingDialog.hide(context);

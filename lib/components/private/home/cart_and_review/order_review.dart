@@ -41,6 +41,15 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   int getStoreId = 0;
   String getShopName = "N/A";
 
+  String recipientName = "";
+  String recipientPhoneNumber = "";
+  String streetAddress = "";
+  String building = "";
+  String suburb = "";
+  String city = "";
+  String postalCode = "";
+  String province = "";
+
   // String _selectedOption = 'delivery';
   double? deliveryFee = 0.0;
   String? _selectedOption;
@@ -83,18 +92,17 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   Future<void> submitOrder() async {
     String description = orderInstructionController.text;
 
-    if (getOfficeAddress == "") {
+    if (recipientPhoneNumber == "") {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Add your office address')),
+        SnackBar(content: Text('Add your address')),
       );
       return;
     }
 
     // Update deliveryFee in each order item
-    for (var item in orderItems) {
-    //  item['deliveryFee'] = deliveryFee ?? 0.0; // Use selected fee, default to 0.0
-      item['deliveryFee'] =  11.0; // Use selected fee, default to 0.0
-    }
+    // for (var item in orderItems) {
+    //   item['deliveryFee'] =  11.0; // Use selected fee, default to 0.0
+    // }
 
     try {
       await storeService.placeOrderReq(
@@ -107,7 +115,16 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
           getUserId,
           description,
           deliveryFee,
-          orderItems);
+          orderItems,
+          recipientName,
+          recipientPhoneNumber,
+          streetAddress,
+          building,
+          suburb,
+          city,
+          postalCode,
+          province
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Order Failed: $e')),
@@ -123,6 +140,14 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       setState(() {
         getAddress = [response];
         getOfficeAddress = getAddress[0]['officeAddress'] ?? 'N/A';
+        recipientName = getAddress[0]['recipientName']  ?? 'N/A';
+        recipientPhoneNumber = getAddress[0]['recipientPhoneNumber']  ?? 'N/A';
+        streetAddress = getAddress[0]['streetAddress']  ?? 'N/A';
+        building = getAddress[0]['building']  ?? 'N/A';
+        suburb = getAddress[0]['suburb']  ?? 'N/A';
+        city = getAddress[0]['city']  ?? 'N/A';
+        postalCode = getAddress[0]['postalCode']  ?? 'N/A';
+        province = getAddress[0]['province']  ?? 'N/A';
       });
 
     } catch (e) {

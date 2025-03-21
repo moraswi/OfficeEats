@@ -106,6 +106,14 @@ class ApiService {
     description,
     deliveryFee,
     List<Map<String, dynamic>> items,
+      recipientName,
+      recipientPhoneNumber,
+      streetAddress,
+      building,
+      suburb,
+      city,
+      postalCode,
+      province
   ) async {
     final endpoint = 'place-order';
     final data = {
@@ -126,6 +134,14 @@ class ApiService {
           'orderCustomizations': item['customizations'] ?? [],
         };
       }).toList(),
+      'recipientName': recipientName,
+      'recipientMobileNumber': recipientPhoneNumber,
+      'streetAddress': streetAddress,
+      'apartment': building,
+      'suburb': suburb,
+      'town': city,
+      'postalCode': postalCode,
+      'province': province
     };
 
     return await httpService.post(endpoint, data);
