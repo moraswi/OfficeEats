@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../shared/date_formatter.dart';
-import '../../../shared/skeleton_loader.dart';
-
-import 'package:flutter/material.dart';
+import 'package:eats/shared/date_formatter.dart';
+import 'package:eats/shared/skeleton_loader.dart';
 
 class MenuItem extends StatefulWidget {
-  final String imagePath;
+  // final String imagePath;
   final String name;
   final String orderDate;
   final String orderCode;
-  final VoidCallback onTrackOrder; // Callback for the button press
+  final VoidCallback onTrackOrder;
 
   MenuItem({
-    required this.imagePath,
+    // required this.imagePath,
     required this.name,
     required this.orderDate,
     required this.orderCode,
@@ -30,67 +27,130 @@ class MenuItem extends StatefulWidget {
 class _MenuItemState extends State<MenuItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey, // Set the grey color for the border
-            width: 1.0, // Set the thickness of the border
+    // return Container(
+    //   padding: EdgeInsets.all(8.0),
+    //   margin: const EdgeInsets.symmetric(vertical: 8.0),
+    //   decoration: BoxDecoration(
+    //     color: Colors.white,
+    //     border: Border(
+    //       bottom: BorderSide(
+    //         color: Colors.grey, // Set the grey color for the border
+    //         width: 1.0, // Set the thickness of the border
+    //       ),
+    //     ),
+    //   ),
+    //   child: Row(
+    //     children: [
+    //       SizedBox(width: 12),
+    //       Expanded(
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Text(
+    //               widget.name, // Access widget properties with 'widget.'
+    //               style: const TextStyle(
+    //                 fontSize: 18,
+    //                 fontWeight: FontWeight.bold,
+    //               ),
+    //             ),
+    //             Text(DateFormatter.formatDateTime(widget.orderDate),
+    //                 style: TextStyle(fontSize: 16)),
+    //             Text(
+    //               widget.orderCode,
+    //               style: const TextStyle(
+    //                 fontSize: 16,
+    //                 fontWeight: FontWeight.bold,
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       SizedBox(width: 12),
+    //       ElevatedButton(
+    //         onPressed: widget.onTrackOrder, // Trigger the callback
+    //         style: ElevatedButton.styleFrom(
+    //           foregroundColor: Colors.white,
+    //           backgroundColor: Colors.white,
+    //           // Keep the background white
+    //           elevation: 0,
+    //           // Remove the shadow
+    //           shape: RoundedRectangleBorder(
+    //             borderRadius: BorderRadius.circular(10.0),
+    //           ),
+    //           padding:
+    //               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+    //         ),
+    //         child: const Icon(
+    //           Icons.arrow_forward_ios_outlined,
+    //           // Use the arrow icon or any other icon you prefer
+    //           color: Colors.black,
+    //           size: 20.0, // Adjust the size of the icon
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    return GestureDetector(
+      onTap: widget.onTrackOrder,  // Trigger onTrackOrder when the entire item is tapped
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 1.0,
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.name, // Access widget properties with 'widget.'
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        child: Row(
+          children: [
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(DateFormatter.formatDateTime(widget.orderDate),
-                    style: TextStyle(fontSize: 16)),
-                Text(
-                  widget.orderCode,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  Text(DateFormatter.formatDateTime(widget.orderDate),
+                      style: TextStyle(fontSize: 16)),
+                  Text(
+                    widget.orderCode,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 12),
-          ElevatedButton(
-            onPressed: widget.onTrackOrder, // Trigger the callback
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.white,
-              // Keep the background white
-              elevation: 0,
-              // Remove the shadow
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                ],
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
             ),
-            child: const Icon(
-              Icons.arrow_forward_ios_outlined,
-              // Use the arrow icon or any other icon you prefer
-              color: Colors.black,
-              size: 20.0, // Adjust the size of the icon
+            SizedBox(width: 12),
+            ElevatedButton(
+              onPressed: widget.onTrackOrder,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios_outlined,
+                color: Colors.black,
+                size: 20.0,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -178,13 +238,6 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          // CustomButton(
-                          //   label: 'Start Shopping',
-                          //   onTap: () {
-                          //     // Navigate to the shopping page
-                          //     Navigator.of(context).pushNamed('/shop');
-                          //   },
-                          // ),
                         ],
                       ),
                     ),
@@ -196,7 +249,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       var order = orderHistory[index];
 
                       return MenuItem(
-                        imagePath: 'assets/images/image1.webp',
+                        // imagePath: 'assets/images/image1.webp',
                         name: order['storeName'],
                         orderDate: order['orderDate'],
                         orderCode: order['orderCode'],
