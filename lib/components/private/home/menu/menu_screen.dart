@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
 import 'package:eats/shared/app_colors.dart';
-import 'package:eats/shared/app_buttons.dart';
 import 'package:eats/http/storeApiService.dart';
 import 'package:eats/shared/skeleton_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../cart_and_review/cart_screen.dart';
 import '../menu/top_bar.dart';
+import 'dart:typed_data';
 
 class MenuPage extends StatefulWidget {
   var routeName = '/storemenu';
@@ -17,7 +16,6 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-
   final StoreApiService storeService = StoreApiService();
   List<dynamic> menus = [];
   bool isLoading = true;
@@ -84,15 +82,8 @@ class _MenuPageState extends State<MenuPage> {
         preferredSize: Size.fromHeight(180),
         child: AppBar(
           backgroundColor: Colors.white,
-          // shape: const RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.only(
-          //         bottomLeft: Radius.circular(100),
-          //         bottomRight: Radius.circular(0))
-          // ),
+
           flexibleSpace: ClipRRect(
-            // borderRadius: const BorderRadius.only(
-            //     bottomLeft: Radius.circular(100),
-            //     bottomRight: Radius.circular(0)),
             child: Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -102,7 +93,10 @@ class _MenuPageState extends State<MenuPage> {
           ),
           title: Text(''),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back , color: Colors.white,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
             onPressed: () {
               // Handle back action
               Navigator.of(context).pop();
@@ -135,7 +129,9 @@ class _MenuPageState extends State<MenuPage> {
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                     ),
-                    Text(getShopAddress.isEmpty ? "${getOfficeName} Office Pack" : getShopAddress),
+                    Text(getShopAddress.isEmpty
+                        ? "${getOfficeName} Office Pack"
+                        : getShopAddress),
                   ],
                 ),
               ),
@@ -189,9 +185,16 @@ class _MenuPageState extends State<MenuPage> {
                           itemBuilder: (context, index) {
                             var menu = menus[index];
 
-                            // address
+                            // Decode the Base64 image string
+                            Uint8List? imageBytes;
+                            if (menu['storeMenuImages'] != null &&
+                                menu['storeMenuImages']['base64'] != null) {
+                              imageBytes = base64Decode(
+                                  menu['storeMenuImages']['base64']);
+                            }
+
                             return MenuItem(
-                              imagePath: 'assets/images/image1.webp',
+                              imageBytes: imageBytes,
                               id: menu['id'],
                               name: menu['name'],
                               description: menu['description'],
@@ -209,23 +212,16 @@ class _MenuPageState extends State<MenuPage> {
                                     (Route<dynamic> route) => true);
                               },
                             );
-                          }),
+                          },
+                        ),
 
-                  // ],
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            // CustomButton(
-            //   label: 'My Cart',
-            //   onTap: () {
-            //     Navigator.of(context)
-            //         .push(MaterialPageRoute(builder: (context) => CartPage()));
-            //     // Handle button press
-            //   },
-            // ),
+
           ],
         ),
       ),
@@ -239,7 +235,7 @@ class _MenuPageState extends State<MenuPage> {
 // MenuItem
 class MenuItem extends StatefulWidget {
   final int id;
-  final String imagePath;
+  final Uint8List? imageBytes;
   final String name;
   final String description;
   final double price;
@@ -247,7 +243,7 @@ class MenuItem extends StatefulWidget {
 
   MenuItem({
     required this.id,
-    required this.imagePath,
+    this.imageBytes,
     required this.name,
     required this.description,
     required this.price,
@@ -279,12 +275,19 @@ class _MenuItemState extends State<MenuItem> {
           ),
           child: Row(
             children: [
-              Image.asset(
-                widget.imagePath,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
+              widget.imageBytes != null
+                  ? Image.memory(
+                      widget.imageBytes!,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/noimage.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

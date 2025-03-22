@@ -144,7 +144,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
         streetAddress = getAddress[0]['streetAddress'] ?? 'N/A';
         building = getAddress[0]['apartment'] ?? 'N/A';
         suburb = getAddress[0]['suburb'] ?? 'N/A';
-        city = getAddress[0]['city'] ?? 'N/A';
+        city = getAddress[0]['town'] ?? 'N/A';
         postalCode = getAddress[0]['postalCode'] ?? 'N/A';
         province = getAddress[0]['province'] ?? 'N/A';
         getRecipientAddress = recipientName +
