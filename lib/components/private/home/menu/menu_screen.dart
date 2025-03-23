@@ -205,6 +205,7 @@ class _MenuPageState extends State<MenuPage> {
                                 prefs.setInt('foodId', menu['id']);
                                 prefs.setDouble('menuItemPrice', menu['price']);
                                 prefs.setString('menuItemName', menu['name']);
+                                prefs.setBool('itemNeedDelivery', menu['delivery']);
                                 prefs.setString(
                                     'description', menu['description']);
                                 Navigator.of(context).pushNamedAndRemoveUntil(

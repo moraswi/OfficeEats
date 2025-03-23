@@ -54,6 +54,7 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
   // String _selectedOption = 'delivery';
   double? deliveryFee = 0.0;
   String? _selectedOption;
+  bool itemNeedDelivery = false;
 
   @override
   void initState() {
@@ -83,6 +84,8 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
       getUserId = prefs.getInt('userId') ?? 0;
       getStoreId = orderItems[0]['storeId'] ?? 0;
       getShopName = orderItems[0]['storeName'] ?? "";
+
+      itemNeedDelivery = prefs.getBool('itemNeedDelivery') ?? false;
     });
 
     getUserAddressReq();
@@ -264,33 +267,42 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             ),
             const SizedBox(height: 20),
 
-            ListTile(
-              title: Text('Delivery: R75.00'),
-              leading: Radio<String>(
-                value: '75.00',
-                groupValue: _selectedOption,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedOption = value!;
-                    deliveryFee = double.parse(value); // Set delivery fee
-                  });
-                },
+            if (itemNeedDelivery) ...[
+              ListTile(
+                title: Text('Delivery: R75.00'),
+                leading: Radio<String>(
+                  value: '75.00',
+                  groupValue: _selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedOption = value!;
+                      deliveryFee = double.parse(value); // Set delivery fee
+                    });
+                  },
+                ),
               ),
-            ),
-            ListTile(
-              title: Text('Collection: R0.00'),
-              leading: Radio<String>(
-                value: '0.00',
-                groupValue: _selectedOption,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedOption = value!;
-                    deliveryFee = double.parse(value); // Set delivery fee
-                  });
-                },
+              ListTile(
+                title: Text('Collection: R0.00'),
+                leading: Radio<String>(
+                  value: '0.00',
+                  groupValue: _selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedOption = value!;
+                      deliveryFee = double.parse(value); // Set delivery fee
+                    });
+                  },
+                ),
               ),
-            ),
-
+            ] else ...[
+              Text(
+                'Collection only',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
+              ),
+            ],
             SizedBox(height: 20),
 
             const Text(
@@ -345,6 +357,14 @@ class _OrderReviewPageState extends State<OrderReviewPage> {
             CustomButton(
               label: 'Submit Order',
               onTap: () {
+                if (itemNeedDelivery && _selectedOption == null) {
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please select a delivery option.')),
+                  );
+                  return; // Stop execution
+                }
+
                 submitOrder();
                 // Handle button press
               },

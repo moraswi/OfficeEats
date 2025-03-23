@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:eats/shared/bottom_nav_bar.dart';
@@ -17,6 +18,7 @@ class _CartPageState extends State<CartPage> {
   List<Map<String, dynamic>> cartItems = [];
 
   int getUserId = 0;
+  bool itemNeedDelivery = false;
 
   @override
   void initState() {
@@ -31,6 +33,7 @@ class _CartPageState extends State<CartPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
+      itemNeedDelivery = prefs.getBool('itemNeedDelivery') ?? false;
     });
   }
 
@@ -46,10 +49,9 @@ class _CartPageState extends State<CartPage> {
           .map((item) => json.decode(item))
           .toList()
           .cast<Map<String, dynamic>>();
-
     });
 
-    print('cartItems/////////////////');
+    print('cartItems');
     print(cartItems);
   }
 
@@ -85,89 +87,85 @@ class _CartPageState extends State<CartPage> {
             const SizedBox(
               height: 20,
             ),
-
             cartItems.isEmpty
                 ? Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.shopping_cart_outlined,
-                      size: 100,
-                      color: Colors.grey[400],
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Your cart is empty!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey[600],
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 100,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Your cart is empty!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            )
-            : Expanded(
-              child: ListView.builder(
-                itemCount: cartItems.length,
-                itemBuilder: (context, index) {
-                  final item = cartItems[index];
-                  return Column(
-                    children: [
-
-                           MenuItem(
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = cartItems[index];
+                        return Column(
+                          children: [
+                            MenuItem(
                               // imagePath:
                               //     item['imagePath'] ?? 'assets/images/burgermeal.png',
                               name: item['foodName'] ?? 'Loading...',
-                              description: item['description'] ?? '',
+                              deliveryDescription:
+                                  itemNeedDelivery ? "" : "Collection only",
                               price: item['itemPrice'] ?? 0.0,
                               storeName: item['storeName'] ?? 'Loading...',
-                              // description: "item['description'] ?? 0.0",
-                              // price: 0.0,
                               onDelete: () => _removeItem(index),
                             ),
-                      SizedBox(height: 20),
-                    ],
-                  );
+                            SizedBox(height: 20),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+            if (cartItems.isNotEmpty)
+              CustomButton(
+                label: 'Check Out',
+                onTap: () {
+                  // if (cartItems.isEmpty) {
+                  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  //     content: Text('Your cart is empty!'),
+                  //   ));
+                  //   return;
+                  // }
+
+                  // Ensure all items come from the same store
+                  final uniqueStoreIds =
+                      cartItems.map((item) => item['storeId']).toSet();
+                  if (uniqueStoreIds.length > 1) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                          'You can only purchase from a single shop at a time!'),
+                    ));
+                    return;
+                  }
+
+                  if (getUserId > 0) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/orderreview', (Route<dynamic> route) => true);
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/logIn',
+                      (Route<dynamic> route) => true,
+                    );
+                  }
                 },
               ),
-            ),
-
-            if (cartItems.isNotEmpty)
-            CustomButton(
-              label: 'Check Out',
-              onTap: () {
-                // if (cartItems.isEmpty) {
-                //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                //     content: Text('Your cart is empty!'),
-                //   ));
-                //   return;
-                // }
-
-                // Ensure all items come from the same store
-                final uniqueStoreIds =
-                    cartItems.map((item) => item['storeId']).toSet();
-                if (uniqueStoreIds.length > 1) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text(
-                        'You can only purchase from a single shop at a time!'),
-                  ));
-                  return;
-                }
-
-                if (getUserId > 0) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/orderreview', (Route<dynamic> route) => true);
-                } else {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/logIn',
-                    (Route<dynamic> route) => true,
-                  );
-                }
-              },
-            ),
           ],
         ),
       ),
@@ -182,7 +180,7 @@ class _CartPageState extends State<CartPage> {
 class MenuItem extends StatelessWidget {
   // final String imagePath;
   final String name;
-  final String description;
+  final String deliveryDescription;
   final double price;
   final String storeName;
   final VoidCallback onDelete;
@@ -190,7 +188,7 @@ class MenuItem extends StatelessWidget {
   MenuItem({
     // required this.imagePath,
     required this.name,
-    required this.description,
+    required this.deliveryDescription,
     required this.price,
     required this.storeName,
     required this.onDelete,
@@ -224,7 +222,6 @@ class MenuItem extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('${description}', style: TextStyle(fontSize: 16)),
                 Text(
                   '\R${price.toStringAsFixed(2)}',
                   style: const TextStyle(
@@ -239,6 +236,8 @@ class MenuItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.grey),
                 ),
+                Text('${deliveryDescription}',
+                    style: TextStyle(fontSize: 14, color: Colors.red)),
               ],
             ),
           ),
