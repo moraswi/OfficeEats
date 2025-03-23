@@ -29,6 +29,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
   double unitPrice = 0;
   String? selectedOption;
   String? menuItemName;
+  String? fetchedDescription;
   // Map<int, String?> selectedOptions = {};
   String? description;
   int getStoreId = 0;
@@ -52,7 +53,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     final fetchedFoodId = prefs.getInt('foodId') ?? 0;
     final fetchedTotalItemsAmount = prefs.getDouble('menuItemPrice') ?? 0.0;
     final fetchedMenuItemName = prefs.getString('menuItemName') ?? "";
-    final fetchedDescription = prefs.getString('description') ?? "";
+     fetchedDescription = prefs.getString('description') ?? "";
     getStoreId = prefs.getInt('storeId') ?? 0;
     getShopName = prefs.getString('shopName') ?? "";
 
@@ -193,14 +194,14 @@ class _MenuCustomizationState extends State<MenuCustomization> {
           padding: EdgeInsets.fromLTRB(10, 15, 10, 8),
           child: Column(
             children: [
-              const Text(
-                'Lorem Ipsum es simplemente el texto de'
-                ' relleno de las imprentas y archivos'
-                ' de texto. Lorem Ipsum ha sido el texto'
-                ' de relleno estándar de las industrias desde'
-                ' el año 1500, cuando un impresor (N. del T. persona que se dedica',
-                style: TextStyle(fontSize: 15),
+              Align(
+              alignment: Alignment.centerLeft,
+                child: Text(
+                  fetchedDescription!,
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
+
 
               isLoading
                   ? ListView.builder(
