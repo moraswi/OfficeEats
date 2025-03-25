@@ -306,7 +306,7 @@ class _MenuItemState extends State<MenuItem> {
                   // Text('${widget.description}', style: TextStyle(fontSize: 13)),
                   Text(
                     widget.description.length > 18
-                        ? '${widget.description.substring(0, 18)}'
+                        ? '${widget.description.substring(0, 30)}..'
                         : widget.description,
                     style: TextStyle(fontSize: 13),
                   ),
