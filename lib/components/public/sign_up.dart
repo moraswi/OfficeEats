@@ -34,8 +34,42 @@ class _SignUpState extends State<SignUp> {
     String confirmPassword = confirmPasswordController.text;
     String role = "customer";
 
-    await authService.registerReq(context, firstName, lastName, phoneNumber,
-        email, password, role, confirmPassword);
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        phoneNumber.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All fields are required!')),
+      );
+    } else if (phoneNumber.length < 10 || phoneNumber.length > 15) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid Phone number')),
+      );
+    }else if (!RegExp(r'^\d{10,15}$').hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Phone number must contain only digits!')),
+      );
+    }else if (!RegExp(r'^\d{10,}$').hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Phone number must contain only digits!')),
+      );
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid email address!')),
+      );
+    }else if (password.length < 5 || password.length > 20) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Password must be between 5 and 20 characters!')),
+      );
+    }  else if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match!')),
+      );
+    } else {
+      await authService.registerReq(context, firstName, lastName, phoneNumber,
+          email, password, role, confirmPassword);
+    }
   }
 
   @override
@@ -44,35 +78,28 @@ class _SignUpState extends State<SignUp> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/landingPage', (Route<dynamic> route) => true);
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-                const Text(
-                  'Registration',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                  ),
+              const Text(
+                'Registration',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
 
-                const Text(
-                  'Personal Details',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+              const Text(
+                'Personal Details',
+                style: TextStyle(
+                  color: Colors.black,
                 ),
+              ),
 
               const SizedBox(height: 23),
               Form(
@@ -114,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: 'Email',
+                        hintText: 'Email/Username',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           borderSide: BorderSide.none,
@@ -212,7 +239,7 @@ class _SignUpState extends State<SignUp> {
 
               CustomButton(label: 'Register', onTap: register),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               //LOGIN
               RichText(
@@ -229,7 +256,7 @@ class _SignUpState extends State<SignUp> {
                     TextSpan(
                       text: 'Log In',
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.red,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),

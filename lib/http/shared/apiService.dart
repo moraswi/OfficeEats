@@ -126,10 +126,17 @@ class ApiService {
       'description': description,
       'deliveryFee': deliveryFee,
       'items': items.map((item) {
+
+        int quantity = item['quantity'];
+        double itemPrice = item['itemPrice'].toDouble();
+
+        // Divide itemPrice by quantity if quantity > 1
+        double adjustedPrice = quantity > 1 ? itemPrice / quantity : itemPrice;
+
         return {
           'foodId': item['foodId'],
           'quantity': item['quantity'],
-          'itemPrice': item['itemPrice'],
+          'itemPrice': adjustedPrice,
           'foodName': item['foodName'],
           'orderCustomizations': item['customizations'] ?? [],
         };
@@ -143,7 +150,8 @@ class ApiService {
       'postalCode': postalCode,
       'province': province
     };
-
+    print('data..............');
+    print(data);
     return await httpService.post(endpoint, data);
   }
 

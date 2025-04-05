@@ -34,7 +34,15 @@ class _LogInState extends State<LogIn> {
     String password = passwordController.text;
 
     try {
-      await authService.loginReq(context, email, password);
+
+      if (email.isEmpty || password.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Email and Password are required!')),
+        );
+        // return false;
+      }else {
+        await authService.loginReq(context, email, password);
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Failed: $e')),
@@ -53,43 +61,6 @@ class _LogInState extends State<LogIn> {
 
 
               const SizedBox(height: 70),
-
-              // Logo
-              // Image.asset(
-              //   'assets/logo.png',
-              //   width: 160,
-              //   height: 160,
-              // ),
-              //
-              // const SizedBox(height: 10),
-
-              // Text
-              // const Text(
-              //   'Welcome',
-              //   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400),
-              // ),
-              // RichText(
-              //   text: const TextSpan(
-              //     children: [
-              //       TextSpan(
-              //         text: 'please',
-              //         style: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 32,
-              //           fontWeight: FontWeight.w400,
-              //         ),
-              //       ),
-              //       TextSpan(
-              //         text: ' login',
-              //         style: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 32,
-              //           fontWeight: FontWeight.w700,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
 
               Align(
                 alignment: Alignment.center,

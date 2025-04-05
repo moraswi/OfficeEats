@@ -33,8 +33,13 @@ class _CartPageState extends State<CartPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       getUserId = prefs.getInt('userId') ?? 0;
+      print("prefs.getInt('userId')");
+      print(prefs.getInt('userId'));
+      getUserId = prefs.getInt('userId') ?? 0;
       itemNeedDelivery = prefs.getBool('itemNeedDelivery') ?? false;
     });
+
+
   }
 
   // loadCartItems
@@ -154,7 +159,8 @@ class _CartPageState extends State<CartPage> {
                     ));
                     return;
                   }
-
+                  print('getUserId');
+                  print(getUserId);
                   if (getUserId > 0) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/orderreview', (Route<dynamic> route) => true);

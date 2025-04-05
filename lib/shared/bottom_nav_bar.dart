@@ -19,9 +19,13 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
 
   int getUserId = 0;
 
-  @override
+  // @override
   void initState() {
     super.initState();
+
+    // Set length based on the number of tabs you will show.
+    int tabCount = getUserId != 0 ? 4 : 4; // Or modify this logic based on your condition
+
     _tabController = TabController(
       length: 5,
       vsync: this,
@@ -29,12 +33,27 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-    getSharedPreferenceData();
-  }
+
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   // Calculate the number of tabs dynamically based on your conditions
+  //   int tabCount = 3; // Start with 3 common tabs (Rate App, Profile/Login, etc.)
+  //
+  //   if (getUserId != 0) {
+  //     tabCount++; // Add the Profile tab if user is logged in
+  //   } else {
+  //     tabCount++; // Add the LogIn tab if user is not logged in
+  //   }
+  //
+  //   _tabController = TabController(
+  //     length: tabCount,
+  //     vsync: this,
+  //     initialIndex: widget.selectedIndex,
+  //   );
+  // }
 
   // getSharedPreferenceData
   Future<void> getSharedPreferenceData() async {
@@ -80,6 +99,8 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   ),
                   text: 'Rate App',
                 ),
+
+
                 Tab(
                   icon: Icon(
                     Icons.account_circle,
@@ -107,17 +128,19 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                 setState(() {
                   _tabController.index = index; // Update the selected tab index
                 });
-
+                print('getUserId');
+                print(getUserId);
                 if (index == 0) {
                   Navigator.pushNamed(context, '/townshop');
                 } else if (index == 1) {
                   Navigator.pushNamed(context, '/history');
                 } else if (index == 2) {
                   Navigator.pushNamed(context, '/feedback');
-                } else if (index == 3) {
+                } else if (index == 3 ) {
+                  // && getUserId != 0
                   Navigator.pushNamed(context, '/profilelanding');
                 }
-                else if (index == 4 ) {
+                else if (index == 4  && getUserId == 0) {
                   Navigator.pushNamed(context, '/logIn');
                 }
               },

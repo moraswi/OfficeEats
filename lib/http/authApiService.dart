@@ -14,13 +14,6 @@ class AuthApiService {
   Future<bool> loginReq(
       BuildContext context, String email, String password) async {
     try {
-      if (email.isEmpty || password.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Email and Password are required!')),
-        );
-        return false;
-      }
-
       // Show the loading dialog
       LoadingDialog.show(context);
 
@@ -39,7 +32,7 @@ class AuthApiService {
         prefs.setString('role', userData['role']);
         prefs.setInt('deliveryPartnerOfficeId', userData['officeId'] ?? 0);
 
-        LoadingDialog.hide(context);
+        // LoadingDialog.hide(context);
 
         if (userData['role'] == "customer") {
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -51,11 +44,12 @@ class AuthApiService {
             '/deliveryorder',
             (Route<dynamic> route) => false,
           );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Ask service provider to give you a role')),
-          );
         }
+        // else {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text('Ask service provider to give you a role')),
+        //   );
+        // }
         return true;
       } else {
         // Show a failure message if login is not successful
@@ -83,24 +77,6 @@ class AuthApiService {
       String confirmPassword) async {
     try {
       // Validation: Ensure all fields are filled
-      if (firstName.isEmpty ||
-          lastName.isEmpty ||
-          phoneNumber.isEmpty ||
-          email.isEmpty ||
-          password.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('All fields are required!')),
-        );
-        return false; // Stay on the same page
-      }
-
-      // Validation: Check if passwords match
-      if (password != confirmPassword) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Passwords do not match!')),
-        );
-        return false; // Stay on the same page
-      }
 
       // Show the loading dialog
       LoadingDialog.show(context);
@@ -109,18 +85,27 @@ class AuthApiService {
       var results = await apiService.register(
           firstName, lastName, phoneNumber, email, password, role);
 
-      if (results.statusCode == 200) {
-        // Success
-        // LoadingDialog.hide(context);
+      var data = json.decode(results.body);
+      var message = data['message'];
 
-        // Show success message
+      if (results.statusCode == 200) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/logIn',
+              (Route<dynamic> route) => false,
+        );
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Successfully registered!')),
         );
+        LoadingDialog.hide(context);
 
-        // Navigate to the login page
-        Navigator.of(context).pushNamed('/login');
         return true;
+      } else if (results.statusCode == 400) {
+        // Failure
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+        return false; // Stay on the same page
       } else {
         // Failure
         ScaffoldMessenger.of(context).showSnackBar(
