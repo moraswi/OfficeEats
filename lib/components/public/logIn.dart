@@ -48,8 +48,11 @@ class _LogInState extends State<LogIn> {
       body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 200),
+
+
+              const SizedBox(height: 70),
 
               // Logo
               // Image.asset(
@@ -61,36 +64,82 @@ class _LogInState extends State<LogIn> {
               // const SizedBox(height: 10),
 
               // Text
-              const Text(
-                'Welcome',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400),
+              // const Text(
+              //   'Welcome',
+              //   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400),
+              // ),
+              // RichText(
+              //   text: const TextSpan(
+              //     children: [
+              //       TextSpan(
+              //         text: 'please',
+              //         style: TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 32,
+              //           fontWeight: FontWeight.w400,
+              //         ),
+              //       ),
+              //       TextSpan(
+              //         text: ' login',
+              //         style: TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 32,
+              //           fontWeight: FontWeight.w700,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/motorbike2.png',
+                  height: 150,
+                ),
               ),
+              const SizedBox(height: 50),
+
+              Text(
+                'Authorization',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   children: [
-                    TextSpan(
-                      text: 'please',
+                    const TextSpan(
+                      text: "Please log in to place an order. If you'd like to browse our menu, click",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 32,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     TextSpan(
-                      text: ' login',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
+                      text: ' here to view our stores.',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/townshop', (Route<dynamic> route) => true);
+                        },
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 23),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
+
               TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -106,7 +155,7 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 13),
 
               TextFormField(
                 controller: passwordController,
@@ -136,24 +185,25 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               CustomButton(label: 'Log In', onTap: handleLogin),
 
               const SizedBox(height: 20),
               //forgot Password
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/forgotPassword', (Route<dynamic> route) => true);
-                },
-                child: const Text(
-                  'Forgot my password',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     Navigator.of(context).pushNamedAndRemoveUntil(
+              //         '/forgotPassword', (Route<dynamic> route) => true);
+              //   },
+              //   child: const Text(
+              //     'Forgot my password',
+              //     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+              //   ),
+              // ),
+              //
+              // const SizedBox(height: 11),
 
-              const SizedBox(height: 11),
 
               RichText(
                 text: TextSpan(
@@ -167,9 +217,9 @@ class _LogInState extends State<LogIn> {
                       ),
                     ),
                     TextSpan(
-                      text: ' Sign up',
+                      text: ' Register',
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.red,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),

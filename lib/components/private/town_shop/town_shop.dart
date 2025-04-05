@@ -168,9 +168,8 @@ class _TownShopState extends State<TownShop> {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('something went wrong')),
-      );
+
+      print(e);
     }
   }
 
@@ -178,7 +177,13 @@ class _TownShopState extends State<TownShop> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Explore Our Stores'),
+        title: Text('Explore Our Stores',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(

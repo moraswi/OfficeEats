@@ -36,15 +36,13 @@ class _ProfileLandingPageState extends State<ProfileLandingPage> {
   final List<String> itemNames = [
     'My profile',
     'Change my password',
-    // 'Payments method',
     'Log out'
   ]; // List of item names
 
   Future<bool> logoutReq(BuildContext context) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-print('test1');
-      // Remove all the stored data
+
       await prefs.clear();
 
       // Optionally, show a message or redirect the user
@@ -52,8 +50,6 @@ print('test1');
         SnackBar(content: Text('You have logged out successfully!')),
       );
 
-      // You can also redirect the user to a login screen if needed
-      // Navigator.pushReplacementNamed(context, '/login');
       Navigator.of(context).pushNamedAndRemoveUntil(
           '/logIn', (Route<dynamic> route) => true);
 

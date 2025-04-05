@@ -143,7 +143,6 @@ class _MenuCustomizationState extends State<MenuCustomization> {
     });
 
     if (isDuplicate) {
-      print("Duplicate item not added to cart");
       return; // Exit if duplicate found
     }
 
@@ -197,7 +196,7 @@ class _MenuCustomizationState extends State<MenuCustomization> {
               Align(
               alignment: Alignment.centerLeft,
                 child: Text(
-                  fetchedDescription!,
+                    fetchedDescription ?? 'No description available',
                   style: TextStyle(fontSize: 15),
                 ),
               ),

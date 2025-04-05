@@ -205,7 +205,12 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Orders'),
+        title: Text('My Orders',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),),
         automaticallyImplyLeading: false,
       ),
       body: Container(
@@ -219,8 +224,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 },
               )
             : orderHistory.isEmpty
-                ? Expanded(
-                    child: Center(
+                ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -240,8 +244,8 @@ class _HistoryPageState extends State<HistoryPage> {
                           SizedBox(height: 20),
                         ],
                       ),
-                    ),
-                  )
+                    )
+
                 : ListView.builder(
                     shrinkWrap: true,
                     itemCount: orderHistory.length,

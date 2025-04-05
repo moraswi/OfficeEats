@@ -55,51 +55,25 @@ class _SignUpState extends State<SignUp> {
       body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Create',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' your',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+
+                const Text(
+                  'Registration',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'new',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' account',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+
+                const Text(
+                  'Personal Details',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
-              ),
+
               const SizedBox(height: 23),
               Form(
                 child: Column(

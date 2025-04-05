@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_colors.dart';
 
@@ -16,11 +17,13 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
   Color activeIconColor = AppColors.primaryColor;
   Color inactiveIconColor = Colors.grey;
 
+  int getUserId = 0;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 4,
+      length: 5,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -30,48 +33,34 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    getSharedPreferenceData();
   }
+
+  // getSharedPreferenceData
+  Future<void> getSharedPreferenceData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      getUserId = prefs.getInt('userId') ?? 0;
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              blurRadius: 10.0,
-              spreadRadius: 2.0,
-              offset: Offset(4.0, 4.0),
-            ),
-          ],
-          borderRadius: BorderRadius.circular(83),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50.0),
-          ),
-          child: Container(
-            color: Colors.white,
-            height: 67,
-            child: TabBar(
-              labelColor: activeIconColor,
+    return TabBar(
+              labelColor: inactiveIconColor,
               unselectedLabelColor: inactiveIconColor,
               labelStyle: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w400),
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Colors.white, width: 0.0),
-                insets: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 40.0),
-              ),
+
               indicatorColor: Colors.black54,
               tabs: <Widget>[
                 Tab(
                   icon: Icon(
                     Icons.home,
                     size: 23.0,
-                    color: _tabController.index == 0
-                        ? activeIconColor
-                        : inactiveIconColor,
+                    color: inactiveIconColor,
                   ),
                   text: 'Town Shop',
                 ),
@@ -79,9 +68,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   icon: Icon(
                     Icons.info,
                     size: 23.0,
-                    color: _tabController.index == 1
-                        ? activeIconColor
-                        : inactiveIconColor,
+                    color: inactiveIconColor,
                   ),
                   text: 'History',
                 ),
@@ -89,9 +76,7 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   icon: Icon(
                     Icons.help,
                     size: 23.0,
-                    color: _tabController.index == 2
-                        ? activeIconColor
-                        : inactiveIconColor,
+                    color:inactiveIconColor,
                   ),
                   text: 'Rate App',
                 ),
@@ -99,12 +84,24 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                   icon: Icon(
                     Icons.account_circle,
                     size: 23.0,
-                    color: _tabController.index == 3
-                        ? activeIconColor
-                        : inactiveIconColor,
+                    color:inactiveIconColor,
                   ),
                   text: 'Profile',
                 ),
+
+                if(getUserId == 0)
+                  Tab(
+                    icon: Icon(
+                      Icons.login,
+                      size: 23.0,
+                      color: Colors.red,
+                    ),
+                    child: Text(
+                      'LogIn',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+
               ],
               onTap: (index) {
                 setState(() {
@@ -120,12 +117,11 @@ class _RoundedBottomBarState extends State<RoundedBottomBar>
                 } else if (index == 3) {
                   Navigator.pushNamed(context, '/profilelanding');
                 }
+                else if (index == 4 ) {
+                  Navigator.pushNamed(context, '/logIn');
+                }
               },
               controller: _tabController,
-            ),
-          ),
-        ),
-      ),
-    );
+            );
   }
 }
